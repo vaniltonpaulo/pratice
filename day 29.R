@@ -70,7 +70,14 @@ fact_of_fact <- function(n){
 
 #Pluralize!
 pluralize <- function(x){
-  paste(unique(x[table(x) >1]),"s",sep  = "")
+  if(any(duplicated(x))) {
+    m <- gregexpr(unique(x[table(x) >1]),x,perl = TRUE)
+    regmatches(x,m) <- paste(unique(x[table(x) >1]),"s",sep  = "")
+    
+   return(unique(x))
+  } else return(x)
+  
+ 
 }
 
 # pluralize(c("cow", "pig", "cow", "cow")) ➞ { "cows", "pig" }
@@ -79,8 +86,4 @@ pluralize <- function(x){
 # 
 # pluralize(c("chair", "pencil", "arm")) ➞ { "chair", "pencil", "arm" }
 
-
-
-x<-c("cow", "pig", "cow", "cow")
-paste(unique(x[table(x) >1]),"s",sep  = "")
 
