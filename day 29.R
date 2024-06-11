@@ -87,3 +87,58 @@ pluralize <- function(x){
 # pluralize(c("chair", "pencil", "arm")) ➞ { "chair", "pencil", "arm" }
 
 
+
+#3n + 1 Problem (Collatz Conjecture)
+collatz <- function(x,y){
+  
+  ge.it <- function(k){
+    result <- k
+    count <- 1
+    repeat{
+      if(result %% 2 == 0){
+        result <- result /2
+      } else{
+        result <- (result * 3) + 1
+      }
+      if(result == 1) break
+      
+      count <- count + 1
+    }
+    count
+  }
+  if(ge.it(x)<ge.it(y)) return("a") else("b")
+}
+
+# 
+# collatz(10, 15) ➞ "a"
+# # Because 10.0 - 5.0 - 16.0 - 8.0 - 4.0 - 2.0 - 1.0: 6 steps
+# # 15.0 - 46.0 - 23.0 - 70.0 - 35.0 - 106.0 - 53.0 - 160.0 - 80.0 - 40.0 - 20.0 - 10.0 - 5.0 - 16.0 - 8.0 - 4.0 - 2.0 - 1.0: 17 steps
+# 
+# collatz(13, 16) ➞ "b"
+#collatz(53782, 72534) ➞ "b"
+
+collatz(1723817263, 837249873748)
+collatz(72221, 11198)
+
+
+##############
+#UB6 CART
+install.packages("mlr3verse")
+install.packages("rattle")
+library(mlr3verse)
+library(rattle)
+task <- tsk("bike_sharing")
+task$select(task$feature_names[task$feature_names != "date"])
+for (i in c(2, 4, 8)){
+learner <- lrn("regr.rpart", minsplit = 2, maxdepth = i, minbucket = 1)
+learner$train(task)
+fancyRpartPlot(learner$model, caption = sprintf("maxdepth: %i", i))
+}
+
+
+
+for (i in c(5, 1000, 10000)) {
+learner <- lrn("regr.rpart", minsplit = i, maxdepth = 20, minbucket = 1)
+learner$train(task)
+fancyRpartPlot(learner$model, caption = sprintf("minsplit: %i", i))
+}
