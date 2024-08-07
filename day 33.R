@@ -79,3 +79,104 @@ replace_vowels <- function(x,y){
 # 
 # replace_vowels("shakespeare", "*") ➞ "sh*k*sp**r*"
 
+
+XO <- function(x){
+  if(!grepl("(x|o)",x,perl = TRUE) == TRUE) return(TRUE)
+  
+  x <- strsplit(x,"")[[1]]
+  x.amount <- sum(grepl("(x|X)",x,perl = TRUE))
+  o.amount <- sum(grepl("(o|O)",x,perl = TRUE))
+  if(x.amount == o.amount){
+    return(TRUE)
+  }else{
+    return(FALSE)
+  }
+}
+
+# 
+# XO("ooxx") ➞ True
+# 
+# XO("xooxx") ➞ False
+# 
+# XO("ooxXm") ➞ True
+# # Case insensitive.
+# 
+# XO("zpzpzpp") ➞ True
+# # Returns True if no x and o.
+# 
+# XO("zzoo") ➞ False
+XO("o")
+XO("")
+
+
+
+
+is_valid_PIN <- function(x){
+  y<-strsplit(x,"")[[1]]
+  values <-grepl("[0-9]",y,perl = TRUE)
+  if((sum(values) == length(values)) == TRUE) {
+    if(length(y) == 4 || length(y) == 6 ) return(TRUE)
+    
+  }
+  return(FALSE) 
+    
+  
+  
+}
+
+# is_valid_PIN("1234") ➞ True
+# 
+# is_valid_PIN("12345") ➞ False
+# 
+# is_valid_PIN("a234") ➞ False
+# 
+# is_valid_PIN("") ➞ False
+is_valid_PIN("@234")
+is_valid_PIN("123456")
+
+
+
+
+
+remove_vowels <- function(x){
+  gsub("[aeiou]","",x,perl = TRUE)
+}
+
+# remove_vowels("I have never seen a thin person drinking Diet Coke.")
+# ➞ " hv nvr sn  thn prsn drnkng Dt Ck."
+# 
+# remove_vowels("We're gonna build a wall!")
+# ➞ "W'r gnn bld  wll!"
+# 
+# remove_vowels("Happy Thanksgiving to all--even the haters and losers!")
+# ➞ "Hppy Thnksgvng t ll--vn th htrs nd lsrs!"
+
+
+cap_to_front <- function(x){
+  ups<-regmatches(x,gregexpr("[[:upper:]]",x,perl = TRUE))[[1]]
+  lows<-regmatches(x,gregexpr("[a-z]",x,perl = TRUE))[[1]]
+  
+  return(paste0(paste0(ups,collapse = ""),paste0(lows,collapse = ""),collapse = ""))
+}
+
+
+
+# cap_to_front("hApPy") ➞ "APhpy"
+# 
+# cap_to_front("moveMENT") ➞ "MENTmove"
+# 
+# cap_to_front("shOrtCAKE") ➞ "OCAKEshrt"
+
+
+letters_only <- function(x){
+  gsub("([[:punct:]]|\\d)","",x, perl = TRUE)
+}
+
+
+# letters_only("R!=:~0o0./c&}9k`60=y") ➞ "Rocky"
+# 
+# letters_only("^,]%4B|@56a![0{2m>b1&4i4") ➞ "Bambi"
+# 
+# letters_only("^U)6$22>8p).") ➞ "Up"
+
+letters_only('97H^)~a8567ll*o?"6%)w63e37e<n?@=')
