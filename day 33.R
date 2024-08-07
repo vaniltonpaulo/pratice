@@ -302,7 +302,21 @@ superheroes <- function(x){
 # ➞ []
 superheroes(c("Batman", "Superman", "Spider-man", "Hulk", "Wolverine", "Deadpool", "Dr.Strange", "Captain-America", "Aquaman", "Hawkeye", "Iron-man", "Thor", "Black-Panther", "Iceman"))
 
-x <- c("Batman", "Superman", "Spider-man", "Hulk", "Wolverine", "Wonder-Woman")
 
 
-unlist(regmatches(x,gregexpr("[A-z]+[^(wo|Wo)]man$",x,perl = TRUE)))
+
+
+format_num <- function(x){
+  format(x, big.mark = ",",scientific = FALSE)
+  
+}
+
+
+# 
+# format_num(1000) ➞ "1,000"
+# 
+# format_num(100000) ➞ "100,000"
+# 
+# format_num(20) ➞ "20"
+
+
