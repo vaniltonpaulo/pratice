@@ -180,3 +180,129 @@ letters_only <- function(x){
 # letters_only("^U)6$22>8p).") ➞ "Up"
 
 letters_only('97H^)~a8567ll*o?"6%)w63e37e<n?@=')
+
+
+is_vowel_sandwich <- function(x){
+  if(nchar(x) != 3)  return(FALSE)
+  vowels <- c("a","e","i","o","u")
+  consonants <- setdiff(letters,vowels)
+  word.1<-substr(x,1,1)
+  word.2<-substr(x,2,2)
+  word.3<-substr(x,3,3)
+  
+  if(word.1 %in% consonants && word.2 %in% vowels &&  word.3 %in% consonants ) {
+    return(TRUE)
+    }
+  else{
+      return(FALSE)
+    } 
+}
+
+
+
+# is_vowel_sandwich("cat") ➞ True
+# 
+# is_vowel_sandwich("ear") ➞ False
+# 
+# is_vowel_sandwich("bake") ➞ False
+# 
+# is_vowel_sandwich("try") ➞ False
+is_vowel_sandwich("xap")
+
+
+
+splittar <- function(x){
+  y<-regmatches(x,gregexpr("[aeiou]",x,perl = TRUE))[[1]]
+  y<- paste0(y,collapse = "")
+  w<-gsub("[aeiou]","",x)
+  paste0(y,w,collapse = "")
+}
+
+
+# splittar("abcde") ➞ "aebcd"
+# 
+# splittar("Hello!") ➞ "eoHll!"
+# 
+# splittar("What's the time?") ➞ "aeieWht's th tm?"
+
+
+
+
+convert_binary <- function(x){
+  y <-gsub("([a-m]|[A-M])","0",x)
+  gsub("([n-z]|[N-Z])","1",y)
+}
+
+
+# convert_binary("house") ➞ "01110"
+# 
+# convert_binary("excLAIM") ➞ "0100000"
+# 
+# convert_binary("moon") ➞ "0111"
+convert_binary("topsyTurvy")
+
+
+count_adverbs <- function(x){
+  x<-gsub("[[:punct:]]","",x)
+  y <- strsplit(x,"\\s+")[[1]]
+  sum(grepl("ly$",y,perl = TRUE))
+  
+}
+
+
+# count_adverbs("She ran hurriedly towards the stadium.") ➞ 1
+# 
+# count_adverbs("She ate the lasagna heartily and noisily.") ➞ 2
+# 
+# count_adverbs("He hates potatoes.") ➞ 0
+# 
+# count_adverbs("He was happily, crazily, foolishly over the moon.") ➞ 3
+
+
+
+
+
+
+
+
+
+zipcode <- function(x){
+  if(nchar(x) !=5) return(FALSE)
+  
+  if(grepl("([^0-9]|\\s)",x,perl = TRUE) == FALSE) return( TRUE)
+  
+  return(FALSE)
+}
+zipcode("923444")
+# "32554" ➞ True
+# 
+# "92 342" ➞ False
+# # Invalid: contains a whitespace
+# 
+# "9@342" ➞ False
+# # Invalid: contains a non-numeric character
+# 
+# "923444" ➞ False
+# # Invalid: length is not 5
+
+
+
+superheroes <- function(x){
+  unlist(regmatches(x,gregexpr("[A-z]+[^(wo|Wo)]man$",x,perl = TRUE)))
+}
+
+
+# superheroes(c("Batman", "Superman", "Spider-man", "Hulk", "Wolverine", "Wonder-Woman"))
+# ➞ ["Batman", "Spider-man", "Superman"]
+# 
+# superheroes(c("Catwoman", "Deadpool", "Dr.Strange", "Captain-America", "Aquaman", "Hawkeye"))
+# ➞ ["Aquaman"]
+# 
+# superheroes(c("Wonder-Woman", "Catwoman", "Invisible-Woman"))
+# ➞ []
+superheroes(c("Batman", "Superman", "Spider-man", "Hulk", "Wolverine", "Deadpool", "Dr.Strange", "Captain-America", "Aquaman", "Hawkeye", "Iron-man", "Thor", "Black-Panther", "Iceman"))
+
+x <- c("Batman", "Superman", "Spider-man", "Hulk", "Wolverine", "Wonder-Woman")
+
+
+unlist(regmatches(x,gregexpr("[A-z]+[^(wo|Wo)]man$",x,perl = TRUE)))
