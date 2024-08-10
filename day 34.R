@@ -125,3 +125,37 @@ pattern = "yourregularexpressionhere"
 #re.findall(pattern, txt) ➞ ["best buy", "best bet", "best boyfriend"]
 
 regmatches(txt,gregexpr("best *b[a-z]*",txt,perl = TRUE))[[1]]
+
+
+
+
+
+
+
+
+
+
+
+findall <- function(x){
+  regmatches(x,gregexpr(" *x([0-9]|([a-f]|[A-F]))+",x,perl = TRUE))[[1]][[2]]
+  
+}
+
+txt1 = "Exception 0xAF"
+txt2 = "Exception 0xD3"
+txt3 = "Exception 0xd3"
+txt4 = "Exception 0xZZ"
+pattern = "yourregularexpressionhere"
+# 
+# re.findall(txt1) ➞ ["xAF"]
+# re.findall( txt2) ➞ ["xD3"]
+# re.findall( txt3) ➞ []
+# re.findall( txt4) ➞ []
+
+
+regmatches(txt1,gregexpr(" *x([0-9]|([a-f]|[A-F]))+",txt1,perl = TRUE))[[1]][[2]]
+
+regmatches(txt4,gregexpr(" *x([0-9]|([a-f]|[A-F]))+",txt4,perl = TRUE))[[1]][[2]]
+
+regmatches(txt4,gregexpr(" *x([0-9]|([a-f]|[A-F]))+",txt4,perl = TRUE))[[1]][[2]]
+
