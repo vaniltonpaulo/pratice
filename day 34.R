@@ -80,3 +80,48 @@ x<-"4 + 5"
 
 grepl("^[0-9] *[+\\-*/%] *[0-9]$",x,perl = TRUE)
 
+
+
+vowels <- function(word) {
+  # Convert to lowercase and remove non-alphabet characters
+  word <- tolower(gsub("[^a-z]", "", word))
+  
+  # Count the number of vowels
+  sum(str_count(word, "[aeiou]"))
+}
+
+
+vowels <- function(x){
+  y<-gsub("[^A-z]", "", x)
+  y <- tolower(y)
+  so<-regmatches(y,gregexpr("[aeiou]",y,perl = TRUE))[[1]]
+  sum(nchar(so))
+}
+
+consonants <- function(x){
+  y<-gsub("[^A-z]", "", x)
+  y <- tolower(y)
+  so<-regmatches(y,gregexpr("[bcdfghjklmnpqrstvwxyz]",y,perl = TRUE))[[1]]
+  sum(nchar(so))
+}
+
+
+# vowels('Jameel SAEB') ➞ 5
+# 
+# 
+# consonants("Smithsonian") ➞ 7
+# vowels("Smithsonian") ➞ 4
+consonants('G^oOd B&y')
+
+
+
+
+
+
+
+txt = "best buy best car best friend best-boy bestguest best dressed best bet best man best deal best boyfriend"
+pattern = "yourregularexpressionhere"
+
+#re.findall(pattern, txt) ➞ ["best buy", "best bet", "best boyfriend"]
+
+regmatches(txt,gregexpr("best *b[a-z]*",txt,perl = TRUE))[[1]]
