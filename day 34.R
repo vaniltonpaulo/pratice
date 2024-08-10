@@ -37,3 +37,46 @@ double_swap <- function(word,c1,c2){
 # double_swap("128 895 556 788 999", "8", "9")
 # ➞ "129 985 556 799 888"
 
+
+
+
+
+to_scottish_screaming <- function(x){
+  toupper(gsub("[aeiou]","e",x))
+  
+}
+
+
+
+# to_scottish_screaming("hello world") ➞ "HELLE WERLD"
+# 
+# to_scottish_screaming("Mr. Fox was very naughty") ➞ "MR. FEX WES VERY NEEGHTY"
+# 
+# to_scottish_screaming("Butterflies are beautiful!") ➞ "BETTERFLEES ERE BEEETEFEL!"
+
+
+
+
+math_expr <- function(x){
+  
+  pattern <- "^[0-9] *[+\\-*/%] *[0-9]$"
+  
+  # Use grepl to check if the input matches the pattern
+  return(grepl(pattern, x,perl = TRUE))
+}
+
+
+# math_expr("4 + 5") ➞ True
+# 
+# math_expr("4*6") ➞ True
+# 
+# math_expr("4*no") ➞ False
+math_expr("nope")
+math_expr("a - b")
+math_expr("4 - 5")
+
+
+x<-"4 + 5"
+
+grepl("^[0-9] *[+\\-*/%] *[0-9]$",x,perl = TRUE)
+
