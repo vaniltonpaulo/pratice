@@ -49,3 +49,44 @@ letters_only <- function(x){
 # 
 # letters_only("") ➞ False
 
+
+
+first_n_vowels <- function(x,n){
+  y<-strsplit(x,"")[[1]]
+  k<- regmatches(x,gregexpr('[aeiou]',x,perl = TRUE))[[1]]
+  if(length(k) < n) return("invalid")
+  paste0(k[1:n],collapse = "")
+}
+
+
+
+# first_n_vowels("sharpening skills", 3) ➞ "aei"
+# 
+# first_n_vowels("major league", 5) ➞ "aoeau"
+# 
+# first_n_vowels("hostess", 5) ➞ "invalid"
+first_n_vowels("shrimpy", 2)
+first_n_vowels("crabby patty", 2)
+
+
+
+
+lst = c("tall height", "tall height", "short height", "medium height", "tall height")
+pattern = "yourregularexpressionhere"
+
+#len(re.findall(pattern, ", ".join(lst))) ➞ 3
+
+
+sum(grepl("(?<=tall)",lst,perl = TRUE))
+
+
+txt = "(214) 987-6482"
+txt = "2020-04-18"
+
+regmatches(txt,gregexpr("(?<area>[0-9]{3})",txt,perl = TRUE))[[1]][[1]]
+
+k<- regmatches(txt,gregexec("(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})",txt,perl = TRUE))[[1]]
+
+k["year",][[1]]
+k["month",][[1]]
+k["day",][[1]]
