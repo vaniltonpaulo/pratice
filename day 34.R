@@ -155,7 +155,10 @@ pattern = "yourregularexpressionhere"
 
 regmatches(txt1,gregexpr(" *x([0-9]|([a-f]|[A-F]))+",txt1,perl = TRUE))[[1]][[2]]
 
-regmatches(txt4,gregexpr(" *x([0-9]|([a-f]|[A-F]))+",txt4,perl = TRUE))[[1]][[2]]
+regmatches(txt2,gregexpr(" *x([0-9]|([a-f]|[A-F]))+",txt2,perl = TRUE))[[1]][[2]]
+
+regmatches(txt3,gregexpr(" *x([0-9]|([a-f]|[A-F]))+",txt3,perl = TRUE))[[1]][[2]]
+
 
 regmatches(txt4,gregexpr(" *x([0-9]|([a-f]|[A-F]))+",txt4,perl = TRUE))[[1]][[2]]
 
