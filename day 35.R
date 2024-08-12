@@ -90,3 +90,43 @@ k<- regmatches(txt,gregexec("(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2
 k["year",][[1]]
 k["month",][[1]]
 k["day",][[1]]
+
+
+
+correct_sentences <- function(sentence) {
+  # Step 1: Trim leading and trailing spaces, and remove extra spaces between words
+  sentence <- gsub("\\s+", " ", trimws(sentence))
+  
+  # Step 2: Capitalize the first letter of the sentence
+  sentence <- paste0(toupper(substring(sentence, 1, 1)), substring(sentence, 2))
+  
+  # Step 3: Insert ". " before every uppercase letter except the first one
+  sentence <- gsub(" ([A-Z])", ". \\1", sentence)
+  
+  # Step 4: Ensure the sentence ends with a period
+  if (!grepl("\\.$", sentence)) {
+    sentence <- paste0(sentence, ".")
+  }
+  
+  return(sentence)
+}
+
+
+
+
+# correct_sentences ("  mubashir loves  edabit  Matt  loves  edabit  ") ➞ "Mubashir loves edabit. Matt loves edabit."
+# 
+# correct_sentences ("  he is an engineer He sleeps a lot") ➞ "He is an engineer. He sleeps a lot."
+# 
+# correct_sentences (" his english is not good Help him     Thank you") ➞ "His english is not good. Help him. Thank you."
+
+
+
+
+
+
+x<- "  mubashir loves  edabit  Matt  loves  edabit  "
+x<-trimws(x)
+first.letters<-regmatches(x,regexpr("[A-z]",x,perl = TRUE))
+x<-sub("[A-z]{1}",toupper(first.letters),x)
+gsub(" ([A-Z])", ". \\1", x)
