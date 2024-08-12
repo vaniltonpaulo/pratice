@@ -122,11 +122,69 @@ correct_sentences <- function(sentence) {
 
 
 
+direction <- function(x){
+  x<-gsub("e","w",x)
+  x<-gsub("a","e",x)
+  x<-gsub("s","s",x)
+  x<-gsub("t","t",x)
+  
+  
+  
+  
+  x<-gsub("E","W",x)
+  x<-gsub("A","E",x)
+  x<-gsub("S","S",x)
+  x<-gsub("T","T",x)
+  
+  x
+}
+
+
+# 
+# direction(c("east", "EAST", "eastEAST")) ➞ ["west", "WEST", "westWEST"]
+# 
+# direction(c("eAsT EaSt", "EaSt eAsT")) ➞ ["wEsT WeSt", "WeSt wEsT"]
+# 
+# direction(c("east EAST", "e a s t", "E A S T")) ➞ ["west WEST", "w e s t", "W E S T"]
 
 
 
-x<- "  mubashir loves  edabit  Matt  loves  edabit  "
-x<-trimws(x)
-first.letters<-regmatches(x,regexpr("[A-z]",x,perl = TRUE))
-x<-sub("[A-z]{1}",toupper(first.letters),x)
-gsub(" ([A-Z])", ". \\1", x)
+
+
+
+
+# pattern = "yourregularexpressionhere"
+# 
+# bool(re.search(pattern, "The end of the story.")) ➞ False
+# bool(re.search(pattern, "Endings are pointless.")) ➞ False
+# bool(re.search(pattern, "Let"s send!")) ➞ False
+# bool(re.search(pattern, "We viewed the rendering at the end.")) ➞ True
+# bool(re.search(pattern, "Sometimes bending the rules is good.")) ➞ True
+
+
+x <-"Sometimes bending the rules is good."
+#regmatches(x,gregexpr("[A-z]+end[a-z]+",x,perl = TRUE))[[1]]
+grepl("[A-z]+end[a-z]+",x,perl = TRUE)
+
+
+
+
+
+
+
+replace_the <- function(x){
+  
+  x<-gsub("the *(?=[aeiou])","an ",x,perl = TRUE)
+  x<-gsub("the *(?=[bcdfghjklmnpqrstvwxyz]+)","a ",x,perl = TRUE)
+  x
+  
+}
+
+
+
+# replace_the("the dog and the envelope") ➞ "a dog and an envelope"
+# 
+# replace_the("the boy ran at the wall") ➞ "a boy ran at a wall"
+# 
+# replace_the("the egg, the spoon and the espionage") ➞ "an egg, a spoon and an espionage"
+
