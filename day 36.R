@@ -103,5 +103,47 @@ m
 
 
 
+is_valid_hex_code <- function(x){
+  if(grepl("^#",x,perl = TRUE) == TRUE){
+    k<-substr(x,2,nchar(x))
+    if(nchar(k) == 6){
+      m<-strsplit(k,"")[[1]]
+      return(all(grepl("([0-9]|[a-f]|[A-F])", m, perl = TRUE)))
+    }else return(FALSE)
+  }else{
+    return(FALSE)
+  }
+}
+
+# is_valid_hex_code("#CD5C5C") ➞ True
+# 
+# is_valid_hex_code("#EAECEE") ➞ True
+# 
+# is_valid_hex_code("#eaecee") ➞ True
+# 
+# is_valid_hex_code("#CD5C58C") ➞ False
+# # Length exceeds 6
+# 
+# is_valid_hex_code("#CD5C5Z") ➞ False
+# # Not all alphabetic characters in A-F
+# 
+# is_valid_hex_code("#CD5C&C") ➞ False
+# # Contains unacceptable character
+# 
+# is_valid_hex_code("CD5C5C") ➞ False
+# # Missing #
 
 
+x<- "#CD5C5C"
+
+grepl("^#",x,perl = TRUE)
+
+k<-substr(x,2,nchar(x))
+nchar(k)
+
+m<-strsplit(k,"")[[1]]
+all(m %in% c(letters,LETTERS,0,1,2,3,4,5,6,7,8,9))
+
+all(grepl("([0-9]|[a-f]|[A-F])", m, perl = TRUE))
+
+setdiff('[A-F]',LETTERS)
