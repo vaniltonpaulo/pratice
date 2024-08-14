@@ -147,3 +147,107 @@ all(m %in% c(letters,LETTERS,0,1,2,3,4,5,6,7,8,9))
 all(grepl("([0-9]|[a-f]|[A-F])", m, perl = TRUE))
 
 setdiff('[A-F]',LETTERS)
+
+
+
+
+
+
+negative_sum <- function(x){
+  k<-regmatches(x,gregexpr('(?<=\\-)[0-9]+',x,perl = TRUE))[[1]]
+  as.numeric(paste0("-",sum(as.numeric(k)),collapse = ""))
+}
+
+
+
+
+# negative_sum("-12 13%14&-11") ➞ -23
+# # -12 + -11 = -23
+# 
+# negative_sum("22 13%14&-11-22 13 12") ➞ -33
+# # -11 + -22 = -33
+negative_sum("-12 -8")
+
+
+
+
+
+get_prices <- function(x){
+  unlist(regmatches(x,gregexpr("[0-9]+\\.[0-9]+",x,perl = TRUE)))
+}
+
+
+
+# get_prices(c("salad ($4.99)")) ➞ [4.99]
+# 
+# get_prices(c(
+#   "artichokes ($1.99)",
+#   "rotiserrie chicken ($5.99)",
+#   "gum ($0.75)"
+# ))
+# 
+# ➞ [1.99, 5.99, 0.75]
+# 
+ get_prices(c(
+   "ice cream ($5.99)",
+   "banana ($0.20)",
+   "sandwich ($8.50)",
+   "soup ($1.99)"
+))
+# 
+# ➞ [5.99, 0.2, 8.50, 1.99]
+
+
+ 
+ sentence_searcher <- function(x,word){
+   x<-strsplit(x,"\\.")[[1]]
+   
+   regmatches(x, regexpr(".*word *.*.",x,perl = TRUE))[[1]]
+   
+ }
+ 
+ 
+ # txt = "I have a cat. I have a mat. Things are going swell."
+ # 
+ # sentence_searcher(txt, "have") ➞ "I have a cat."
+ # 
+ # sentence_searcher(txt, "MAT") ➞ "I have a mat."
+ # 
+ # sentence_searcher(txt, "things") ➞ "Things are going swell."
+ # 
+ # sentence_searcher(txt, "flat") ➞ ""
+ 
+ 
+ 
+ x = "I have a cat. I have a mat. Things are going swell."
+ sentences<-strsplit(x,"\\.")[[1]]
+ word <- "have"
+ word <- tolower(word)
+ 
+ for (sentence in sentences) {
+   
+   
+ }
+ 
+ regmatches(x, regexpr(".*word *.*.",x,perl = TRUE))[[1]]
+ grepl(paste0("\\b", word, "\\b"), tolower(sentences)) 
+ 
+ 
+ sentence_searcher <- function(txt, word) {
+   # Split the text into sentences
+   sentences <- unlist(strsplit(txt, "(?<=\\.)", perl = TRUE))
+   
+   # Convert the word to lower case for case-insensitive comparison
+   word <- tolower(word)
+   
+   # Loop through each sentence to find the first one that contains the word
+   for (sentence in sentences) {
+     # Check if the sentence contains the word
+     if (grepl(paste0("\\b", word, "\\b"), tolower(sentence))) {
+       return(trimws(sentence))  # Return the sentence with leading/trailing whitespace removed
+     }
+   }
+   
+   # If no sentence contains the word, return an empty string
+   return("")
+ }
