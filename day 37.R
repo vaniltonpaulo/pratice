@@ -25,3 +25,36 @@ sentence_searcher <- function(txt,word){
 # sentence_searcher(txt, "flat") ➞ ""
 sentence_searcher(txt, "Have")
 sentence_searcher(txt, "swell")
+
+
+
+
+
+count_ones <- function(x) {
+  ones <- strsplit(paste(lst, collapse = ""), "0")[[1]]
+  
+  # Count how many of the resulting segments have a length greater than 1
+  sum(nchar(ones) > 1)
+}
+
+
+# count_ones(c(1, 0, 0, 1, 1, 0, 1, 1, 1)) ➞ 2
+# # Two instances: [1, 1] (middle) and [1, 1, 1] (end)
+# 
+# count_ones(c(1, 0, 1, 0, 1, 0, 1, 0)) ➞ 0
+# 
+# count_ones(c(1, 1, 1, 1, 0, 0, 0, 0)) ➞ 1
+# 
+# count_ones(c(0, 0, 0)) ➞ 0
+
+
+x<- c(1, 0, 0, 1, 1, 0, 1, 1, 1)
+ones <- strsplit(paste(x, collapse = ""), "0")[[1]]
+
+# Count how many of the resulting segments have a length greater than 1
+sum(nchar(ones) > 1)
+
+
+
+
+
