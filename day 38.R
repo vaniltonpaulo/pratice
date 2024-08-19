@@ -78,3 +78,77 @@ reverse <- function(x){
 # 
 # reverse("Edabit is really helpful!") ➞ "!lufpleh yllaer si tibadE"
 
+
+
+findLargestNums <- function(x){
+  lapply(x,function(k){
+    sort(unlist(k),decreasing = TRUE)[[1]]
+  })
+}
+
+
+# findLargestNums(list(list(4, 2, 7, 1), list(20, 70, 40, 90), list(1, 2, 0))) ➞ [7, 90, 2]
+# 
+# findLargestNums(list(list(-34, -54, -74), list(-32, -2, -65), list(-54, 7, -43))) ➞ [-34, -2, 7]
+# 
+# findLargestNums([[0.4321, 0.7634, 0.652], [1.324, 9.32, 2.5423, 6.4314], [9, 3, 6, 3]]) ➞ [0.7634, 9.32, 9]
+
+
+
+
+asc_des_none <- function(x,y){
+  if(y =="Asc") return(sort(x))
+  if(y =="Des") return(sort(x,decreasing = TRUE))
+  return(x)
+}
+
+
+# asc_des_none(c(4, 3, 2, 1), "Asc" ) ➞ [1, 2, 3, 4]
+# 
+# asc_des_none(c(7, 8, 11, 66), "Des") ➞ [66, 11, 8, 7]
+# 
+# asc_des_none([1, 2, 3, 4], "None") ➞ [1, 2, 3, 4]
+
+
+missing_num <- function(x){
+  setdiff(1:10,x)
+}
+
+
+
+# missing_num(c(1, 2, 3, 4, 6, 7, 8, 9, 10)) ➞ 5
+# 
+# missing_num([7, 2, 3, 6, 5, 9, 1, 4, 8]) ➞ 10
+# 
+# missing_num([10, 5, 1, 2, 4, 6, 8, 3, 9]) ➞ 7
+
+
+
+
+
+name_shuffle <- function(x){
+  paste0(rev(strsplit(x,"\\s+")[[1]]),collapse = " ")
+}
+# name_shuffle("Donald Trump") ➞ "Trump Donald"
+# 
+# name_shuffle("Rosie O'Donnell") ➞ "O'Donnell Rosie"
+# 
+# name_shuffle("Seymour Butts") ➞ "Butts Seymour"
+
+
+alphabet_soup <- function(x){
+  x<-sort(strsplit(x,"")[[1]])
+  paste0(x,collapse = "")
+}
+
+
+# 
+# alphabet_soup("hello") ➞ "ehllo"
+# 
+# alphabet_soup("edabit") ➞ "abdeit"
+# 
+# alphabet_soup("hacker") ➞ "acehkr"
+# 
+# alphabet_soup("geek") ➞ "eegk"
+# 
+# alphabet_soup("javascript") ➞ "aacijprstv"
