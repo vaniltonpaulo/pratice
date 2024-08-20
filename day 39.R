@@ -62,12 +62,25 @@ is_alpha <- function(x){
 
 
 
+cons <- function(x){
+  x<- sort(x)
+  suppressWarnings( if(all(unique(x) == x) == FALSE) return(FALSE))
+  k<-seq(x[[1]]:x[[length(x)]])
+  suppressWarnings( if(all(k==x) == TRUE) return(TRUE) else return(FALSE))
+}
 
-
-# cons([5, 1, 4, 3, 2]) ➞ True
+# cons(c(5, 1, 4, 3, 2)) ➞ True
 # // Can be re-arranged to form [1, 2, 3, 4, 5]
 # 
-# cons([5, 1, 4, 3, 2, 8]) ➞ False
+# cons(c(5, 1, 4, 3, 2, 8)) ➞ False
 # 
-# cons([5, 6, 7, 8, 9, 9]) ➞ False
+# cons(c(5, 6, 7, 8, 9, 9)) ➞ False
 # // 9 appears twice
+
+
+x<- c(5, 1, 4, 3, 2)
+
+x<- sort(x)
+
+k<-seq(x[[1]]:x[[length(x)]])
+if(k== x) return(TRUE) else return(FALSE)
