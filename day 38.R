@@ -166,4 +166,31 @@ number_len_sort <- function(x){
 # 
 # number_len_sort(c(9, 8, 7, 6, 5, 4, 31, 2, 1, 3)) ➞ [9, 8, 7, 6, 5, 4, 2, 1, 3, 31]
 
+unique_in_order <- function(x) {
+  if(mode(x) == "numeric"){
+    res <-x[1]
+    for (i in 2:length(x)) {
+      if(x[i] != x[i -1])
+        res <-c(res,x[i])
+    }
+    return(res)
+  }else{
+    k<-strsplit(x,"")[[1]]
+    
+    res <-k[1]
+    for (i in 2:length(k)) {
+      if(k[i] != k[i -1])
+        res <-c(res,k[i])
+    }
+    return(res)
+  }
+  
+  
+}
+
+# unique_in_order("AAAABBBCCDAABBB") ➞ ["A", "B", "C", "D", "A", "B"]
+# 
+# unique_in_order("ABBCcAD") ➞ ["A", "B", "C", "c", "A", "D"]
+# 
+# unique_in_order(c(1, 2, 2, 3, 3)) ➞ [1, 2, 3]
 
