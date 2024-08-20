@@ -152,3 +152,18 @@ alphabet_soup <- function(x){
 # alphabet_soup("geek") ➞ "eegk"
 # 
 # alphabet_soup("javascript") ➞ "aacijprstv"
+
+
+
+number_len_sort <- function(x){
+  x[order(nchar(x))]
+}
+
+
+# number_len_sort(c(1, 54, 1, 2, 463, 2)) ➞ [1, 1, 2, 2, 54, 463]
+# 
+# number_len_sort(c(999, 421, 22, 990, 32)) ➞ [22, 32, 999, 421, 990]
+# 
+# number_len_sort(c(9, 8, 7, 6, 5, 4, 31, 2, 1, 3)) ➞ [9, 8, 7, 6, 5, 4, 2, 1, 3, 31]
+
+
