@@ -96,3 +96,53 @@ fruit_salad <- function(x){
 # 
 # fruit_salad(c("banana")) ➞ "anaban"
 
+
+sort_by_string <- function(x,y){
+  k<-strsplit(y,"")[[1]]
+  
+  result <- character(0)
+  
+  for (j in seq_along(k)) {
+    for (i in seq_along(x)) {
+      if(k[[j]] == substr(x[[i]],1,1)){
+        result[[length(result) + 1]] <- x[[i]]
+      }
+    }
+    
+  }
+  
+  result
+}
+
+
+
+# sort_by_string(c("poof", "floof", "loop"), "flatp")
+# ➞ ["floof", "loop", "poof"]
+# 
+# sort_by_string(c("small", "big", "medium"), "sazymtb")
+# ➞ ["small", "medium", "big"]
+# 
+# sort_by_string(c("apple", "banana", "cherry", "date"), "dbca")
+# ➞ ["date", "banana", "cherry", "apple"]
+
+
+
+
+x<-c("poof", "floof", "loop") 
+y<- "flatp"
+k<-strsplit(y,"")[[1]]
+
+
+result <- character(0)
+
+for (j in seq_along(k)) {
+  for (i in seq_along(x)) {
+    if(k[[j]] == substr(x[[i]],1,1)){
+      result[[length(result) + 1]] <- x[[i]]
+    }
+  }
+  
+}
+
+result
+# ➞ ["floof", "loop", "poof"]
