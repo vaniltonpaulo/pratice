@@ -146,3 +146,29 @@ for (j in seq_along(k)) {
 
 result
 # ➞ ["floof", "loop", "poof"]
+
+
+
+
+same_upsidedown <- function(x){
+  k<-strsplit(x,"")[[1]]
+  
+  y<-rep(1,length(k))
+  
+  y[c(which(k == 9))] <- 6
+  y[c(which(k == 6))] <- 9
+  y[c(which(k == 0))] <- 0
+  paste0(y,collapse = "") == paste0(rev(k),collapse = "")
+  
+}
+
+
+# same_upsidedown("6090609") ➞ True
+# 
+# same_upsidedown("9669") ➞ False
+# # Becomes 6996 when upside down.
+# 
+# same_upsidedown("69069069") ➞ True
+same_upsidedown("96666660999999")
+same_upsidedown("6666660999999")
+same_upsidedown("6000000009")
