@@ -135,3 +135,22 @@ move_zeros <- function(x){
 #Now Hard
 
 
+
+
+rearranged_difference <- function(x){
+  k<-strsplit(as.character(x),"")[[1]]
+  as.numeric(paste0(sort(as.numeric(k),decreasing = TRUE),collapse = "")) - as.numeric(paste0(sort(as.numeric(k),decreasing = FALSE),collapse = ""))
+  
+  
+  
+}
+
+# rearranged_difference(972882) ➞ 760833
+# # 988722 - 227889 = 760833
+# 
+# rearranged_difference(3320707) ➞ 7709823
+# # 7733200 - 23377 = 7709823
+# 
+# rearranged_difference(90010) ➞ 90981
+# # 91000 - 19 = 90981
+
