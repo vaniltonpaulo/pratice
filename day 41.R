@@ -154,3 +154,23 @@ rearranged_difference <- function(x){
 # rearranged_difference(90010) ➞ 90981
 # # 91000 - 19 = 90981
 
+
+alphabet_index <- function(alphabet,x){
+  k<-tolower(x)
+  k<-strsplit(k,"")[[1]]
+  
+  
+  final.1<-max(match(k,alphabet))
+  final.2<-alphabet[[max(match(k,alphabet))]]
+  paste0(final.1,final.2,collapse = "")
+}
+
+# 
+# alphabet = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
+# 
+# 
+# alphabet_index(alphabet, "Flavio") ➞ "22v"
+# 
+# alphabet_index(alphabet, "Andrey") ➞ "25y"
+#alphabet_index(alphabet, "Oscar") ➞ "19s"
+
