@@ -20,36 +20,21 @@ sort_by_letter <- function(x){
 # ➞ []
 
 
+last_name_lensort <- function(x){
+  k <- lapply(x,function(k){
+    strsplit(k," ")[[1]][[2]]
+  })
+  
+  surnames<-unlist(k)
+  x[order(nchar(surnames))]
+}
 
 
 
-
-# last_name_lensort(c(
-#   "Jennifer Figueroa","Heather Mcgee",
-#   "Amanda Schwartz","Nicole Yoder","Melissa Hoffman"))
+last_name_lensort(c(
+   "Jennifer Figueroa","Heather Mcgee",
+   "Amanda Schwartz","Nicole Yoder","Melissa Hoffman"))
 
 #➞ ["Heather Mcgee", "Nicole Yoder", "Melissa Hoffman", "Jennifer Figueroa", "Amanda Schwartz"]
 
-
-x<- c(
-  "Jennifer Figueroa",
-  "Heather Mcgee",
-  "Amanda Schwartz",
-  "Nicole Yoder",
-  "Melissa Hoffman"
-)
-
-k <- lapply(x,function(k){
-  strsplit(k," ")[[1]][[2]]
-})
-
-surnames<-unlist(k)
-
-result <- character(0)
-for (i in seq_along(surnames)) {
-  
-  result <- c(result,substr(surnames[[i]],nchar(1),nchar(1)))
-}
-
-sort(result)
-x[order(result)]
+last_name_lensort(c("Hitagi Senjougahara","Edward Elric","Light Yagami","Rintaro Okabe","Kurisu Makise"))
