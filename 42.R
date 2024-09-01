@@ -63,15 +63,9 @@ who_passed<-function(x){
     if(all(result) == TRUE){
       final<-c(final,student)
     } 
-    
     final 
-    
   }
-
-  
-  
   final.vect <-character(0)
-  
   for (i in seq_along(names(x))) {
     final.vect <-c(final.vect,check.grade(names(x)[[i]],x[[names(x[i])]]))
   }
@@ -79,19 +73,6 @@ who_passed<-function(x){
   
   
 }
-
-
-# who_passed({
-#   "Zara" : ["10/10"],
-#   "Kris" : ["30/30"],
-#   "Charlie" : ["100/100"],
-#   "Alex" : ["1/1"]
-# }) ➞ ["Alex", "Charlie", "Kris", "Zara"]
-# 
-# who_passed({
-#   "Zach" : ["10/10", "2/4"],
-#   "Fred" : ["7/9", "2/3"]
-# }) ➞ []
 
 
  who_passed( list(
@@ -115,4 +96,37 @@ who_passed<-function(x){
    Zach = c("10/10", "2/4"),
    Fred = c("7/9", "2/3")
  ))
+ 
+ leaderboards <- function(x){
+   player <-lapply(x,function(player){
+     player$trueScore <- player$score + (player$reputation *2)
+     player
+   })
+   
+
+   player[order(unlist(lapply(player, function(player) player$trueScore)),decreasing = TRUE)]
+ }
+ 
+ 
+ # 
+ # leaderboards([
+ #   { "name": "a", "score": 100, "reputation": 20 },
+ #   { "name": "b", "score": 90, "reputation": 40 },
+ #   { "name": "c", "score": 115, "reputation": 30 },
+ # ]) ➞ [
+ #   { "name": "c", "score": 115, "reputation": 30 },  # trueScore = 175
+ #   { "name": "b", "score": 90, "reputation": 40 },   # trueScore = 170
+ #   { "name": "a", "score": 100, "reputation": 20 }   # trueScore = 140
+ # ]
+ 
+ 
+ 
+ 
+ 
+ leaderboards(list(
+   list(name = "a", score = 100, reputation = 20),
+   list(name = "b", score = 90, reputation = 40),
+   list(name = "c", score = 115, reputation = 30)
+ ))
+ 
  
