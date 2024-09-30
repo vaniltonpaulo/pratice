@@ -73,4 +73,16 @@ dt[, lapply(.SD, sum), by = city, .SDcols = c("age", "income")]
 dt[,lapply(.SD,function(x) (x -mean(x))/sd(x)),by = .(name), .SDcols = c("age","income")]
 
 
-dt[, lapply(.SD, function(x) (x - mean(x)) / sd(x)), by = name, .SDcols = c("age", "income")]
+dt[,lapply(.SD,function(x) list(mins = min(x),maxs = max(x))),by = .(city),.SDcols = c("age","income")]
+
+
+dt[,lapply(.SD,sum),by =.(name),.SDcols = is.numeric]
+
+dt[,lapply(.SD,uniqueN),by = .(name),.SDcols = c('city')]
+
+dt[,lapply(.SD,mean),by =.(city),.SDcols = grepl("income",names(dt))]
+
+dt[income > 50000,lapply(.SD,mean),by= .(name),.SDcols = c('age')]
+
+dt[,.SD[income > 40000],by= .(name)]
+
