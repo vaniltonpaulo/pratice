@@ -89,3 +89,70 @@ dt[,.SD[income > 40000],by= .(name)]
 
 
 #BINDER CLASS 
+
+#####Mine
+dt <- as.data.table(cars) #nice
+dt[,c("speed.2") := .(speed^2)] #nice
+dt[speed %between% c(10,20),] #nice 
+dt[speed.2 >= 4* dist,] # forgot to add =
+dt[,c("speed.3","speed.4") := .(speed^4,speed^4)]# nice
+dt[,speed := NULL] #nice
+
+
+
+######################
+# 1. Get a data.table out of the cars dataset
+#    (Note that setDT() won't work on built-in datasets directly)
+
+# (a)
+carsdt <- as.data.table(cars)
+
+# (b)
+carsdt <- cars
+setDT(carsdt)
+
+######################
+# 2. Create a column speed.2, containing the squared "speed"-values
+
+carsdt[, speed.2 := speed^2]
+
+# possible, but not recommended:
+cbind(carsdt, speed.2 = carsdt$speed^2)
+carsdt$speed.2 <- carsdt[, speed^2]
+carsdt$speed.2 <- carsdt$speed^2
+
+carsdt <- carsdt[, .(speed, dist, speed.2 = speed^2)]
+
+# result
+carsdt
+
+######################
+# 3. Remove all rows that have speed either below 10 or above 20
+# Try this using %between%
+carsdt[!(speed < 10 | speed > 20)]
+carsdt[speed >= 10 & speed <= 20]
+carsdt[speed %between% c(10, 20)]
+
+carsdt <- carsdt[speed %between% c(10, 20)]
+
+######################
+# 4. Remove all rows where speed.2 is smaller than 4 times the dist
+carsdt <- carsdt[speed.2 >= dist * 4]
+
+carsdt
+
+######################
+# 5. Add the columns speed.3 and speed.4 (as speed^3 and speed^4) with a single command
+carsdt[, `:=`(speed.3 = speed^3, speed.4 = speed^4)]
+
+carsdt[, c("speed.3", "speed.4") := .(speed^3, speed^4)]
+
+carsdt[, (paste0("speed.", 3:4)) := lapply(3:4, function(x) speed ^ x)]
+
+carsdt <- carsdt[, .(speed, dist, speed.2, speed.3 = speed ^ 3, speed.4 = speed ^ 4)]
+
+
+######################
+# 6. Remove the speed column
+carsdt[, speed := NULL]
+carsdt$speed <- NULL
