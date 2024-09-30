@@ -86,3 +86,6 @@ dt[income > 50000,lapply(.SD,mean),by= .(name),.SDcols = c('age')]
 
 dt[,.SD[income > 40000],by= .(name)]
 
+
+
+#BINDER CLASS 
