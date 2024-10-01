@@ -43,3 +43,22 @@ sum(prices[sales, on = c("book")][,ifelse(channel == "online",price.online,price
 # exercise 4
 
 sales[,.SD[which.max(.N)],by = .(channel),.SDcols = c("book")]
+
+
+#exercise 5
+
+prices[sales,on=c("book")][,.(revenue = sum(ifelse(channel == "online", price.online,price.onsite))), by =.(book)]
+
+
+#exercise 6
+
+sales[, .N, by = .(book,channel)][, .N,by = book][N == 2,.(book)]
+
+
+#Exercise 7 
+
+sales[,.N,by = .(channel,book)][channel == "online",.(book)]
+
+
+#Exercise 8
+prices[sales,on = "book"][,.(avg_mean =mean(ifelse(channel == "online", price.online, price.onsite))), by =.(channel)]
