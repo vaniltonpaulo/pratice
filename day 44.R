@@ -40,3 +40,6 @@ result <- if(!nrow(sales)) price[book,] else dcast(sales, book~channel,fun.aggre
 
 sum(prices[sales, on = c("book")][,ifelse(channel == "online",price.online,price.onsite)])
 
+# exercise 4
+
+sales[,.SD[which.max(.N)],by = .(channel),.SDcols = c("book")]
