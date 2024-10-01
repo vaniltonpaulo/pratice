@@ -288,6 +288,7 @@ itemshop.sales[, str(.SD), by = "channel"]
 
 # e.g.: get "best" row within sub-data.table
 itemshop.sales[, .SD[which.max(quantity)], by = "channel"]
+itemshop.sales[,.SD[which.min(quantity)],by = .(channel), .SDcols = c("quantity")]
 
 # e.g.: get first / last row within sub-data.table
 itemshop.sales[, .SD[1], by = "channel"]
@@ -349,30 +350,55 @@ ski.temps <- rbindlist(list(
 
 # 1. convert all temperatures to celsius
 #   (formula F -> C is  C = (F - 32) * 5/9
+
+ski.temps[unit == "Fahrenheit" ,temp := .(temp =(temp - 32) * 5/9 )]
+ski.temps[,unit := "Celsius"]
+
+
+ski.temps[,temp := ifelse(unit == "Fahrenheit",(temp - 32) * 5/9,temp )][]
+
+# Alternative
+
+
 ski.temps[,
           temp := ifelse(unit == "Fahrenheit", (temp - 32) * 5 / 9, temp)
-]
+][]
+ski.temps[,unit := "Celsius"]
 
-ski.temps[unit == "Fahrenheit", temp := (temp - 32) * 5 / 9]
-ski.temps[, unit := "Celsius"]
 
 # 2. create a table that lists the resort with the highest max temp. in each country
 
-ski.temps[, .(name = name[which.max(temp)]), by = "country"]
-ski.temps[, .SD[which.max(temp)], by = "country"]
-
+ski.temps[,.SD[which.max(temp)],by = .(country)]
 # what about lowest max temp
 
-ski.temps[, .(temp = max(temp)), by = c("country", "name")][,
-                                                            .SD[which.min(temp)], by = "country"]
+ski.temps[,.SD[which.min(temp)],by = .(country)]
 
 
-ski.temps[unit == "Fahrenheit",
-          temp := ifelse(unit == "Fahrenheit", (temp - 32) * 5 / 9, temp)
-]
 
-ski.temps[unit == "Fahrenheit", temp := (temp - 32) * 5 / 9]
 
-ski.temps[, .(name = name[which.max(temp)]), by = "country"]
 
-ski.temps[, .SD[which.max(temp)], by = "country"]
+
+
+
+# (made up) list of ski-resorts with temperatures
+ski.temps <- rbindlist(list(
+  list(name = NULL,   country = NULL, temp = NULL, unit = NULL),
+  list("Zugspitze",   "Germany",      23,          "Fahrenheit"),
+  list("Mt Buller",   "Australia",    -3,          "Celsius"),
+  list("Lake Louise", "Canada",       -5,          "Celsius"),
+  list("Mt Buller",   "Australia",    41,          "Fahrenheit"),
+  list("Zugspitze",   "Germany",      -8,          "Celsius"),
+  list("Wurmberg",    "Germany",      -1,          "Celsius")
+))
+
+ski.temps[,.(unit = uniqueN(unit)),by = .(country)]
+
+ski.temps[,.(temp_fluctuation = max(temp) - min(temp)),by = .(name)][temp_fluctuation > 10,]
+
+ski.temps[temp <0,.(mean_temp = mean(temp)),by =.(country)]
+
+ski.temps[,.SD[all(temp >=0)],by = .(name)]
+
+ski.temps[,.SD[which.max(temp)]][,.(country,name,temp)]
+
+ski.temps[,.(max_temp = max(temp),by = .(country,name))][,c("rank") := frank(-max_temp), by = country ]
