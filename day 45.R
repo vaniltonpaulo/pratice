@@ -96,3 +96,45 @@ sales[,sales_count := .N,by = .(item,channel)][1:5,order(sales_count, decreasing
 
 
 #Variation 5: Handling Complex Sales Scenarios
+
+
+
+prices <- data.table(
+  item = c("Potion", "Sword", "Shield", "Armor"),
+  price_onsite = c(10, 50, 30, 100),
+  price_online = c(12, 55, 33, 110),
+  discount_day = c("Monday", "Wednesday", NA, "Friday")
+)
+
+sales <- data.table(
+  item = c("Potion", "Sword", "Potion", "Armor", "Shield", "Sword", "Sword"),
+  channel = c("onsite", "online", "online", "onsite", "onsite", "onsite", "online"),
+  sale_day = c("Monday", "Wednesday", "Tuesday", "Friday", "Thursday", "Wednesday", "Monday")
+)
+
+
+sales[prices, on = "item"][,revenue := ifelse(channel == "online",price_online,price_onsite)][,.(
+  revenue = ifelse(discount_day == sale_day,revenue *0.9,revenue))][,sum(revenue,na.rm = TRUE)]
+
+
+#Exercise 5.2: Stock Management and Backorders
+
+stock <- data.table(
+  item = c("Potion", "Sword", "Shield", "Armor"),
+  stock_level = c(10, 5, 3, 2)
+)
+
+sales <- data.table(
+  item = c("Potion", "Sword", "Potion", "Armor", "Shield", "Sword", "Sword"),
+  quantity = c(2, 1, 3, 1, 1, 2, 1)
+)
+
+
+
+  stock_copy <- copy(stock)
+  
+  for (i  in seq_len(nrow(sales))) {
+    stock_copy[item == sales$item[i], stock_level := stock_level - sales$quantity[i]]
+    
+  }
+  stock_copy[]
