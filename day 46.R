@@ -95,3 +95,39 @@ salary_data <- data.table(
   Salary = c(60000, 50000, 52000, 75000, 48000, 65000, 55000, 49000, 53000, 62000),
   YearsAtCompany = c(5, 3, 4, 10, 2, 8, 6, 3, 1, 7)
 )
+
+#What is the average salary of employees across the company?
+salary_data[,lapply(.SD,mean),.SDcols = c("Salary")]
+
+#Which department has the highest average salary?
+salary_data[,lapply(.SD,mean),.SDcols = c("Salary"), by = Department][1,1:2]
+
+#How does the average salary differ between males and females?
+salary_data[,lapply(.SD,mean),.SDcols = c("Salary"), by = Gender]
+
+#Who has the highest salary in the company?
+salary_data[,lapply(.SD,mean),.SDcols = c("Salary"), by = Name][1,1:2]
+
+#What is the average age of employees across different departments?
+salary_data[,lapply(.SD,mean),.SDcols = c("Age"), by = Department]
+
+#Is there any correlation between the number of years at the company and salary?
+
+salary_data[,.(YearsAtCompany,Salary),by = Name][order(YearsAtCompany,Salary,decreasing = TRUE)]
+#there is a weak corrolation
+
+#How many employees are in each department?
+
+salary_data[,.(number.of.employees = .N),by = Department]
+
+
+#Who has been working the longest at the company?
+salary_data[max(YearsAtCompany)]
+
+#What is the average salary for employees who have been with the company for more than 5 years?
+
+salary_data[YearsAtCompany > 5, .(avg.salary = mean(Salary))]
+
+
+#What is the salary range (min, max) in each department?
+salary_data[,.(min.salary = min(Salary),max.salary = max(Salary)),by =Department ]
