@@ -164,3 +164,77 @@ result<-salary_data[YearsAtCompany < 5,.(avg.five.less = mean(Salary)),by = Gend
 result.2 <-salary_data[YearsAtCompany > 5,.(avg.five.more = mean(Salary)),by = Gender]
 merge(result,result.2,by = "Gender",all.x = TRUE)
 
+
+
+#Exercise 3 type exercises
+
+
+#Exercise 1: Grouping and Summarizing Data
+
+flights[,.(avg.delay = mean(arr_delay)),by = .(origin,dest)]
+flights[,.(avg.dep.delay = max(dep_delay)),by = origin]
+
+#Exercise 2: Finding Maximum and Minimum Values Within Groups
+
+
+flights[flights[,.I[which.max(arr_delay)], by =.(origin,dest) ]$V1]
+flights[flights[,.I[which.min(dep_delay)], by =.(origin,dest) ]$V1]
+
+
+
+#Exercise 3: Handling Ties and Sorting
+flights<-flights[order(year,month,day,hour)]
+flights[flights[,.I[arr_delay == max(arr_delay)],by = .(origin,dest)]$V1]
+
+#Exercise 4: Calculating the Median Delay for Each Route
+flights <- flights[order(year, month, day, hour)] # Order chronologically
+flights[flights[,.I[arr_delay == quantile(arr_delay,0.5,type = 1)][[1]],by = .(origin,dest)]$V1]
+
+
+
+
+
+
+
+flights <- data.table(
+  flight_id = 1:5,
+  hour = c(3, 8, 14, 22, 0)  # Flight departure times
+)
+
+# Shop opening times (open and close times)
+opening.times <- data.table(
+  open = c(0, 8, 14, 20),
+  close = c(5, 9, 19, 24)  # Note: close times are exclusive
+)
+
+# Example query
+flights[,sum(hour %inrange% opening.times)]
+
+
+
+
+#exam like question
+
+
+# Create a data table with sample salary data for two companies
+salaries_data <- data.table(
+  EmployeeID = 1:12,
+  Name = c("John", "Jane", "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Henry", "Ivy", "Jake"),
+  Age = c(34, 28, 29, 41, 36, 45, 32, 38, 25, 30, 33, 37),
+  Gender = c("M", "F", "F", "M", "M", "M", "F", "M", "F", "M", "F", "M"),
+  Department = c("IT", "HR", "Finance", "IT", "HR", "Finance", "IT", "HR", "Finance", "IT", "HR", "Finance"),
+  Salary = c(60000, 50000, 52000, 75000, 48000, 65000, 55000, 49000, 53000, 62000, 54000, 66000),
+  Company = c("CompanyA", "CompanyA", "CompanyA", "CompanyA", "CompanyA", "CompanyA", 
+              "CompanyB", "CompanyB", "CompanyB", "CompanyB", "CompanyB", "CompanyB")
+)
+
+salaries_data<-salaries_data[order(-Salary)]
+
+salaries_data[salaries_data[,.I[2], by = Company]$V1]
+
+
+
+# Find the row index of the first person with Age > 30 in each Gender group
+salaries_data[salaries_data[, .I[Age > 30 & Company =="CompanyA" ], by = Gender]$V1]
+
+salaries_data[Age >30]
