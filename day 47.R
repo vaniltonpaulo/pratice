@@ -160,3 +160,98 @@ programmers <- function(...){
 # programmers(33, 72, 74) ➞ 41
 # 
 # programmers(1, 5, 9) ➞ 8
+
+leap_year <- function(x)
+  if(substr(x,nchar(x) -1 ,nchar(x)) == "00"){
+     return( x%% 400 ==0)
+  }else{
+    return(x %% 4 == 0)
+  }
+
+
+
+# leap_year(2020) ➞ True
+# 
+# leap_year(2021) ➞ False
+# 
+# leap_year(1968) ➞ True
+leap_year(2024)
+leap_year(2100)
+
+
+sum_cubes <- function(x){
+  sum((seq_len(x))^3)
+}
+
+
+# sum_cubes(7) ➞ 784
+# 
+# sum_cubes(8) ➞ 1296
+# 
+# sum_cubes(9) ➞ 2025
+
+
+total_cups <- function(x){
+  x + x %/% 6
+}
+
+# total_cups(6) ➞ 7
+# 
+# total_cups(12) ➞ 14
+# 
+# total_cups(213) ➞ 248
+
+
+largest_numbers <- function(y,x){
+  if(y == 0) return(numeric(0))
+  x<-sort(x,decreasing = TRUE)
+  
+  result<- numeric(0)
+  for (i in seq_len(y)) {
+    result[[length(result) + 1]] <- x[i]
+    
+  }
+  sort(result,decreasing = FALSE)
+}
+
+# largest_numbers(2, c(4, 3, 2, 1)) ➞ [3, 4]
+# 
+# largest_numbers(1, c(7, 19, 4, 2)) ➞ [19]
+# 
+# largest_numbers(3, c(14, 12, 57, 11, 18, 16)) ➞ [16, 18, 57]
+# 
+# largest_numbers(0, c(1, 3, 4, 2) ➞ []
+
+
+
+
+n_tables_plus_one <- function(x){
+  n <- 1
+  
+  result <- numeric(0)
+  
+  repeat{
+    
+    if((n %% x == 0) == TRUE){
+      result[length(result) + 1] <- n
+    }
+    
+    if(length(result) == 10){
+      break
+    } 
+    
+    
+    n <- n +1
+  }
+  result +1
+}
+
+
+
+# n_tables_plus_one(7) ➞ "8,15,22,29,36,43,50,57,64,71"
+# 
+# n_tables_plus_one(1) ➞ "2,3,4,5,6,7,8,9,10,11"
+# 
+# n_tables_plus_one(3) ➞ "4,7,10,13,16,19,22,25,28,31"
+
+

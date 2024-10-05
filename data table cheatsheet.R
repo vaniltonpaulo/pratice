@@ -49,3 +49,8 @@ salaries_data[salaries_data[,.I[2], by = Company]$V1]
 
 # Find the row index of the first person with Age > 30 in each Gender group
 salaries_data[salaries_data[, .I[Age > 30 & Company =="CompanyA" ], by = Gender]$V1]
+
+
+#Find out how many times a number goes into another number
+
+x %/% y
