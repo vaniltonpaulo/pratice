@@ -255,3 +255,14 @@ n_tables_plus_one <- function(x){
 # n_tables_plus_one(3) ➞ "4,7,10,13,16,19,22,25,28,31"
 
 
+
+
+# middle_earth(c("Frodo", "Sam", "Gandalf")) ➞ True
+# 
+# middle_earth(c("Frodo", "Saruman", "Sam")) ➞ False
+# 
+# middle_earth(c("Orc", "Sam", "Frodo", "Legolas") ➞ True
+
+
+x <- c("Frodo", "Sam", "Gandalf")
+
