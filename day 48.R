@@ -261,3 +261,46 @@ sock_merchant <- function(x){
 sock_merchant(c(50, 40, 30, 100, 60, 65, 90, 80, 10))
 
 
+
+
+
+
+primes <- c(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97)
+
+is_prime <- function(primes,x){
+  ifelse(any(primes == x),"yes","no")
+}
+# is_prime(primes, 3) ➞ "yes"
+# 
+# is_prime(primes, 4) ➞ "no"
+# 
+# is_prime(primes, 67) ➞ "yes"
+# 
+# is_prime(primes, 36) ➞ "no"
+
+max_collatz <- function(n){
+  result <- numeric(0)
+  x<- n
+  while(n >1){
+    if((n %% 2==0) == TRUE){
+      n <- n/2
+      
+    }else{
+      n <- n * 3 +1
+    } 
+    result[[length(result) +1 ]] <-n
+  }
+  
+  max(append(x,result))
+}
+
+
+# max_collatz(10) ➞ 16
+# # Collatz sequence: 10, 5, 16, 8, 4, 2, 1
+# 
+# max_collatz(32) ➞ 32
+# # Collatz sequence: 32, 16, 8, 4, 2, 1
+# 
+# max_collatz(85) ➞ 256
+# # Collatz sequence: 85, 256, 128, 64, 32, 16, 8, 4, 2, 1
+
