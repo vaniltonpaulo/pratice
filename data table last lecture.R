@@ -28,16 +28,28 @@ itemshop.sales <- rbindlist(list(
 ))
 
 
+
+
+
+
+
 ###########################
 # Reshaping
 #
 # wide --> long: "melt"
 #   imagine an ice cream table melting in the sun
 
+
+#  ----->melt() is used to reshape wide data into long format, making it easier for analysis, grouping, and visualization.
+#         -----> Use it when you have multiple columns that should instead be represented as rows for clearer,
+#                        more flexible data handling.
+
+
+#THIS IS JUST TO SHOW YOU HOW MELT WORKS
 melt(itemshop.prices,
      id.vars = "item",  # could be more than one
-     # default: everything that's not numeric/integer/logical
-     # measurement vars: default: everything else
+     # default: everything that's not numeric/integer/logical ---> only character
+     # measurement vars: default: everything else ------> This are the columns that you can specify to use
      measure.vars = c("price.onsite", "price.online", "price.b2b"),
      variable.name = "channel",  # how to name the 'variable' column; default "variable"
      value.name = "price"  # how to name the 'value' column; default 'value'
@@ -48,37 +60,49 @@ melt(itemshop.prices,
 # also: variable.factor = FALSE would leave 'channel' as `character`
 
 
-cols.price <- grep("^price\\.", colnames(itemshop.prices), value = TRUE)
-cols.shipping <- grep("^shipping\\.", colnames(itemshop.prices), value = TRUE)
-melt(itemshop.prices,
-     id.vars = "item",
-     measure.vars = list(cols.price, cols.shipping),  # !!
-     variable.name = "channel",
-     value.name = c("price", "shipping") # default: value1, value2
-)
+# better: "patterns". ---> If you want to melt columns that have different names like price.  shipping.
 
-# better: "patterns"
+#THIS IS JUST A ILUSTRATION OF THE BETTER WAY OF CODING
 melt(itemshop.prices,
      id.vars = "item",
      measure.vars = patterns("^price\\.", "^shipping\\."),  # !!
-     variable.name = "channel",
-     value.name = c("price", "shipping")
+     variable.name = "channel",  # ---> this will be a FACTOR in order to differentiate
+     value.name = c("price", "shipping") # ---> the names of the column where the values will go
 )
 
+
+# is the same as above
+
+#REAL DEAL
 itemshop.prices.long <- melt(itemshop.prices,
                              id.vars = "item",
                              # named arguments to 'patterns' instead of 'value.name'
                              measure.vars = patterns(price = "^price\\.", shipping = "^shipping\\."),  # !!
                              variable.name = "channel"
 )
+# instead of having the collumn channel as 1,2,3 --> we rename the factor
 
+#HOW TO RENAME FACTORS IN CHANNEL COLUMN
 levels(itemshop.prices.long$channel) <- c("onsite", "online", "b2b")
+
+
+
+
+
+
+
+
+
+
+
 
 # quiz: for each sold item, I want to have:
 #  - gross revenue (price times units sold)
 #  - total shipping (shipping times units sold)
 #  - total revenue (gross revenue + shipping)
 
+
+#HERE THEY JUCT USED THE MELT VERSION OF PRICE AND HAD TO COMBINE THE TWO TABLES ON TWO COLUMNS they share
 itemshop.prices.long[itemshop.sales, on = c("item", "channel")][,
                                                                 sum(price * quantity)]
 itemshop.prices.long[itemshop.sales, on = c("item", "channel")][,
