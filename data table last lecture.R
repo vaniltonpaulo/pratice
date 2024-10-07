@@ -206,7 +206,6 @@ dcast(valuecounts,
 
 
 
-##### EVERYTHING AFTER HERE IS NOT REALY RELEVANT
 
 
 
@@ -218,7 +217,7 @@ dcast(valuecounts,
 dt <- data.table(
   x = c(1, 2, 3),
   y = c("a", "b", "c"),
-  z = list(0, c(1, 10), c(2, 20, 200))
+  z = list(0, c(1, 10), c(2, 20, 200))   # ----> A list column
 )
 
 dt$z
@@ -240,6 +239,8 @@ dt[, c(x, 1000)]
 # otherwise behaves mostly as normal:
 dt[, .(x = x[-1], y = y[-2], z = z[-3])]
 
+
+#HERE THEY ARE USING VAPPLY INSIDE A DATA TABLE. INTERESTING!!!
 dt[z == 0]  # z is a list!
 vapply(dt$z, function(zval) identical(zval, 0), logical(1))
 dt[vapply(z, function(zval) identical(zval, 0), logical(1))]
@@ -247,7 +248,6 @@ dt[vapply(z, function(zval) identical(zval, 0), logical(1))]
 dt[x == 2, z := list(c(5, 4, 3, 2))]
 
 # dt$z[dt$x == 2] <- list(c(5, 4, 3, 2))
-
 dt
 
 dt[x %in% c(2, 3), z := list(c(-1, -2), c(-3, -4))]
