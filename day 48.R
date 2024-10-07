@@ -304,3 +304,30 @@ max_collatz <- function(n){
 # max_collatz(85) ➞ 256
 # # Collatz sequence: 85, 256, 128, 64, 32, 16, 8, 4, 2, 1
 
+
+
+blocks <- function(x){
+  0.5*x^2+5.5*x -1
+}
+
+
+
+# blocks(1) ➞ 5
+# 
+# blocks(5) ➞ 39
+# 
+# blocks(2) ➞ 12
+
+
+
+
+
+# generate_hashtag("    Hello     World   " ) ➞ "#HelloWorld"
+# 
+# generate_hashtag("") ➞ false, "Expected an empty string to return false"
+# 
+# generate_hashtag("Edabit Is Great") ➞ "#EdabitIsGreat", "Should remove spaces."
+
+x <-"    Hello     World   "
+
+strsplit(x,"\\s+")[[1]]
