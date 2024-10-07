@@ -202,6 +202,14 @@ dcast(valuecounts,
 
 # lm(outcome ~ ., data = ...)
 
+
+
+
+
+##### EVERYTHING AFTER HERE IS NOT REALY RELEVANT
+
+
+
 ###########################
 # List columns
 #
