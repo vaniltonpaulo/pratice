@@ -124,6 +124,11 @@ itemshop.prices.long[itemshop.sales, on = c("item", "channel")][,
 itemshop.prices[, .SD, .SDcols = patterns("^price\\.")]
 
 
+
+
+
+
+
 ###########################
 # Reshaping
 #
@@ -131,16 +136,20 @@ itemshop.prices[, .SD, .SDcols = patterns("^price\\.")]
 #   "casting" is the process of putting molten metal / plastic
 #   into an empty mold to give it a new shape
 
+#  dcast() is used to reshape long data back into wide format, spreading rows into columns based on a key variable. 
+#        ------> Use it when you need to summarize or pivot data for reporting or easier comparison across variables.
+
+
 dcast(itemshop.prices.long,
-      item ~ channel,
-      value.var = "price"
+      item ~ channel, # Take the elements inside channel column and turn them into columns
+      value.var = "price" #. ---> this are the values that will go into the channels elements columns based on their match
 )
 
 # multiple value.var
 dcast(itemshop.prices.long,
       item ~ channel,
       value.var = c("price", "shipping"),
-      sep = "."
+      sep = "." #. ---> This will make the elements  be like price.online  for example
 )
 
 # suppose we had missing values:
@@ -148,7 +157,7 @@ dcast(itemshop.prices.long[1:12],
       item ~ channel,
       value.var = c("price", "shipping"),
       sep = ".",
-      fill = 999  # default: NA
+      fill = 999  # default: NA. --->  REPLACE NA VALUES WITH 999 FOR EXAMPLE
 )
 
 
@@ -164,7 +173,7 @@ valuecounts
 
 # get information for each chapter + subchapter
 dcast(valuecounts,
-      chapter + subchapter ~ info
+      chapter + subchapter ~ info # ---> HERE CHAPTER AND SUBCHAPTER STAY THE SAME BUT THE INFO COLUMN IS THE ONE WHERE LEMENTS BECOME COLUMNS
 )
 
 # aggregate??
@@ -174,7 +183,7 @@ dcast(valuecounts,
 
 dcast(valuecounts,
       chapter ~ info,
-      value.var = "value",
+      value.var = "value",  # ---> THIS ARE THE VALUES THAT GO INTO THE NEW COLUMNS
       fun.aggregate = sum
 )
 
