@@ -64,3 +64,33 @@ x %/% y
 
 
 #EXERCISES 1
+
+#HOW TO ASSERT IN DATA TABLE
+
+# ------  1-ASSERT THAT IT IS A DATA TABLE
+#        -->  assertDataTable(prices)
+
+
+# ------- 2 ASSERT FOR LIST
+#  -------  assertList(k, 
+#             names = "unique" #asserts that that the elements inside have unique name
+#              ie list(a=2,b=8)
+ #                ,any.missing = TRUE #IF YOU ALLOW FOR missing values    
+#)
+#diff between by and keyby
+
+#In the first case (by), the result is not sorted, while in the second case (keyby),
+#the result is sorted by group.
+
+
+# How to remove a column from a data tabe
+
+#minuend[!subtrahend, on = "index"] 
+#OR USE NULL
+
+
+# HOW TO USE Rbindlist
+
+#rbindlist(lst,
+#          fill = TRUE, # fill the columns with elements inside the list
+   #use.names = TRUE)
