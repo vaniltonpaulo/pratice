@@ -69,6 +69,9 @@ x %/% y
 
 # ------  1-ASSERT THAT IT IS A DATA TABLE
 #        -->  assertDataTable(prices)
+#----------2 - ASSERT THAT A SPECIFIC COLUMN IS THERE
+#         ---> assertDataTable(a, types = "atomic")
+#              assertNames(colnames(a), must.include = "id")
 
 
 # ------- 2 ASSERT FOR LIST
@@ -86,7 +89,7 @@ x %/% y
 # How to remove a column from a data tabe
 
 #minuend[!subtrahend, on = "index"] 
-#OR USE NULL
+#OR USE NULL ( BETTER)
 
 
 # HOW TO USE Rbindlist
@@ -94,3 +97,4 @@ x %/% y
 #rbindlist(lst,
 #          fill = TRUE, # fill the columns with elements inside the list
    #use.names = TRUE)
+
