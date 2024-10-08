@@ -54,3 +54,13 @@ salaries_data[salaries_data[, .I[Age > 30 & Company =="CompanyA" ], by = Gender]
 #Find out how many times a number goes into another number
 
 x %/% y
+
+
+
+
+########################################################################
+
+#HERE WE ARE DOING A DEEP DIVE OF THE EXERCISE 
+
+
+#EXERCISES 1
