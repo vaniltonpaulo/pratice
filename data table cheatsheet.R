@@ -152,3 +152,55 @@ ex04CarrierDelay <- function(flights, year) {
 # The calculation is performed by each carrier within each month.
 # The outer by = "month" groups the data by month, so that for each month, the mean delay for each carrier and their competitors is calculated.
 # The inner by = "carrier" within the .SD[, ...] block ensures that the calculations are performed for each carrier in that specific month.
+
+
+
+
+
+#COLLECT ALL DATA INTO A SINGLE LIST COLUMN
+
+
+# Write a function that accepts one `data.table` argument `data` and collects all the sensor data into
+# a single list column. This means, the resulting `data.table` should have columns `machine`, `quality`,
+# `sensor`, and the `sensor` column should be a `list` column containing a named `numeric` vector
+# containing all the non-`NA` sensor values with appropriate names. The order of the table should not be changed.
+# The output for the example data would therefore be:
+widget.corp.data.list <- rbindlist(list(
+  list(machine = NULL, quality = NULL, sensor = NULL),
+  list("Machine01",    78,             list(c(sensor01 = 23, sensor02 = 28.6, sensor03 = -23))),
+  list("Machine02",    28,             list(c(sensor01 = 41, sensor02 = 77.8, sensor04 = 27))),
+  list("Machine03",    32,             list(c(sensor01 = 57, sensor02 = 91.6, sensor03 = -29, sensor04 = 10))),
+  list("Machine03",    80,             list(c(sensor02 = 32.3))),
+  list("Machine03",    58,             list(c(sensor01 = 10, sensor02 = 77.8, sensor03 = 3))),
+  list("Machine02",    74,             list(c(sensor02 = 24.5, sensor03 = -18, sensor04 = 3))),
+  list("Machine01",    46,             list(c(sensor01 = 81))),
+  list("Machine01",    24,             list(c(sensor01 = 43, sensor02 = 13.3, sensor03 = -22))),
+  list("Machine02",    7,              list(c(sensor01 = 96, sensor02 = 96.0, sensor03 = 0))),
+  list("Machine01",    22,             list(c(sensor01 = 107, sensor02 = 23.5, sensor03 = 7, sensor04 = 8))),
+  list("Machine03",    98,             list(c(sensor03 = 11)))
+))
+  
+  
+  # Be aware that some rows may not have any non-missing sensor data, in which case the `sensor` value for the
+  # corresponding result row should be an empty `numeric`.
+  ex02ListTable <- function(data) {
+    assertDataTable(data)
+    sensorcols <- grep("^sensor[0-9]+", colnames(data), value = TRUE)
+    data[, sensor := list(list(c(na.omit(unlist(.SD))))), .SDcols = sensorcols, by = seq_len(nrow(data))]
+    data[, c("machine", "quality", "sensor")]
+  }
+  
+  
+  
+#   3. data[, sensor := list(list(c(na.omit(unlist(.SD))))), .SDcols = sensorcols, by = seq_len(nrow(data))]
+#   This is the key part of the function, and it's performing a transformation on the data.table.
+# Let’s break it down:
+# 
+# .SDcols = sensorcols: This specifies that only the columns stored in sensorcols (i.e., columns starting with "sensor") should be considered in the operation.
+# by = seq_len(nrow(data)): This ensures that the operation is performed row-by-row. The sequence seq_len(nrow(data)) simply generates a sequence from 1 to the number of rows in the data, effectively applying the operation to each row individually.
+# .SD: .SD is a special symbol in data.table that represents the subset of data being worked on (in this case, the sensorcols columns for each row).
+# unlist(.SD): This takes all the sensorcols columns for the current row and "unlists" them, i.e., it combines all sensor values from that row into a single vector.
+# na.omit(unlist(.SD)): This removes any NA values from the unlisted vector of sensor data.
+# list(c(...)): The cleaned (non-NA) vector is wrapped in a list to create a list column. The double list() is used to ensure that the new column sensor is a list of lists (since each row will store a list of sensor values).
+# sensor :=: This assigns the result to a new column called sensor in the data table.
+# In summary, this line creates a new column sensor in data where each row contains a list of the non-NA sensor values from that row.
