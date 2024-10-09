@@ -142,7 +142,7 @@ itemshop.prices[, .SD, .SDcols = patterns("^price\\.")]
 
 dcast(itemshop.prices.long,
       item ~ channel, # Take the elements inside channel column and turn them into columns
-      value.var = "price" #. ---> this are the values that will go into the channels elements columns based on their match
+      value.var = "price" #. --->FROM WHICH COLLUMN THE VALUES WILL COME FROM. this are the values that will go into the channels elements columns based on their match
 )
 
 # multiple value.var
