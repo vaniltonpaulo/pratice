@@ -98,3 +98,57 @@ x %/% y
 #          fill = TRUE, # fill the columns with elements inside the list
    #use.names = TRUE)
 
+
+
+
+
+
+
+
+
+#HOW TO DEAL WITH COMPETION
+
+ex04CarrierDelay <- function(flights, year) {
+  # your code
+  assertDataTable(flights)
+  assertInt(year)
+  combs <- CJ(month = 1:12, carrier = flights$carrier, unique = TRUE)
+  yr <- year
+  allflights <- flights[year == yr][combs, on = c("month", "carrier")][, {
+    dt <- .SD
+    .SD[, .(
+      mean.delay = mean(arr_delay),
+      mean.delay.competition = dt[!carrier, mean(arr_delay, na.rm = TRUE), on = "carrier"]
+    ), by = "carrier"]
+  }, by = "month"]
+  res <- allflights[combs, on = c("month", "carrier")]
+  setnafill(res, fill = 0, cols = "mean.delay")
+  res
+}
+
+
+
+# 
+# 
+# 
+# 3. .SD and dt <- .SD:
+#   .SD is a special symbol in data.table that refers to the Subset of Data corresponding to the current group within by operations.
+# dt <- .SD assigns the current subset of the data (i.e., the data for a specific month and carrier) to a local variable dt.
+# dt is used to store the data that contains the flights for the current group (month and carrier).
+# 4. Inside .SD[, .()]:
+#   Now, within the .SD (Subset of Data) for each carrier and month:
+#   
+#   mean.delay = mean(arr_delay):
+#   
+#   This calculates the mean delay (mean.delay) for the current carrier in the current month.
+# It computes the average arr_delay (arrival delay) for flights of that carrier in the month.
+# mean.delay.competition = dt[!carrier, mean(arr_delay, na.rm = TRUE), on = "carrier"]:
+#   
+#   This calculates the mean delay of the competition (i.e., every other airline except the current carrier).
+# dt[!carrier, ...] means "exclude the current carrier."
+# For the remaining rows (the competitors), the function computes the mean of arr_delay to get the delay for the competition.
+# on = "carrier" ensures that it works with the carrier column to exclude the current airline while calculating the competition's delays.
+# 5. by = "carrier" and by = "month":
+# The calculation is performed by each carrier within each month.
+# The outer by = "month" groups the data by month, so that for each month, the mean delay for each carrier and their competitors is calculated.
+# The inner by = "carrier" within the .SD[, ...] block ensures that the calculations are performed for each carrier in that specific month.
