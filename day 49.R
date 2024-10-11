@@ -47,3 +47,111 @@ find_the_difference <- function(s,t) {
 # find_the_difference("", "y") ➞ "y"
 # 
 # find_the_difference("ae", "aea") ➞ "a"
+
+
+
+
+fib_fast<- function(n){
+  if(n == 0) return(0)
+  if(n == 1) return(1)
+  
+  fib_fast( n -1) + fib_fast( n -2)
+  
+}
+
+
+
+
+# fib_fast(5) ➞ 5
+# 
+# fib_fast(10) ➞ 55
+# 
+# fib_fast(20) ➞ 6765
+# 
+# fib_fast(50) ➞ 12586269025
+fib_fast(20)
+
+
+multiplication_table<- function(x){
+  mt<-matrix(numeric(0),ncol = x,nrow = x)
+  for (i in seq_len(nrow(mt))) {
+    for (j in seq_len(ncol(mt))) {
+      if(i == 1){
+        mt[i,j] <- j
+      }
+      mt[i,j]  <- i *j
+    }
+    
+  }
+  mt
+  
+}
+
+
+# multiplication_table(1) ➞ [[1]]
+# 
+# multiplication_table(3) ➞ [[1, 2, 3], [2, 4, 6], [3, 6, 9]]
+
+
+
+
+# cup_swapping(c("AB", "CA")) ➞ "C"
+# 
+# cup_swapping(c("AC", "CA", "CA", "AC")) ➞ "B"
+# 
+# cup_swapping(c("BA", "AC", "CA", "BC")) ➞ "A"
+
+
+
+
+cup_swapping <- function(swaps) {
+  ball_position <- "B"  # Ball starts at position B
+  
+  # Loop through each swap
+  for (swap in swaps) {
+    if (ball_position %in% strsplit(swap, "")[[1]]) {
+      # If the ball is in one of the cups involved in the swap, move it to the other cup
+      ball_position <- setdiff(strsplit(swap, "")[[1]], ball_position)
+    }
+  }
+  
+  return(ball_position)
+}
+
+owij_sum<- function(n){
+  result <- (n* (n+1))/2
+  x<-seq_len(result)
+  x<- sort(x,decreasing = TRUE)
+  sum(x[1:n])
+}
+
+
+
+# owij_sum(1) ➞ 1
+# 
+# owij_sum(2) ➞ 5
+# 
+# owij_sum(4) ➞ 34
+
+
+is_palindrome_possible <- function(x){
+  result <-strsplit(x,"")[[1]]
+  result<-table(result)
+  odd_count <-sum(result %% 2 == 1)
+  
+  return(odd_count <= 1)
+}
+
+
+
+
+# is_palindrome_possible("rearcac") ➞ True
+# # You can make "racecar"
+# 
+# is_palindrome_possible("suhbeusheff") ➞ True
+# # You can make "sfuehbheufs" (not a real word but still a palindrome)
+# 
+# is_palindrome_possible("palindrome") ➞ False
+# # It's impossible
+is_palindrome_possible("avkkiaapiusuapspiip")
+
