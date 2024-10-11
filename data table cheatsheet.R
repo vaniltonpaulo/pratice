@@ -204,3 +204,26 @@ widget.corp.data.list <- rbindlist(list(
 # list(c(...)): The cleaned (non-NA) vector is wrapped in a list to create a list column. The double list() is used to ensure that the new column sensor is a list of lists (since each row will store a list of sensor values).
 # sensor :=: This assigns the result to a new column called sensor in the data table.
 # In summary, this line creates a new column sensor in data where each row contains a list of the non-NA sensor values from that row.
+  
+  
+  
+  
+  
+  
+  
+################  
+#                   PRIME
+#                       NUMBERS
+  ############################  
+  ksiprime<-function(n){
+    if(n == 1) return(FALSE)
+    if(n == 2) return(TRUE)
+    if(n %% 2 == 0) return(FALSE)
+    
+    for (i in 3:sqrt(n)) {
+      if(n %% i == 0 ) return(FALSE)
+    }
+    return(TRUE)    
+    
+  }
+  ksiprime(47)
