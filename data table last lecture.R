@@ -57,7 +57,7 @@ melt(itemshop.prices,
 
 # otherwise: setnames(result, "value", "price")
 
-# also: variable.factor = FALSE would leave 'channel' as `character`
+# also: variable.factor = FALSE would leave 'channel' as `character
 
 
 # better: "patterns". ---> If you want to melt columns that have different names like price.  shipping.
