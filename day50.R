@@ -1,41 +1,37 @@
 #day 50
+track_robot <- function(x){
+  x.axis <-0
+  y.axis <- 0
+  
+  
+  
+  for (i in seq_along(x)) {
+    main.x<-x[[i]]
+    result<-strsplit(main.x," ")[[1]]
+    
+    if(result[[1]] == "right"){
+      x.axis <- x.axis  + as.numeric(result[[2]])
+    }
+    if(result[[1]] == "up"){
+      y.axis <- y.axis  + as.numeric(result[[2]])
+    } 
+    if(result[[1]] == "left"){
+      x.axis <- x.axis  - as.numeric(result[[2]])
+    } 
+    
+    if(result[[1]] == "down"){
+      y.axis <- y.axis  - as.numeric(result[[2]])
+    } 
+    
+  }
+  return(c(x.axis,y.axis)) 
+}
 
-stock_picker(c(10, 12, 4, 5, 9)) #➞ 5
+#track_robot(c("right 10", "up 50", "left 30", "down 10")) ➞ [-20, 40]
 
-stock_picker(c(14, 20, 4, 12, 5, 11)) #➞ 8
+#track_robot(c()) ➞ [0, 0]
+#// If there are no instructions, the robot doesn't move.
 
+#track_robot(c("right 100", "right 100", "up 500", "up 10000")) ➞ [200, 10500]
 
-stock_picker(c(80, 60, 10, 8))# ➞ #-1
-
-
-
-
-stock_picker(c(10, 12, 4, 5, 9)) #➞ 5
-
-stock_picker(c(14, 20, 4, 12, 5, 11)) #➞ 8
-
-stock_picker(c(80, 60, 10, 8))# ➞ #-1
-
-stock_picker(c(10, 12, 4, 5, 9)) #➞ 5
-
-stock_picker(c(14, 20, 4, 12, 5, 11)) #➞ 8
-
-stock_picker(c(80, 60, 10, 8)) #➞ #-1
-
-
-stock_picker(c(10, 12, 4, 5, 9)) #➞ 5
-
-stock_picker(c(14, 20, 4, 12, 5, 11)) #➞ 8
-
-stock_picker(c(80, 60, 10, 8)) #➞ #-1
-
-stock_picker(c(10, 12, 4, 5, 9)) #➞ 5
-
-#hhidwhgiyvwy
-
-x<- "hidgywg"
-
-stock_picker(c(14, 20, 4, 12, 5, 11)) #➞ 8
-
-
-stock_picker(c(80, 60, 10, 8)) ➞ #-1
+track_robot(c("left 10", "left 100", "left 1000", "left 10000"))
