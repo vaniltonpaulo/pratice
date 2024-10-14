@@ -96,9 +96,55 @@ pile_of_cubes<- function(m){
 
 
 
-
 # pile_of_cubes(1071225) ➞ 45
 # 
 # pile_of_cubes(4183059834009) ➞ 2022
 # 
 # pile_of_cubes(16) ➞ None
+
+
+
+get_frame <- function(x,y,z){
+  if(x <= 2 || y <= 2) stop("Invalid")
+  
+  
+  mt <- matrix(numeric(0),nrow = y,ncol = 1)
+  
+  
+  for (i in seq_len(nrow(mt))) {
+    if(i == 1 || i == length(seq_len(y))){
+      mt[i,1] <- paste0(rep(z,x),collapse = "")
+      
+    }else{
+      mt[i,1] <- paste0("#",paste(rep(" ",x-2),collapse = ""),"#")
+      
+    }
+    
+  }
+  mt
+  
+}
+
+# get_frame(4, 5, "#") ➞ [
+#   ["####"],
+#   ["#  #"],
+#   ["#  #"],
+#   ["#  #"],
+#   ["####"]
+# ]
+# # Frame is 4 characters wide and 5 characters tall.
+# 
+# 
+# get_frame(10, 3, "*") ➞ [
+#   ["**********"],
+#   ["*        *"],
+#   ["**********"]
+# ]
+# # Frame is 10 characters and wide and 3 characters tall.
+# 
+# 
+# get_frame(2, 5, "0") ➞ "invalid"
+# # Frame's width is not more than 2.
+
+
+
