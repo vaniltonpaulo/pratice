@@ -62,3 +62,25 @@ chunkify <- function(x,y){
 # chunkify([2, 3, 4, 5, 6, 7], 7) ➞ [[2, 3, 4, 5, 6, 7]]
 
 
+
+possible_palindrome <- function(x){
+  result<-table(strsplit(x,"")[[1]])
+  if(all(result == 1))return(FALSE)
+  if(all(result %% 2 ==1)) return(TRUE)
+  if(sum(result %% 2 ==1) == 1) return(TRUE)
+  return(FALSE)
+  
+}
+
+# possible_palindrome("acabbaa") ➞ True
+# # Can make the following palindrome: "aabcbaa"
+# 
+# possible_palindrome("aacbdbc") ➞ True
+# # Can make the following palindrome: "abcdcba"
+# 
+# possible_palindrome("aacbdb") ➞ False
+# 
+# possible_palindrome("abacbb") ➞ False
+possible_palindrome("ab")
+possible_palindrome("abc")
+possible_palindrome("bbaacd")
