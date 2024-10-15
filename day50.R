@@ -148,3 +148,26 @@ get_frame <- function(x,y,z){
 
 
 
+
+
+# fibo(1) ➞ 1
+# 
+# fibo(2) ➞ 1
+# 
+# fibo(3) ➞ 2
+# 
+# fibo(6) ➞ 8
+# 
+# fibo(30) ➞ 832040
+
+fibo <- function(x){
+  if( x== 2) return(1)
+  if( x== 1) return(1)
+  
+  fibo(x-1) + fibo(x-2)
+  
+}
+
+
+
+
