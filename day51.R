@@ -84,3 +84,39 @@ possible_palindrome <- function(x){
 possible_palindrome("ab")
 possible_palindrome("abc")
 possible_palindrome("bbaacd")
+
+
+
+dial <- function(x){
+  
+  my_vector <- c("abc" = 2, "def" = 3, "ghi" = 4, "jkl" = 5, "mno" = 6, "pqrs" = 7, "tuv" = 8, "wxyz" = 9)
+  
+  for (i in seq_along(my_vector)) {
+    y<-names(my_vector)[[i]]
+    pattern <- paste0("[",paste0(y,toupper(y)),"]")
+    regmatches(x,gregexpr(pattern,x,perl = TRUE)) <- my_vector[[i]]
+    
+    
+  }
+  
+  x
+}
+
+# abc  = 2
+# def  = 3
+# ghi  = 4
+# jkl  = 5
+# mno  = 6
+# pqrs = 7
+# tuv  = 8
+# wxyz = 9
+
+
+
+# dial("1-800-HOTLINEBLING") ➞ "1-800-468546325464"
+# 
+# dial("abc-def-ghi-jkl!!") ➞ "222-333-444-555!!"
+# 
+# dial("adgjmptw :)") ➞ "23456789 :)"
+
+
