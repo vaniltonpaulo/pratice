@@ -119,4 +119,158 @@ dial <- function(x){
 # 
 # dial("adgjmptw :)") ➞ "23456789 :)"
 
+mat.multiplier <- function(x,y){
+  if(ncol(x) != nrow(y)) stop("error")
+  if(nrow(x) != ncol(y)) stop("error")
+  
+  x %*%y
+}
 
+
+matrix1 <- matrix(c(1, 2, 3, 
+                    4, 5, 6, 
+                    7, 8, 9), nrow = 3, byrow = TRUE)
+
+matrix2 <- matrix(c(1, 2, 3, 
+                    4, 5, 6, 
+                    7, 8, 9), nrow = 3, byrow = TRUE)
+
+
+mat.multiplier(matrix1,matrix2)
+
+
+
+
+
+
+
+
+make_box <- function(x){
+  mt <- matrix(numeric(0),ncol = 1,nrow = x)
+  
+  for (i in seq_len(x)) {
+    if(i == 1 || i == x){
+      mt[i,1]<-paste0(rep("#",x),collapse = "")
+    }else{
+      mt[i,1]<-paste0("#",paste0(rep(" ",x-2),collapse = ""),"#",collapse = "")
+      
+    }  
+  }
+  mt
+}
+# make_box(5) ➞ [
+#   "#####",
+#   "#   #",
+#   "#   #",
+#   "#   #",
+#   "#####"
+# ]
+# 
+# make_box(3) ➞ [
+#   "###",
+#   "# #",
+#   "###"
+# ]
+# 
+# make_box(2) ➞ [
+#   "##",
+#   "##"
+# ]
+# 
+# make_box(1) ➞ [
+#   "#"
+# ]
+
+letts <- function(x,y){
+  x.main<-strsplit(x,"")[[1]]
+  
+  y.main<-strsplit(y,"")[[1]]
+  
+  final <-intersect(x.main,y.main)
+  final <-paste0(sort(final),collapse = "")
+  
+  
+  pattern.x<-paste0("[^",y,"]",collapse = "")
+  m.x<-regmatches(x,gregexpr(pattern.x,x,perl = TRUE))[[1]]
+  
+  final.1<-paste0(sort(unique(m.x)),collapse = "")
+  
+  
+  
+  pattern.y<-paste0("[^",x,"]",collapse = "")
+  m.y<-regmatches(y,gregexpr(pattern.y,y,perl = TRUE))[[1]]
+  final.2<-paste0(sort(unique(m.y)),collapse = "")
+  
+  list(final,final.1,final.2)
+  
+  
+}
+
+
+# letts("sharp", "soap") ➞ ["aps", "hr", "o"]
+# 
+# letts("board", "bored") ➞ ["bdor", "a", "e"]
+# 
+# letts("happiness", "envelope") ➞ ["enp", "ahis", "lov"]
+# 
+# letts("kerfuffle", "fluffy") ➞ ["flu", "ekr", "y"]
+# # Even with multiple matching letters (e.g. 3 f's), there should 
+# # only exist a single "f" in your first element.
+# 
+# letts("match", "ham") ➞ ["ahm", "ct", ""]
+# # "ham" does not contain any letters that are not found already 
+# # in "match".
+
+
+
+
+
+ones_threes_nines <- function(x){
+  
+  
+  result.1<-logical(0)
+  result.2<-logical(0)
+  result.3<-logical(0)
+  
+  
+  while (x > 0) {
+    
+    if(x > 9){
+      x<-x- 9
+      result.1[[length(result.1) + 1]] <- TRUE
+    }else{
+      if(x >= 3){
+        x<-x- 3
+        result.2[[length(result.2) + 1]] <- TRUE
+      }else{
+        x<-x- 1
+        result.3[[length(result.3) + 1]] <- TRUE
+        
+      }
+    }
+    
+    
+  }
+  paste(paste0("nines:",sum(result.1),collapse = ""),paste0("threes:",sum(result.2),collapse = ""),paste0("ones:",sum(result.3),collapse = "")
+        ,collapse = ",",sep = ", ")
+  
+  
+}
+
+
+# ones_threes_nines(10) ➞ "nines:1, threes:0, ones:1"
+# 
+# ones_threes_nines(15) ➞ "nines:1, threes:2, ones:0"
+# 
+# ones_threes_nines(22) ➞ "nines:2, threes:1, ones:1"
+
+ones_threes_nines(25)
+
+
+#This function I already did before
+
+# generate_hashtag("    Hello     World   " ) ➞ "#HelloWorld"
+# 
+# generate_hashtag("") ➞ false, "Expected an empty string to return false"
+# 
+# generate_hashtag("Edabit Is Great") ➞ "#EdabitIsGreat", "Should remove spaces."
