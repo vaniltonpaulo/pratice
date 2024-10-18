@@ -43,3 +43,29 @@ split_code <- function(x){
 split_code("WIEB3921")
 
 
+
+
+
+# pattern = "yourregularexpressionhere"
+# txt = "eta, edu, etc, ele, epa, eye, exe, emf, ete, eon, era"
+# 
+# re.findall(pattern, txt) ➞ ["eta", "edu", "etc", "ele", "epa", "eye", "exe", "emf", "ete", "eon", "era"]
+x<-"eta, edu, etc, ele, epa, eye, exe, emf, ete, eon, era"
+regmatches(x,gregexpr("\\w",x,perl = TRUE))
+grep("\\w",x,perl = TRUE)
+
+
+vowels <- function(x){
+  result <-regmatches(x,gregexpr("[aeiou]",x,perl = TRUE))[[1]]
+  nchar(paste0(result,collapse = ""))
+}
+
+# vowels("apple") ➞ 2
+# 
+# vowels("cheesecake") ➞ 5
+# 
+# vowels("bbb") ➞ 0
+# 
+# vowels("") ➞ 0
+
+x <- "apple"

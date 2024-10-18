@@ -80,4 +80,3 @@ same_length <- function(x) {
 # 
 # same_length("111") ➞ False
 
-766
