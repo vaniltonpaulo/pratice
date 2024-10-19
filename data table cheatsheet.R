@@ -227,3 +227,49 @@ widget.corp.data.list <- rbindlist(list(
     
   }
   ksiprime(47)
+  
+  
+  
+  
+  
+  ############### COOL CONCEPT ALMOST WORKS Problem is the mean is a bit off in two cases
+  x<-2
+  ex04CarrierDelay <- function(flights, year) {
+    # your code
+    
+    
+    
+    assertDataTable(flights)
+    assertCount(year, tol = 0)
+    yr <- year
+    
+    flights <-flights[order(month, day,hour)]
+    result<-flights[yr == year,lapply(.SD,mean),.SDcols = "arr_delay" , by = .(month, carrier)]
+    result <-result[order(month,carrier)]
+    
+    
+    
+    
+    
+    carrier.res<-unique(flights$carrier)
+    soka_list <- list()
+    for (i in seq_along(carrier.res)) {
+      carrier.names <-carrier.res[[i]]
+      for (j in seq_len(12)) {
+        
+        soka <-flights[yr == year & carrier != carrier.names & month == j,.(carrier = carrier.names,mean.delay.competition =mean(arr_delay, na.rm = TRUE)), by = .(month)]
+        soka_list[[paste0("carrier_", carrier.names, "_month_", j)]] <- soka 
+      }
+    }
+    #soka_list
+    
+    nice<-rbindlist(soka_list,fill = TRUE)
+    nice<- nice[order(month,carrier)]
+    
+    
+    sooo<- merge(result,nice,all.x = TRUE, by = c(month ="month",carrier ="carrier"))
+    sooo<-sooo[,.(month, carrier ,mean.delay=arr_delay,mean.delay.competition)]
+    combs <- CJ(month = 1:12, carrier = flights$carrier, unique = TRUE)
+    res <- sooo[combs, on = c("month", "carrier")]
+    setnafill(res,fill = 0,cols = c("mean.delay",  "mean.delay.competition"))
+  }
