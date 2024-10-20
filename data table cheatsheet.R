@@ -58,8 +58,11 @@ salaries_data[salaries_data[, .I[Age > 30 & Company =="CompanyA" ], by = Gender]
 
 x %/% y
 
+#Definitions of special symbols in data table
 
-
+#.SD (Subset of Data): Refers to the subset of data within each group specified by by. .SD holds the data that corresponds to the current group.
+#Special symbols: .SD, .N (number of rows in the current group),
+#.BY (current group key), .I (row indices), and .GRP (group number).
 
 ########################################################################
 
@@ -235,44 +238,51 @@ widget.corp.data.list <- rbindlist(list(
   
   
   
-  ############### COOL CONCEPT ALMOST WORKS Problem is the mean is a bit off in two cases
-  x<-2
-  ex04CarrierDelay <- function(flights, year) {
-    # your code
+#######################
+  #Advance use of .SD
+  ###################################
+  
+   combs <- CJ(month = 1:12, carrier = flights$carrier, unique = TRUE)
+   yr <- year
+   
+   allflights <- flights[year == yr][combs, on = c("month", "carrier")][, {
+     dt <- .SD
+     .SD[, .(
+      mean.delay = mean(arr_delay),
+      mean.delay.competition = dt[!carrier, mean(arr_delay, na.rm = TRUE), on = "carrier"]
+      # This uses a nested query to calculate the mean of arr_delay excluding the current carrier.
+      # The !carrier excludes the current group from the calculation, and on = "carrier" is used
+      # for efficient joining of data, allowing for carrier-based grouping.
+    ), by = "carrier"]
+  }, by = "month"]
+   
+  res <- allflights[combs, on = c("month", "carrier")]
+  
+  setnafill(res, fill = 0, cols = "mean.delay")
+  
+  # Inside the j expression:
+  #   
+  #   The part inside {...} allows for multiple operations in j, which makes data.table extremely flexible.
+  # Nested data.table operations: You can perform calculations within groups using .SD, and even filter
+  #or compute things dynamically based on subsets of data.
+  
+  
+  # Group-wise Operations:
+  #   
+  #   You can group data by columns using by = column_name and then perform calculations on each group.
+  # 
+  
+  
+  
+  # Key Concepts in Your Example:
+  #   1. .SD (Subset of Data):
+  #   .SD is a special object in data.table that represents the subset of data for the current group. When you group by month, .SD will contain all rows where the month is the current one being processed.
+  # You store .SD into a variable dt so that you can refer to the full subset of the data for that group.
+  
+  
+  
+  #Grouping by carrier within each month:
+    .SD[, .(...), by = carrier]
     
-    
-    
-    assertDataTable(flights)
-    assertCount(year, tol = 0)
-    yr <- year
-    
-    flights <-flights[order(month, day,hour)]
-    result<-flights[yr == year,lapply(.SD,mean),.SDcols = "arr_delay" , by = .(month, carrier)]
-    result <-result[order(month,carrier)]
-    
-    
-    
-    
-    
-    carrier.res<-unique(flights$carrier)
-    soka_list <- list()
-    for (i in seq_along(carrier.res)) {
-      carrier.names <-carrier.res[[i]]
-      for (j in seq_len(12)) {
-        
-        soka <-flights[yr == year & carrier != carrier.names & month == j,.(carrier = carrier.names,mean.delay.competition =mean(arr_delay, na.rm = TRUE)), by = .(month)]
-        soka_list[[paste0("carrier_", carrier.names, "_month_", j)]] <- soka 
-      }
-    }
-    #soka_list
-    
-    nice<-rbindlist(soka_list,fill = TRUE)
-    nice<- nice[order(month,carrier)]
-    
-    
-    sooo<- merge(result,nice,all.x = TRUE, by = c(month ="month",carrier ="carrier"))
-    sooo<-sooo[,.(month, carrier ,mean.delay=arr_delay,mean.delay.competition)]
-    combs <- CJ(month = 1:12, carrier = flights$carrier, unique = TRUE)
-    res <- sooo[combs, on = c("month", "carrier")]
-    setnafill(res,fill = 0,cols = c("mean.delay",  "mean.delay.competition"))
-  }
+    #Outer by = month:
+#  [{...}, by = month]

@@ -35,4 +35,4 @@ DT[,.SD[.N > 10], by = species]
 
 DT[,.SD[which.max(petal_length)], by = species]
 
-DT
+DT[, .(exact.row.indices =.I[petal_length == max(petal_length)]), by = species]
