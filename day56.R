@@ -31,5 +31,14 @@ dashed<-function(x){
 # 
 # dashed("Fight for your right to party!") ➞ "F-i-ght f-o-r y-o--u-r r-i-ght t-o- p-a-rty!"
 
+is_valid_phone_number <- function(x){
+  grepl("^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$",x,perl = TRUE)
+  
+}
 
+# is_valid_phone_number("(123) 456-7890") ➞ True
+# 
+# is_valid_phone_number("1111)555 2345") ➞ False
+# 
+# is_valid_phone_number("098) 123 4567") ➞ False
 
