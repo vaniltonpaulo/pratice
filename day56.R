@@ -59,3 +59,29 @@ club_entry <- function(x){
 # 
 # club_entry("bee") ➞ 20
 
+insert_whitespace <- function(x){
+  gsub("([a-z])([A-Z])","\\1 \\2",x)
+}
+
+# insert_whitespace("SheWalksToTheBeach") ➞ "She Walks To The Beach"
+# 
+# insert_whitespace("MarvinTalksTooMuch") ➞ "Marvin Talks Too Much"
+# 
+# insert_whitespace("TheGreatestUpsetInHistory") ➞ "The Greatest Upset In History"
+
+
+
+validate_email <- function(x){
+  grepl("^[A-z]+@[a-z]+\\.com$",x,perl = TRUE)
+}
+
+# validate_email("@gmail.com") ➞ False
+# 
+# validate_email("hello.gmail@com") ➞ False
+# 
+# validate_email("gmail") ➞ False
+# 
+# validate_email("hello@gmail") ➞ False
+# 
+# validate_email("hello@edabit.com") ➞ True
+
