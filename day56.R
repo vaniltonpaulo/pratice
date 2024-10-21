@@ -42,3 +42,20 @@ is_valid_phone_number <- function(x){
 # 
 # is_valid_phone_number("098) 123 4567") ➞ False
 
+club_entry <- function(x){
+  codebook <- 1:26
+  names(codebook) <- letters
+  result<-strsplit(x,"")[[1]]
+  item <-result[duplicated(result)]
+  final<-codebook[which(names(codebook) == item)]*4
+  unname(final)
+}
+
+# club_entry("hill") ➞ 48
+# # 'l' is 12th in the alphabet
+# # 12*4 = 48
+# 
+# club_entry("apple") ➞ 64
+# 
+# club_entry("bee") ➞ 20
+
