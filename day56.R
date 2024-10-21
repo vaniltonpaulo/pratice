@@ -72,7 +72,7 @@ insert_whitespace <- function(x){
 
 
 validate_email <- function(x){
-  grepl("^[A-z]+@[a-z]+\\.com$",x,perl = TRUE)
+  grepl("^[A-z]+(\\.[A-z]+)?@[a-z]+\\.com$",x,perl = TRUE)
 }
 
 # validate_email("@gmail.com") ➞ False
@@ -84,4 +84,4 @@ validate_email <- function(x){
 # validate_email("hello@gmail") ➞ False
 # 
 # validate_email("hello@edabit.com") ➞ True
-
+validate_email('bill.gates@microsoft.com')
