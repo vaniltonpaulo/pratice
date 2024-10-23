@@ -85,3 +85,6 @@ validate_email <- function(x){
 # 
 # validate_email("hello@edabit.com") ➞ True
 validate_email('bill.gates@microsoft.com')
+
+
+x<-"I did nothing"
