@@ -89,3 +89,8 @@ validate_email('bill.gates@microsoft.com')
 
 x<-"I did nothing"
 y <-"Im doing the R homework"
+
+
+validate_email <- function(x){
+  grepl("^[A-z]+(\\.[A-z]+)?@[a-z]+\\.com$",x,perl = TRUE)
+}
