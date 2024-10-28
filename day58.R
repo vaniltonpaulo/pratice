@@ -117,3 +117,24 @@ split_and_delimit <- function(x,y,z){
 # 
 # split_and_delimit("poisonous", 2, "~") ➞ "po~is~on~ou~s"
 
+
+
+
+
+no_yelling <- function(x){
+  regmatches(x, gregexpr("[[:punct:]]+$",x,perl = TRUE))[[1]] <-regmatches(x, gregexpr("[[:punct:]]$",x,perl = TRUE))[[1]]
+  x  
+}
+
+# no_yelling("What went wrong?????????") ➞ "What went wrong?"
+# 
+# no_yelling("Oh my goodness!!!") ➞ "Oh my goodness!"
+# 
+# no_yelling("I just!!! can!!! not!!! believe!!! it!!!") ➞ "I just!!! can!!! not!!! believe!!! it!"
+# # Only change repeating punctuation at the end of the sentence.
+# 
+# no_yelling("Oh my goodness!") ➞ "Oh my goodness!"
+# # Do not change sentences where there exists only one or zero exclamation marks/question marks.
+# 
+# no_yelling("I just cannot believe it.") ➞ "I just cannot believe it."
+
