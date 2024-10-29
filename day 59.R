@@ -65,3 +65,28 @@ is_empty <- function(x){
 # is_empty(" ") ➞ False
 # 
 # is_empty("a") ➞ False
+
+repetition <- function(x,y){
+  paste0(rep(x,y),collapse = "")
+}
+
+
+# repetition("ab", 3) ➞ "ababab"
+# 
+# repetition("kiwi", 1) ➞ "kiwi"
+# 
+# repetition("cherry", 2) ➞ "cherrycherry"
+
+
+calculator <- function(x){
+  eval(parse(text = x))
+}
+
+# calculator("23+4") ➞ 27
+# 
+# calculator("45-15") ➞ 30
+# 
+# calculator("13+2-5*2") ➞ 5
+# 
+# calculator("49/7*2-3") ➞ 11
+

@@ -21,3 +21,8 @@ split_string_equal_parts <- function(text, part_length) {
 print(split_string_equal_parts("abcdefghij", 3))
 # Output: "abc" "def" "ghi" "j"
 
+
+
+
+#To evalueate expresiions
+eval(parse(text = "49/7*2-3"))
