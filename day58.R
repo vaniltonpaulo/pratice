@@ -138,3 +138,25 @@ no_yelling <- function(x){
 # 
 # no_yelling("I just cannot believe it.") ➞ "I just cannot believe it."
 
+
+
+
+
+# best_friend("he headed to the store", "h", "e") ➞ True
+# 
+# best_friend("i found an ounce with my hound", "o", "u") ➞ True
+# 
+# best_friend("we found your dynamite", "d", "y") ➞ False
+
+
+x<-"he headed to the store"
+#x<-"we found your dynamite"
+
+#result<-strsplit(x," ")[[1]]
+#grep("dy",result,value = TRUE)
+
+
+pattern <- paste0("h", "(?!", "u]e", ")")
+
+# Use grepl to check if there is any occurrence of letter1 not followed by letter2
+grepl(pattern, x, perl = TRUE)
