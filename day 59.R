@@ -90,3 +90,18 @@ calculator <- function(x){
 # 
 # calculator("49/7*2-3") ➞ 11
 
+
+first_last <- function(x){
+  result <-strsplit(x,"")[[1]]
+  paste0(result[[1]],result[[length(result)]],collapse = "")
+}
+# first_last("ganesh") ➞ "gh"
+# 
+# first_last("kali") ➞ "ki"
+# 
+# first_last("shiva") ➞ "sa"
+# 
+# first_last("vishnu") ➞ "vu"
+# 
+# first_last("durga") ➞ "da"
+
