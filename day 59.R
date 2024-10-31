@@ -105,3 +105,57 @@ first_last <- function(x){
 # 
 # first_last("durga") ➞ "da"
 
+
+eq <- function(x){
+  eval(parse(text = x))
+}
+# eq("1+2") ➞ 3
+# 
+# eq("6/(9-7)") ➞ 3
+# 
+# eq("3+2-4") ➞ 1
+
+
+
+add <- function(x,y){
+  result<-strsplit(y," ")[[1]]
+  paste0(paste0(result[-length(result)],x,collapse = ""),result[length(result)],collapse = "")
+  
+}
+
+# add("R", "python is fun") ➞ "pythonRisRfun"
+# 
+# add("#", "hello world!") ➞ "hello#world!"
+# 
+# add("#", " ") ➞ "#"
+
+
+
+
+has_spaces <- function(x){
+  grepl("\\s+",x) 
+}
+
+# has_spaces("hello") ➞ False
+# 
+# has_spaces("hello, world") ➞ True
+# 
+# has_spaces(" ") ➞ True
+# 
+# has_spaces("") ➞ False
+# 
+# has_spaces(",./!@#") ➞ False
+
+
+
+sopa <- function(x,y){
+  isTRUE(tolower(x) == tolower(y))
+}
+# 
+# sopa("hello", "hELLo") ➞ True
+# 
+# sopa("motive", "emotive") ➞ False
+# 
+# sopa("venom", "VENOM") ➞ True
+# 
+# sopa("mask", "mAskinG") ➞ False
