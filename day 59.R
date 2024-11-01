@@ -159,3 +159,5 @@ sopa <- function(x,y){
 # sopa("venom", "VENOM") ➞ True
 # 
 # sopa("mask", "mAskinG") ➞ False
+
+x <- "so"
