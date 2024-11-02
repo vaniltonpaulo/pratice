@@ -30,6 +30,41 @@ eval(parse(text = "49/7*2-3"))
 
 
 
+
+
+
+
+
+
+correct_signs <- function(expr) {
+  # Split the expression by spaces to separate numbers and operators
+  parts <- strsplit(expr, " ")[[1]]
+  
+  # Loop through each operator and check the condition
+  for (i in seq(2, length(parts) - 1, by = 2)) {
+    left <- as.numeric(parts[i - 1])
+    op <- parts[i]
+    right <- as.numeric(parts[i + 1])
+    
+    # Check each comparison based on the operator
+    if (op == "<" && !(left < right)) return(FALSE)
+    if (op == ">" && !(left > right)) return(FALSE)
+    if (op == "<=" && !(left <= right)) return(FALSE)
+    if (op == ">=" && !(left >= right)) return(FALSE)
+    if (op == "==" && !(left == right)) return(FALSE)
+    if (op == "!=" && !(left != right)) return(FALSE)
+  }
+  
+  # If all comparisons are correct, return TRUE
+  return(TRUE)
+}
+
+# Examples
+print(correct_signs("3 < 7 < 11"))        # ➞ TRUE
+print(correct_signs("13 > 44 > 33 > 1"))  # ➞ FALSE
+print(correct_signs("1 < 2 < 6 < 9 > 3")) # ➞ TRUE
+
+
 ######################### How to use Filter
 # Define a numeric vector
 numbers <- 1:10
