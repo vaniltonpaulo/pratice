@@ -68,3 +68,35 @@ atbash <- function(x){
 # 
 # atbash("Christmas is the 25th of December") ➞ "Xsirhgnzh rh gsv 25gs lu Wvxvnyvi"
 atbash("Vmxibkgrlm zmw wvxibkgrlm ziv rwvmgrxzo uli gsv Zgyzhs xrksvi.")
+
+
+
+
+
+
+
+
+shift_sentence <- function(x){
+  result <- strsplit(x," ")[[1]]
+  
+  final<-unlist(lapply(result,function(k){
+    substr(k,1,1)
+  }))
+  
+  final<-append(final,final[[length(final)]],after = 0)
+  final<-final[-length(final)]
+  
+  regmatches(result,gregexpr("^[A-z]",result,perl = TRUE)) <- final
+  paste(result,collapse = " ")
+}
+
+
+
+# shift_sentence("create a function") ➞ "freate c aunction"
+# 
+# shift_sentence("it should shift the sentence") ➞ "st ihould shift she tentence"
+# 
+# shift_sentence("the output is not very legible") ➞ "lhe tutput os iot nery vegible"
+# 
+# shift_sentence("edabit") ➞ "edabit"
+
