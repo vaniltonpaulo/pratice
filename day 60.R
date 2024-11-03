@@ -113,3 +113,86 @@ correct_signs <- function(expr) {
 print(correct_signs("3 < 7 < 11"))        # ➞ TRUE
 print(correct_signs("13 > 44 > 33 > 1"))  # ➞ FALSE
 print(correct_signs("1 < 2 < 6 < 9 > 3")) # ➞ TRUE
+
+
+
+
+count_characters <- function(x){
+  sum(nchar(x))
+}
+# 
+# count_characters(c(
+#   "###",
+#   "###",
+#   "###"
+# )) ➞ 9
+# 
+# count_characters([
+#   "22222222",
+#   "22222222",
+# ]) ➞ 16
+# 
+# count_characters([
+#   "------------------"
+# ]) ➞ 18
+# 
+# count_characters([]) ➞ 0
+# 
+# count_characters(c("", "")) ➞ 0
+
+
+area_of_country <- function(x,y){
+  paste(x,"is",paste0(round(((y/148940000)*100),2),"%"),"of the total world's landmass",collapse = " ")
+}
+
+
+# area_of_country("Russia", 17098242) ➞ "Russia is 11.48% of the total world's landmass"
+# 
+# area_of_country("USA", 9372610), "USA is 6.29% of the total world's landmass"
+# 
+# area_of_country("Iran", 1648195) ➞ "Iran is 1.11% of the total world's landmass"
+
+
+
+plus_sign <- function(x){
+  result<-regmatches(x,gregexpr("(?<=\\+)[A-z](?=\\+)",x,perl = TRUE))[[1]]
+  result.1<-sum(strsplit(x,"")[[1]] %in% letters)
+  return(ifelse(length(result) == result.1,TRUE,FALSE))
+}
+
+# plus_sign("+f+d+c+#+f+") ➞ True
+# 
+# plus_sign("+d+=3=+s+") ➞ True
+# 
+# plus_sign("f++d+g+8+") ➞ False
+# 
+# plus_sign("+s+7+fg+r+8+") ➞ False
+
+
+mark_maths <- function(x){
+  result<-strsplit(x,"=")
+  
+  final<-vapply(result,function(k){
+    eval(parse(text = k[1])) == k[2]
+  },logical(1))
+  
+  paste0(round((sum(final) / length(x)) * 100,0),"%",collapse = "")
+  
+}
+
+# mark_maths(c("2+2=4", "3+2=5", "10-3=3", "5+5=10")) ➞ "75%"
+# 
+# mark_maths(c("1-2=-2"))  "0%"
+# 
+# mark_maths(c("2+3=5", "4+4=9", "3-1=2")) ➞ "67%"
+
+
+
+
+# is_icecream_sandwich("CDC") ➞ True
+# 
+# is_icecream_sandwich("AAABB") ➞ False
+# 
+# is_icecream_sandwich("AA") ➞ False
+
+
