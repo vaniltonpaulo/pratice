@@ -189,10 +189,4 @@ mark_maths <- function(x){
 
 
 
-# is_icecream_sandwich("CDC") ➞ True
-# 
-# is_icecream_sandwich("AAABB") ➞ False
-# 
-# is_icecream_sandwich("AA") ➞ False
-
 
