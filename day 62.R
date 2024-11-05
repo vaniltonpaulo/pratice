@@ -26,3 +26,14 @@ change_string <- function(x){
 change_string("MElon")
 change_string("sNaKe")
 
+
+
+# add_str_nums("4", "5") ➞ "9"
+# 
+# add_str_nums("abcdefg", "3") ➞ "-1"
+# 
+# add_str_nums("1", "") ➞ "1"
+# 
+# add_str_nums("1874682736267235927359283579235789257", "32652983572985729") ➞ "1874682736267235927391936562808774986"
+
+#TOO EASY EVEN THOUGH ITS LABELED AS HARD
