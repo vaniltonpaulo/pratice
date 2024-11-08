@@ -80,3 +80,5 @@ inverter <- function(x,y) {
 # inverter("Division by powers of two", "P") ➞ "Two of powers by division"
 
 inverter("Excellence is achievable", "W")
+
+x<-"nice"
