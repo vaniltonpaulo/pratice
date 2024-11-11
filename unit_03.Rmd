@@ -356,8 +356,23 @@ The input consists only of lists that may or may not contain other lists, which 
 
 ```{r}
 nestingDepth <- function(lst) {
-  # your code
-  length(lst)
+ if (length(lst) == 0) {
+    return(0)
+  }
+  #I need to work on this
+  # Initialize the maximum depth of any sublist to 0
+  max_depth <- 0
+  
+  # Iterate over each element in the list
+  for (element in lst) {
+    # If the element is a list, calculate its depth recursively
+    if (is.list(element)) {
+      max_depth <- max(max_depth, nestingDepth(element) + 1)
+    }
+  }
+  
+  # Return the maximum depth found
+  return(max_depth)
 }
 ```
 
