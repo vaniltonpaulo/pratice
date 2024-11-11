@@ -1,0 +1,365 @@
+---
+title: 'Lecture 02: Idiomatic R'
+output: html_document
+---
+
+
+```{r setup, echo = FALSE}
+## setup
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", out.width = "50%", echo = TRUE)
+```
+
+# Idiomatic R
+
+Solve the following tasks.
+See if you know specific `R` functions or tricks that these exercises particularly easy.
+Try to solve these without loading any additional `R`-packages.
+
+
+## Exercise 00: Zero
+
+(Demo Exercise)
+
+Create a variable `zero` that is a `numeric` scalar containin the number zero, i.e. `0`.
+```{r}
+# your code
+zero<- 0
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+checkmate::expect_numeric(zero, lower = 0, upper = 0, any.missing = FALSE, len = 1)
+cat("If there are no errors here then tests are ok.\n")
+```
+
+## Exercise 01: Zeroes
+
+Create a variable `z` that is a `numeric` vector consisting of 1024 zeroes, i.e. `c(0, 0, 0, ...., 0)`.
+```{r}
+# your code
+z <- rep(0,1024)
+z
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+checkmate::expect_numeric(z, lower = 0, upper = 0, any.missing = FALSE, len = 1024)
+cat("If there are no errors here then tests are ok.\n")
+```
+
+## Exercise 02: Powers of Ten
+
+Create a variable `tens` that is a `numeric` vector of length 16 consisting of powers of ten in increasing order, starting at 1:
+`c(1, 10, 100, 1000, ..... 10 ^ 15)`
+
+```{r}
+# your code
+tens <- 10^seq(0,15)
+tens
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+checkmate::expect_numeric(tens, lower = 1, upper = 10^19, any.missing = FALSE, len = 16, unique = TRUE, sorted = TRUE)
+testthat::expect_true(all(tens[-1] %% 10 == 0))
+testthat::expect_equal(tens[[1]], 1)
+cat("If there are no errors here then tests are ok.\n")
+```
+## Exercise 03: Simple Function
+
+Write a function that increments every second element of a numeric vector.
+Inputs:
+
+* **`x`**: vector with even number of elements, e.g. `c(1, 1)` or `c(-1, 0, 10, 9)`
+
+Return value:
+The value of **`x`** where every second element is increased by one.
+
+```{r}
+secondInc <- function(x) {
+  # your code
+  #x[c(FALSE,TRUE)] <- x[c(FALSE,TRUE)] +1
+  x[seq(2,length(x),2)] <- x[seq(2,length(x),2)] +1
+
+x
+}
+```
+
+Example calls:
+```{r}
+secondInc(c(1, 1))
+# Expected:
+##> [1] 1 2
+```
+```{r}
+secondInc(c(-1, 0, 10, 9))
+# Expected:
+##> [1] -1  1 10 10
+```
+```{r}
+secondInc(c(1, -1, 1, -1, 1, -1))
+# Expected:
+##> [1] 1 0 1 0 1 0
+```
+```{r}
+x <- secondInc(c(0, -1))
+# This should *not* generate any output!
+```
+```{r}
+x
+# Expected
+##> [1] 0 0
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+testthat::expect_equal(secondInc(c(1, 1)), c(1, 2))
+testthat::expect_equal(secondInc(c(-1, 0, 10, 9)), c(-1, 1, 10, 10))
+testthat::expect_equal(secondInc(c(1, -1, 1, -1, 1, -1)), c(1, 0, 1, 0, 1, 0))
+testthat::expect_output(secondInc(c(1, 1)), NA)
+
+testvector <- rpois(10, 5)
+testthat::expect_equal(secondInc(c(secondInc(!!testvector)[-1], 0)), c(testvector[-1], 0) + 1)
+cat("If there are no errors here then tests are ok.\n")
+```
+
+## Exercise 04
+
+Write a function returns a greeting for the user.
+Inputs:
+
+* **`name`**: length-1 `character` vector
+
+Return value:
+The return value should be `"Hello, <name>"`.
+
+Your function should not generate any output, only return the string!
+
+```{r}
+greet <- function(name) {
+  # your code
+paste("Hello,",name)}
+```
+
+Example calls:
+```{r}
+greet("Helmut")        # "Hello, Helmut"
+greet("Anna Maier")    # "Hello, Anna Maier"
+x <- greet("Sarah")    #  no output!
+x                      # "Hello, Sarah"
+```
+
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+testthat::expect_equal(greet("Helmut"), "Hello, Helmut")
+testthat::expect_equal(greet("Anna Maier"), "Hello, Anna Maier")
+testthat::expect_equal(greet("Sarah"), "Hello, Sarah")
+testthat::expect_output(greet("Helmut"), NA)
+
+st <- paste(sample(letters, 4), collapse = "")
+checkmate::expect_string(greet(st), pattern = "^Hello, ")
+checkmate::expect_string(greet(st), pattern = st)
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+## Exercise 05
+
+Write a function that greets the user a given number of times.
+The function should output the line `Hello` a given number of times, using `cat()`.
+Inputs:
+
+* **`n`**: Number of greetings to print.
+
+Return value:
+The function should return the number of times it printed the greeting, i.e. the value of `n`.
+
+```{r}
+multiGreet <- function(n) {
+  # your code
+  
+x <- rep("Hello",n)
+for (i in seq_len(n)) {
+print(x[[i]])
+}
+}
+```
+
+Example calls:
+```{r}
+multiGreet(3)
+# Expected
+##> Hello
+##> Hello
+##> Hello
+##> [1] 3
+```
+Example calls:
+```{r}
+multiGreet(0)
+# Expected
+##> [1] 0
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+testthat::expect_output(testthat::expect_equal(multiGreet(3), 3), "^Hello\nHello\nHello$")
+testthat::expect_output(testthat::expect_equal(multiGreet(1), 1), "^Hello$")
+testthat::expect_output(testthat::expect_equal(multiGreet(0), 0), NA)
+testthat::expect_output(testthat::expect_equal(multiGreet(5), 5), "^(Hello\n){4}Hello$")
+
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+## Exercise 06
+
+Write a function that takes a `numeric` vector and, for each element, calculates the difference to the value of the element coming two entries later.
+E.g. `c(1, 2, 3, 4, 5)` --> `c(3 - 1, 4 - 2, 5 - 3)` --> `c(2, 2, 2)`.
+`c(3, 30, 2, 20, 1, 10)` --> `c(2 - 3, 20 - 30, 1 - 2, 10 - 20)` --> `c(-1, -10, -1, -10)`.
+
+Inputs:
+* **`x`**: `numeric` vector, at least length 3, for which to calculate differences.
+
+Return value: A vector that has length `length(x) - 2`, where the i'th element has the value `x[[i + 2]] - x[[i]]`.
+
+
+```{r}
+diffOverNext <- function(x) {
+  # your code
+  
+result <- numeric(0)
+
+for (i in seq_len(length(x) -2)) {
+  result[[length(result) + 1]] <-  x[[i+2]] -x[[i]]
+}
+result
+}
+```
+Example calls:
+```{r}
+diffOverNext(c(1, 2, 3, 4, 5))  # c(2, 2, 2)
+diffOverNext(c(3, 30, 2, 20, 1, 10))  # c(-1, -10, -1, -10)
+diffOverNext(c(1, 2, 3))  # 2
+diffOverNext(c(1, 2, 1, 2, 1, 2))  # c(0, 0, 0, 0)
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+testthat::expect_equal(diffOverNext(c(1, 2, 3, 4, 5)), c(2, 2, 2))
+testthat::expect_equal(diffOverNext(c(3, 30, 2, 20, 1, 10)), c(-1, -10, -1, -10))
+testthat::expect_equal(diffOverNext(c(1, 2, 3)), 2)
+testthat::expect_equal(diffOverNext(c(1, 2, 1, 2, 1, 2)), c(0, 0, 0, 0))
+
+res1 <- rpois(4, 2)
+res2 <- rpois(4, 3)
+
+
+integ <- c(rbind(c(0, cumsum(res1)), c(0, cumsum(res2))))
+expect <- c(rbind(res1, res2))
+testthat::expect_equal(diffOverNext(integ), expect)
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+## Exercise 07
+
+Write a function that calculates the day of the year, given day and month, assuming the current year is not a leap-year (i.e. "kein Schaltjahr").
+`"January 1"` is day `1`.
+`"January 31"` is day `31`.
+`"February 1"` is day `32`.
+`"March 1"` is day `60`.
+Etc.
+
+Do this *without* using any date-related functions in `R`, do not use e.g. `as.Date()` or `strptime()`.
+
+Inputs:
+
+* **`month`**: `character(1)`: month of the year, written in english, starting with a capital letter (`"January"`, `"February"`, ...)
+* **`day`**: `numeric(1)`: day of the year, scalar integer value between 1 and 31.
+
+```{r}
+dayNumber <- function(month, day) {
+  # your code
+}
+```
+
+Example calls:
+```{r}
+dayNumber("January", 1)   # 1
+dayNumber("January", 31)  # 31
+dayNumber("February", 1)  # 32
+dayNumber("March", 1)     # 60
+dayNumber("December", 31) # 365
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+testthat::expect_equal(dayNumber("January", 1), 1)
+testthat::expect_equal(dayNumber("January", 2), 2)
+testthat::expect_equal(dayNumber("February", 1), 32)
+testthat::expect_equal(dayNumber("March", 1), 60)
+testthat::expect_equal(dayNumber("December", 31), 365)
+
+dn <- round(runif(1, 1, 31))
+testthat::expect_equal(dayNumber("October", !!dn), 
+  as.numeric(difftime(as.Date(sprintf("22-10-%s", dn)), as.Date("21-12-31"), units = "days"))
+)
+
+dn <- round(runif(1, 1, 30))
+testthat::expect_equal(dayNumber("June", !!dn), 
+  as.numeric(difftime(as.Date(sprintf("22-06-%s", dn)), as.Date("21-12-31"), units = "days"))
+)
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+## Exercise 08`*`
+
+This exercise is more difficult than the preceding exercises.
+We do not expect you to be able to solve it yet, but we also do not want you to get bored.
+
+Write a function that determines the "nesting depth" of a list of lists.
+
+The input consists only of lists that may or may not contain other lists, which again may contain lists etc.
+
+* The nesting depth of `list()` is 0.
+* The nesting depth of `list(list())` is 1.
+* The nesting depth of `list(list(), list())` is 1.
+* The nesting depth of `list(list(), list(list(), list()))` is 2.
+
+--> The nesting depth of a list with elements `a`, `b`, `c`, .... is therefore
+   1 + the maximum nesting depth of any of `a`, `b`, `c`, ... .
+
+```{r}
+nestingDepth <- function(lst) {
+  # your code
+}
+```
+
+```{r}
+nestingDepth(list())                      # 0
+nestingDepth(list(list()))                # 1
+nestingDepth(list(list(), list(list())))  # 2
+nestingDepth(list(list(), list()))        # 1
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+
+testthat::expect_equal(nestingDepth(list()), 0)
+testthat::expect_equal(nestingDepth(list(list())), 1)
+testthat::expect_equal(nestingDepth(list(list(), list())), 1)
+testthat::expect_equal(nestingDepth(list(list(), list(), list())), 1)
+testthat::expect_equal(nestingDepth(list(list(), list(list()), list())), 2)
+
+l <- list()
+for (i in seq_len(4)) {
+  l <- list(list(), list(l), list(list(l)))
+  testthat::expect_equal(nestingDepth(l), 3 * i)
+}
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
