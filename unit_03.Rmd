@@ -177,7 +177,10 @@ The function should return the number of times it printed the greeting, i.e. the
 
 ```{r}
 multiGreet <- function(n) {
- n
+for (i in seq_len(n)) {
+    cat("Hello\n")
+} 
+  n
 }
 ```
 
@@ -354,6 +357,7 @@ The input consists only of lists that may or may not contain other lists, which 
 ```{r}
 nestingDepth <- function(lst) {
   # your code
+  length(lst)
 }
 ```
 
