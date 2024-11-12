@@ -148,14 +148,21 @@ cat("If there are no errors here then tests are ok.\n")
 ```{r}
 f1e <- function(m) {
   # your code 
-  if(is.matrix(x)){
-      assertMatrix(m,mode = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE)
+  ifelse(is.matrix(m),         assertMatrix(m,mode = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE)
+,assertDataFrame(m,types = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE))
+         #assertMatrix(m,mode = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE)
+         #assertDataFrame(m,types = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE)
 
-  } 
-  if(is.data.frame(m)){
-      assertDataFrame(m,types = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE)
 
-  }
+  #  if(is.matrix(m)){
+  #      assertMatrix(m,mode = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE)
+  # 
+  #  } 
+  #  if(is.data.frame(m)){
+  #      assertDataFrame(m,types = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE)
+  # 
+  #  }
+  # return(stop("no"))
 }
 ```
 
@@ -193,6 +200,17 @@ Write a function that takes two arguments: `words` and `text`. Both are characte
 ```{r}
 wordInText <- function(words, text) {
   # your code
+words %in% text
+# result <-logical(0)
+# for (i in seq_along(words)) {
+#   if(words[[i]] %in% text){
+#     result[[length(result) + 1]] <- TRUE
+#   }else{
+#     result[[length(result) + 1]] <- FALSE
+#   }
+# }
+# result
+
 }
 ```
 
@@ -257,6 +275,15 @@ Example:
 ```{r}
 countWordOccurrences <- function(words, text) {
   # your code
+  result <-numeric(0)
+for (i in seq_along(words)) {
+  if(words[[i]] %in% text){
+    result[[length(result) + 1]] <- sum(words[[i]] == text)
+  }else{
+    result[[length(result) + 1]] <- sum(words[[i]] == text)
+  }
+}
+result
 }
 ```
 
@@ -319,6 +346,12 @@ Write a function that takes a matrix as input and returns a numeric vector indic
 ```{r}
 countNAsPerRow <- function(mat) {
   # your code
+  result <- numeric(0)
+for (i in seq_len(nrow(mat))) {
+  result[[length(result) + 1]] <- sum(is.na(mat[i,]))
+
+}
+result
 }
 ```
 
