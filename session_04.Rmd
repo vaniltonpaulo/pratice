@@ -24,7 +24,7 @@ library("checkmate")
 Define a variable `zero` with value `0`.
 This is to get used to the setup.
 ```{r}
-zero <- 1  # change this?
+zero <- 0  # change this?
 ```
 
 ## Exercise 1: checkmate
@@ -39,6 +39,7 @@ Fill in the correct `assert` for the given argument from the description.
 ```{r}
 f1a <- function(n) {
   # your code 
+  assertNumber(n)
 }
 ```
 
@@ -62,6 +63,7 @@ cat("If there are no errors here then tests are ok.\n")
 ```{r}
 f1b <- function(s) {
   # your code 
+  assertCharacter(s,min.len = 2,any.missing = FALSE)
 }
 ```
 
@@ -89,6 +91,8 @@ cat("If there are no errors here then tests are ok.\n")
 ```{r}
 f1c <- function(i) {
   # your code 
+  assertInt(i,na.ok = TRUE)
+  
 }
 ```
 
@@ -116,6 +120,7 @@ cat("If there are no errors here then tests are ok.\n")
 ```{r}
 f1d <- function(v) {
   # your code 
+  assertChoice(v,choices = c("yes","no","maybe"))
 }
 ```
 
@@ -143,6 +148,14 @@ cat("If there are no errors here then tests are ok.\n")
 ```{r}
 f1e <- function(m) {
   # your code 
+  if(is.matrix(x)){
+      assertMatrix(m,mode = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE)
+
+  } 
+  if(is.data.frame(m)){
+      assertDataFrame(m,types = "numeric",min.cols = 2,min.rows = 2,any.missing = FALSE)
+
+  }
 }
 ```
 
