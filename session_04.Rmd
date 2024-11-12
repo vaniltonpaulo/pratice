@@ -1,0 +1,361 @@
+---
+title: 'Unit 04: Structured Programming III'
+output: html_document
+---
+
+```{r setup, echo = FALSE}
+## setup
+library("checkmate")
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", out.width = "50%", echo = TRUE)
+```
+
+# Checkmate, Lapply
+
+## Setup
+
+Make sure you run this to load the checkmate package.
+
+```{r}
+library("checkmate")
+```
+
+## Exercise 0: Test things
+
+Define a variable `zero` with value `0`.
+This is to get used to the setup.
+```{r}
+zero <- 1  # change this?
+```
+
+## Exercise 1: checkmate
+
+Use the correct checkmate functions:
+Fill in the correct `assert` for the given argument from the description.
+
+### Exercise 1a
+
+`n`: a scalar numeric, no missing values.
+
+```{r}
+f1a <- function(n) {
+  # your code 
+}
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+invisible(f1a(1))
+testthat::expect_error(f1a("a"))
+testthat::expect_error(f1a(list(1)))
+testthat::expect_error(f1a(c(1, 1)))
+testthat::expect_error(f1a(NA_real_))
+testthat::expect_error(f1a(NULL))
+testthat::expect_error(f1a())
+cat("If there are no errors here then tests are ok.\n")
+```
+
+### Exercise 1b
+
+`s`: a character vector with at least 2 elements; no missing values
+
+```{r}
+f1b <- function(s) {
+  # your code 
+}
+```
+
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+# Valid test case
+invisible(f1b(c("apple", "banana")))
+
+# Invalid cases
+testthat::expect_error(f1b("apple"))               # Only one element
+testthat::expect_error(f1b(c("apple", NA)))        # Contains missing value
+testthat::expect_error(f1b(c("apple", "banana", NA))) # Contains missing value
+testthat::expect_error(f1b(1:3))                   # Not a character vector
+testthat::expect_error(f1b(list("apple", "banana"))) # List instead of character vector
+testthat::expect_error(f1b(NULL))                  # NULL input
+testthat::expect_error(f1b())                      # No argument provided
+cat("If there are no errors here then tests are ok.\n")
+```
+
+### Exercise 1c
+
+`i`: scalar integer-valued numeric, missing values are allowed.
+
+```{r}
+f1c <- function(i) {
+  # your code 
+}
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+# Valid test cases
+invisible(f1c(1))                # Single integer
+invisible(f1c(NA_integer_))      # NA integer
+invisible(f1c(3L))               # Explicit integer type
+
+# Invalid cases
+testthat::expect_error(f1c("a"))           # Non-numeric input
+testthat::expect_error(f1c(1.5))           # Non-integer numeric (decimal)
+testthat::expect_error(f1c(c(1, 2)))       # Vector instead of scalar
+testthat::expect_error(f1c(NULL))          # NULL input
+testthat::expect_error(f1c(list(1)))       # List instead of scalar
+testthat::expect_error(f1c())              # No argument provided
+cat("If there are no errors here then tests are ok.\n")
+```
+
+### Exercise 1d
+
+`v`: A scalar character, either `"yes"`, `"no"`, or `"maybe"`.
+
+```{r}
+f1d <- function(v) {
+  # your code 
+}
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+# Valid test cases
+invisible(f1d("yes"))
+invisible(f1d("no"))
+invisible(f1d("maybe"))
+
+# Invalid cases
+testthat::expect_error(f1d("perhaps"))      # Invalid choice
+testthat::expect_error(f1d("YES"))          # Case-sensitive mismatch
+testthat::expect_error(f1d(c("yes", "no"))) # Vector instead of scalar
+testthat::expect_error(f1d(1))              # Non-character input
+testthat::expect_error(f1d(NA_character_))  # NA value
+testthat::expect_error(f1d(NULL))           # NULL input
+testthat::expect_error(f1d())               # No argument provided
+cat("If there are no errors here then tests are ok.\n")
+```
+### Exercise 1e
+
+`m`: Either a `matrix`, or a `data.frame`, having at least two rows, at least two columns, and containing only numeric, non-missing values.
+
+```{r}
+f1e <- function(m) {
+  # your code 
+}
+```
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+# Valid test cases
+invisible(f1e(matrix(1:4, nrow = 2, ncol = 2)))               # 2x2 numeric matrix
+invisible(f1e(data.frame(a = c(1, 2), b = c(3, 4))))          # 2x2 numeric data frame
+invisible(f1e(matrix(1:9, nrow = 3, ncol = 3)))               # 3x3 numeric matrix
+invisible(f1e(data.frame(a = c(1, 2, 3), b = c(4, 5, 6))))    # 3x2 numeric data frame
+
+# Invalid cases
+testthat::expect_error(f1e(matrix(1:4, nrow = 1, ncol = 4)))        # Less than 2 rows
+testthat::expect_error(f1e(matrix(1:4, nrow = 4, ncol = 1)))        # Less than 2 columns
+testthat::expect_error(f1e(matrix(c(1, 2, NA, 4), nrow = 2)))      # Contains missing value
+testthat::expect_error(f1e(data.frame(a = c(1, NA), b = c(3, 4)))) # Missing value in data frame
+testthat::expect_error(f1e(data.frame(a = c("a", "b"), b = c("c", "d")))) # Non-numeric data frame
+testthat::expect_error(f1e(matrix(c("a", "b", "c", "d"), nrow = 2))) # Non-numeric matrix
+testthat::expect_error(f1e(data.frame(a = 1:2, b = c(3.5, "test")))) # Mixed types in data frame
+testthat::expect_error(f1e(1:4))                                    # Not a matrix or data frame
+testthat::expect_error(f1e(list(matrix(1:4, nrow = 2, ncol = 2))))   # Wrapped in list instead of matrix/data frame
+testthat::expect_error(f1e(NULL))                                    # NULL input
+testthat::expect_error(f1e())                                        # No argument provided
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+
+## Exercise 2: Loops, lapply etc.
+
+### Exercise 2a
+
+Write a function that takes two arguments: `words` and `text`. Both are character vectors. The function should return a logical vector indicating, for each word in `words`, whether it occurs in `text`.
+
+```{r}
+wordInText <- function(words, text) {
+  # your code
+}
+```
+
+Example:
+
+```{r}
+text.example <- c("this", "is", "a", "small", "text")
+words.example <- c("this", "not", "small")
+```
+
+Expected return:
+
+```{r}
+wordInText(words.example, text.example)
+```
+```r
+#> [1] TRUE FALSE TRUE
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+text_example <- c("this", "is", "a", "small", "text")
+words_example <- c("this", "not", "small")
+result <- wordInText(words_example, text_example)
+expected <- c(TRUE, FALSE, TRUE)
+testthat::expect_equal(result, expected)
+
+words_example <- c("a", "small", "text", "example")
+result <- wordInText(words_example, text_example)
+expected <- c(TRUE, TRUE, TRUE, FALSE)
+testthat::expect_equal(result, expected)
+
+text_example <- c("hello", "world")
+words_example <- c("hello", "world", "test")
+result <- wordInText(words_example, text_example)
+expected <- c(TRUE, TRUE, FALSE)
+testthat::expect_equal(result, expected)
+
+text_example <- character(0)
+words_example <- c("any", "word")
+result <- wordInText(words_example, text_example)
+expected <- c(FALSE, FALSE)
+testthat::expect_equal(result, expected)
+
+words_example <- character(0)
+result <- wordInText(words_example, text_example)
+expected <- logical(0)
+testthat::expect_equal(result, expected)
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+### Exercise 2b
+
+Write a function that takes two arguments: `words` and `text`. Both are character vectors. The function should return a numeric vector indicating, for each word in `words`, how many times it occurs in `text`.
+
+You may need to use `unname()` to pass the tests.
+
+Example:
+
+```{r}
+countWordOccurrences <- function(words, text) {
+  # your code
+}
+```
+
+```{r}
+text.example <- c("this", "is", "a", "small", "text", "this", "is", "a", "test")
+words.example <- c("this", "a", "test", "not")
+```
+
+Expected return:
+
+```{r}
+countWordOccurrences(words.example, text.example)
+```
+```r
+#> [1] 2 2 1 0
+```
+
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+text_example <- c("this", "is", "a", "small", "text", "this", "is", "a", "test")
+words_example <- c("this", "a", "test", "not")
+result <- countWordOccurrences(words_example, text_example)
+expected <- c(2, 2, 1, 0)
+testthat::expect_equal(result, expected)
+
+words_example <- c("small", "text", "is")
+result <- countWordOccurrences(words_example, text_example)
+expected <- c(1, 1, 2)
+testthat::expect_equal(result, expected)
+
+text_example <- c("hello", "world", "hello", "world", "hello")
+words_example <- c("hello", "world", "test")
+result <- countWordOccurrences(words_example, text_example)
+expected <- c(3, 2, 0)
+testthat::expect_equal(result, expected)
+
+text_example <- character(0)
+words_example <- c("any", "word")
+result <- countWordOccurrences(words_example, text_example)
+expected <- c(0, 0)
+testthat::expect_equal(result, expected)
+
+words_example <- character(0)
+result <- countWordOccurrences(words_example, text_example)
+expected <- numeric(0)
+testthat::expect_equal(result, expected)
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+---
+
+### Exercise 2c
+
+Write a function that takes a matrix as input and returns a numeric vector indicating, for each row, how many `NA` values it contains.
+
+
+```{r}
+countNAsPerRow <- function(mat) {
+  # your code
+}
+```
+
+Example:
+
+```{r}
+mat.example <- matrix(c(1, NA, 3, 4, 5, NA), nrow = 2)
+```
+```r
+#>      [,1] [,2] [,3]
+#> [1,]    1    3    5
+#> [2,]   NA    4   NA
+```
+
+Expected return:
+
+```{r}
+countNAsPerRow(mat.example)
+```
+```r
+#> [1] 0 2
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+mat_example <- matrix(c(1, NA, 3, 4, 5, NA), nrow = 2)
+result <- countNAsPerRow(mat_example)
+expected <- c(0, 2)
+testthat::expect_equal(result, expected)
+
+mat_example <- matrix(c(NA, NA, NA, 1, 2, 3), nrow = 3)
+result <- countNAsPerRow(mat_example)
+expected <- c(1, 1, 1)
+testthat::expect_equal(result, expected)
+
+mat_example <- matrix(1:9, nrow = 3)
+result <- countNAsPerRow(mat_example)
+expected <- c(0, 0, 0)
+testthat::expect_equal(result, expected)
+
+mat_example <- matrix(rep(NA, 9), nrow = 3)
+result <- countNAsPerRow(mat_example)
+expected <- c(3, 3, 3)
+testthat::expect_equal(result, expected)
+
+mat_example <- matrix(numeric(0), nrow = 0, ncol = 0)
+result <- countNAsPerRow(mat_example)
+expected <- numeric(0)
+testthat::expect_equal(result, expected)
+
+cat("If there are no errors here then tests are ok.\n")
+```
