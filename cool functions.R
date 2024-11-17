@@ -1,5 +1,9 @@
 #coool stuff
 
+
+#THis IS ALL YOU VERIFY IF TWO THINGS OR MORE ARE EQUAL
+isTRUE(all.equal(firsthalf(result), secondHalf(result)))
+
 split_string_equal_parts <- function(text, part_length) {
   # Initialize an empty vector to store the parts
   parts <- character(0)
