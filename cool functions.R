@@ -1,5 +1,7 @@
 #coool stuff
 
+# HOW TO USE THE OPTIONAL '?' IN REGEX AND AND HOW TO GET DECIMAL NUMBERS
+regmatches(result, gregexpr("-?\\d+(\\.\\d+)?", result, perl = TRUE))
 
 #THis IS ALL YOU VERIFY IF TWO THINGS OR MORE ARE EQUAL
 isTRUE(all.equal(firsthalf(result), secondHalf(result)))
