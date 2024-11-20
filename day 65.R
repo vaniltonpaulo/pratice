@@ -93,3 +93,39 @@ lengthen <- function(x,y){
 # 
 # lengthen("clap", "skipping") ➞ "clapclap"
 
+
+primorial <- function(x){
+  is_prime <- function(n) {
+    if(n == 2) return(TRUE)
+    if (n <= 1) {
+      return(FALSE)  # Numbers <= 1 are not prime
+    }
+    for (i in 2:sqrt(n)) {
+      if (n %% i == 0) {
+        return(FALSE)  # Divisible by a number other than 1 and itself
+      }
+    }
+    return(TRUE)  # Number is prime
+  }
+  result <- numeric(0)
+  n <-2
+  repeat{
+    
+    if(isTRUE(is_prime(n))) {
+      result[[length(result) + 1]] <- n
+      if(length(result) >= x){
+        break;
+      }
+    }
+    n <- n + 1
+  }
+  
+  prod(result)
+}
+
+# primorial(1) ➞ 2
+# 
+# primorial(2) ➞ 6
+# 
+# primorial(8) ➞ 9699690
+
