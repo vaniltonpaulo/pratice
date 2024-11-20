@@ -1,5 +1,25 @@
 #coool stuff
 
+
+
+# Function to check if a number is prime
+is_prime <- function(n) {
+  if(n == 2) return(TRUE)
+  if (n <= 1) {
+    return(FALSE)  # Numbers <= 1 are not prime
+  }
+  for (i in 2:sqrt(n)) {
+    if (n %% i == 0) {
+      return(FALSE)  # Divisible by a number other than 1 and itself
+    }
+  }
+  return(TRUE)  # Number is prime
+}
+
+# Example usage
+is_prime(7)  # Returns: TRUE
+is_prime(10) # Returns: FALSE
+
 # HOW TO USE THE OPTIONAL '?' IN REGEX AND AND HOW TO GET DECIMAL NUMBERS
 regmatches(result, gregexpr("-?\\d+(\\.\\d+)?", result, perl = TRUE))
 
