@@ -75,14 +75,21 @@ pos_neg_sort <- function(x){
 # pos_neg_sort(c()) ➞ []
 
 
-x <-c(6, 3, -2, 5, -8, 2, -2)
 
-x.sorted <- sort(x[x >0])
 
-for (i in seq_len(length(x))) {
-  if(isTRUE(x[[i]] >0)){
-    x[[i]] <- x.sorted[[1]]
-    x.sorted <- x.sorted[-1]
-  } 
+lengthen <- function(x,y){
+  if(isTRUE(nchar(y) < nchar(x))){
+    result <- paste0(rep(y,nchar(x)- nchar(y)),collapse = "")
+    return(substr(result,1,nchar(x)))
+  }else{
+  result <- paste0(rep(x,nchar(y)- nchar(x)),collapse = "")
+  return(substr(result,1,nchar(y)))
+  }
 }
-x
+
+# lengthen("abcdefg", "ab") ➞ "abababa"
+# 
+# lengthen("ingenius", "forest") ➞ "forestfo"
+# 
+# lengthen("clap", "skipping") ➞ "clapclap"
+
