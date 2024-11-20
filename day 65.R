@@ -51,3 +51,38 @@ larger_than_right <- function(x){
 # larger_than_right(c(5, 9, 8, 7)) ➞ [9, 8, 7]
 
 
+
+pos_neg_sort <- function(x){
+  if(length(x) == 0) return(numeric(0))
+  x.sorted <- sort(x[x >0])
+  
+  for (i in seq_len(length(x))) {
+    if(isTRUE(x[[i]] >0)){
+      x[[i]] <- x.sorted[[1]]
+      x.sorted <- x.sorted[-1]
+    } 
+  }
+  return(x)
+}
+
+
+# pos_neg_sort(c(6, 3, -2, 5, -8, 2, -2)) ➞ [2, 3, -2, 5, -8, 6, -2]
+# 
+# pos_neg_sort(c(6, 5, 4, -1, 3, 2, -1, 1)) ➞ [1, 2, 3, -1, 4, 5, -1, 6]
+# 
+# pos_neg_sort(c(-5, -5, -5, -5, 7, -5)) ➞ [-5, -5, -5, -5, 7, -5]
+# 
+# pos_neg_sort(c()) ➞ []
+
+
+x <-c(6, 3, -2, 5, -8, 2, -2)
+
+x.sorted <- sort(x[x >0])
+
+for (i in seq_len(length(x))) {
+  if(isTRUE(x[[i]] >0)){
+    x[[i]] <- x.sorted[[1]]
+    x.sorted <- x.sorted[-1]
+  } 
+}
+x
