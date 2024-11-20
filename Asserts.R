@@ -27,7 +27,10 @@
 # 
 # assert_true(x): Asserts that x is TRUE.
 # assert_false(x): Asserts that x is FALSE.
+
+# ESSENTIALLY AS INPUT, WE ARE ONLY GOING TO ACCEPT
 # assert_choice(x, choices): Asserts that x is a scalar and one of the provided choices.
+
 # assert_scalar_na(x): Asserts that x is a scalar NA.
 # assert_scalar_non_na(x): Asserts that x is a non-NA scalar.
 
