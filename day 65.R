@@ -128,3 +128,5 @@ primorial <- function(x){
 # primorial(2) ➞ 6
 # 
 # primorial(8) ➞ 9699690
+
+x <-"ygcw"
