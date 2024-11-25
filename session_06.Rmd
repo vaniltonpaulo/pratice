@@ -15,7 +15,7 @@ invisible(suppressPackageStartupMessages(testthat::expect_equal))
 Define a variable `zero` with value `0`.
 This is to try out the setup.
 ```{r}
-zero <- 1  # change this?
+zero <- 0  # change this?
 ```
 
 # Exercise 1: Words
@@ -24,7 +24,7 @@ Define a variable `pattern.word` that matches words.
 A word is a sequence of one or more `[[:alpha:]]` characters, surrounded by word boundaries `"\\b"`.
 
 ```{r}
-pattern.word <- ".*"  # change this?
+pattern.word <- "\\b[A-z]+\\b"  # change this?
 ```
 
 Expected behaviour:
@@ -68,7 +68,7 @@ testthat::expect_equal(unique(sort(!!matched)), unique(sort(c(words.random, setd
 Define a variable `pattern.word.even` that matches words of even length, i.e. words made up of an even number of characters.
 
 ```{r}
-pattern.word.even <- ".*"  # change this?
+pattern.word.even <- "\\b([A-Za-z]{2})+\\b"  # change this?
 ```
 
 Expected behaviour:
@@ -117,7 +117,7 @@ Define a variable `pattern.word.surrounded` that matches words of length at leas
 You probably want to use back-references (`"\\1"`) here.
 
 ```{r}
-pattern.word.surrounded <- ".*"  # change this?
+pattern.word.surrounded <- "\\b([A-z])([A-z]*)\\1\\b"  # change this?
 ```
 
 Expected behaviour:
@@ -169,7 +169,7 @@ Define a variable `pattern.logical` that matches a string if either `"TRUE"` or 
 Use the `^` and `$` to make sure your regex refers to the entire string.
 
 ```{r}
-pattern.logical <- ".*"  # change this?
+pattern.logical <- "^(TRUE|FALSE)$"  # change this?
 ```
 
 Expected behaviour:
@@ -199,7 +199,7 @@ Define a variable `pattern.logical.vect` that matches a string if it is a repres
 `"c(TRUE,FALSE,FALSE,TRUE,...)"`.
 
 ```{r}
-pattern.logical.vect <- ".*"  # change this?
+pattern.logical.vect <- "^c\\((TRUE|FALSE)(,(TRUE|FALSE))*\\)"  # change this?
 ```
 
 
