@@ -199,7 +199,7 @@ Define a variable `pattern.logical.vect` that matches a string if it is a repres
 `"c(TRUE,FALSE,FALSE,TRUE,...)"`.
 
 ```{r}
-pattern.logical.vect <- "^c\\((TRUE|FALSE)(,(TRUE|FALSE))*\\)"  # change this?
+pattern.logical.vect <- "^c\\((TRUE|FALSE)(,(TRUE|FALSE))*\\)$"  # change this?
 ```
 
 
@@ -269,7 +269,7 @@ Filter(function(x) sum(!x%%(2:x))<2, 2:1000)
 Hint 2: It is probably easiest to write code that constructs this regular expression.
 
 ```{r}
-pattern.prime <- ".*"  # change this?
+pattern.prime <- paste0("\\b(", paste(Filter(function(x) sum(!x%%(2:x))<2, 2:1000), collapse = "|"), ")\\b")
 ```
 
 Expected behaviour:
