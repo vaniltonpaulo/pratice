@@ -1,0 +1,334 @@
+---
+title: 'Lecture 05: Regular Expressions'
+output: html_document
+---
+
+
+```{r setup, echo = FALSE}
+## setup
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", out.width = "50%", echo = TRUE)
+invisible(suppressPackageStartupMessages(testthat::expect_equal))
+```
+
+# Exercise 0: Test things
+
+Define a variable `zero` with value `0`.
+This is to try out the setup.
+```{r}
+zero <- 1  # change this?
+```
+
+# Exercise 1: Words
+
+Define a variable `pattern.word` that matches words.
+A word is a sequence of one or more `[[:alpha:]]` characters, surrounded by word boundaries `"\\b"`.
+
+```{r}
+pattern.word <- ".*"  # change this?
+```
+
+Expected behaviour:
+
+```{r, error = TRUE}
+some.words <- "word a7 I 1one, aNoThEr X!"
+
+matched <- regmatches(some.words, gregexpr(pattern.word, some.words))[[1]]
+
+matched # expected to be c("word", "I", "aNoThEr", "X")
+```
+
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+
+some.words <- "word a7 I 1one,aNoThEr X!"
+
+matched <- regmatches(some.words, gregexpr(pattern.word, some.words))[[1]]
+
+testthat::expect_equal(matched, c("word", "I", "aNoThEr", "X"))
+
+set.seed(1)
+words.random <- replicate(10, paste(sample(c(letters, LETTERS), rpois(1, 5) + 1, replace = TRUE), collapse = ""))
+
+nonwords.random <- replicate(10, paste(sample(c(letters, LETTERS, 0:9), rpois(1, 5) + 1, replace = TRUE), collapse = ""))
+
+nonwords.random.true <- Filter(function(x) !all(strsplit(x, "")[[1]] %in% c(letters, LETTERS)), nonwords.random)
+
+
+string <- paste(t(matrix(c(words.random, nonwords.random, sample(strsplit("!@#$%^&*(                ", "")[[1]], 20, replace = TRUE)), ncol = 2)), collapse = "")
+
+matched <- regmatches(string, gregexpr(pattern.word, string))[[1]]
+
+testthat::expect_equal(unique(sort(!!matched)), unique(sort(c(words.random, setdiff(nonwords.random, nonwords.random.true)))))
+```
+
+# Exercise 2: Even Words
+
+Define a variable `pattern.word.even` that matches words of even length, i.e. words made up of an even number of characters.
+
+```{r}
+pattern.word.even <- ".*"  # change this?
+```
+
+Expected behaviour:
+
+```{r, error = TRUE}
+some.more.words <- "word a7 I 1one, aNoThEr Xx!"
+
+matched <- regmatches(some.more.words, gregexpr(pattern.word.even, some.more.words))[[1]]
+
+matched # expected to be c("word", "Xx")
+```
+
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+
+some.more.words <- "word a7 I 1one, aNoThEr Xx!"
+
+matched <- regmatches(some.more.words, gregexpr(pattern.word.even, some.more.words))[[1]]
+
+testthat::expect_equal(matched, c("word", "Xx"))
+
+set.seed(1)
+words.random <- replicate(10, paste(sample(c(letters, LETTERS), rpois(1, 3) * 2 + 2, replace = TRUE), collapse = ""))
+
+nonwords.random <- replicate(10, paste(sample(c(letters, LETTERS, 0:9), rpois(1, 2) * 2 + 2, replace = TRUE), collapse = ""))
+
+nonwords.random.2 <- replicate(10, paste(sample(c(letters, LETTERS), rpois(1, 3) * 2 + 1, replace = TRUE), collapse = ""))
+
+nonwords.random.true <- Filter(function(x) !all(strsplit(x, "")[[1]] %in% c(letters, LETTERS)), nonwords.random)
+
+
+string <- paste(t(matrix(c(words.random, nonwords.random, nonwords.random.2,
+  sample(strsplit("!@#$%^&*(                ", "")[[1]], 30, replace = TRUE)), ncol = 2)), collapse = "")
+
+matched <- regmatches(string, gregexpr(pattern.word.even, string))[[1]]
+
+testthat::expect_equal(unique(sort(!!matched)), unique(sort(c(words.random, setdiff(nonwords.random, nonwords.random.true)))))
+
+```
+
+# Exercise 3: Surrounded Words
+
+Define a variable `pattern.word.surrounded` that matches words of length at least two letters where the first letter equals the last letter.
+You probably want to use back-references (`"\\1"`) here.
+
+```{r}
+pattern.word.surrounded <- ".*"  # change this?
+```
+
+Expected behaviour:
+
+```{r, error = TRUE}
+some.more.words.2 <- "wordw a7 I II 1one, aNoThEr Xx gling!"
+
+matched <- regmatches(some.more.words.2, gregexpr(pattern.word.surrounded, some.more.words.2))[[1]]
+
+matched # expected to be c("wordw", "II", "gling")
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+
+some.more.words.2 <- "wordw a7 I II 1one, aNoThEr Xx gling!"
+
+matched <- regmatches(some.more.words.2, gregexpr(pattern.word.surrounded, some.more.words.2))[[1]]
+
+testthat::expect_equal(matched, c("wordw", "II", "gling"))
+
+set.seed(1)
+words.random <- replicate(10, paste(sample(c(letters, LETTERS), rpois(1, 4) * 1, replace = TRUE), collapse = ""))
+words.random <- paste0(words.random, substr(words.random, 1, 1))
+
+nonwords.random <- replicate(10, paste(sample(c(letters, LETTERS, 0:9), rpois(1, 4) + 2, replace = TRUE), collapse = ""))
+
+nonwords.random.2 <- replicate(10, paste(sample(c(letters, LETTERS), rpois(1, 4) + 2, replace = TRUE), collapse = ""))
+
+nonwords.random.true <- Filter(function(x) {
+  lets <- strsplit(x, "")[[1]]
+  !all(lets %in% c(letters, LETTERS)) || lets[[1]] != tail(lets, 1)
+}, c(nonwords.random, nonwords.random.2))
+
+
+string <- paste(t(matrix(c(words.random, nonwords.random, nonwords.random.2,
+  sample(strsplit("!@#$%^&*(                ", "")[[1]], 30, replace = TRUE)), ncol = 2)), collapse = "")
+
+matched <- regmatches(string, gregexpr(pattern.word.surrounded, string))[[1]]
+
+testthat::expect_equal(unique(sort(!!matched)), unique(sort(c(words.random, setdiff(c(nonwords.random.2, nonwords.random), nonwords.random.true)))))
+
+```
+
+# Exercise 4: Logical Scalar
+
+Define a variable `pattern.logical` that matches a string if either `"TRUE"` or `"FALSE"`, but not otherwise.
+Use the `^` and `$` to make sure your regex refers to the entire string.
+
+```{r}
+pattern.logical <- ".*"  # change this?
+```
+
+Expected behaviour:
+
+```{r, error = TRUE}
+some.words.logical <- c("TRUE", "FALSE", "notTRUE", "FALSEx", "F.A.L.S.E", "", "TRUE")
+
+matched <- grep(pattern.logical, some.words.logical, value = TRUE)
+
+matched # expected to be c("TRUE", "FALSE", "TRUE")
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+
+some.words.logical <- c("TRUE", "FALSE", "notTRUE", "FALSEx", "F.A.L.S.E", "", "TRUE")
+
+matched <- grep(pattern.logical, some.words.logical, value = TRUE)
+
+testthat::expect_equal(matched, c("TRUE", "FALSE", "TRUE"))
+```
+
+# Exercise 5: Logical Vector
+
+Define a variable `pattern.logical.vect` that matches a string if it is a representation of a logical vector, of the form
+`"c(TRUE,FALSE,FALSE,TRUE,...)"`.
+
+```{r}
+pattern.logical.vect <- ".*"  # change this?
+```
+
+
+Expected behaviour:
+
+```{r, error = TRUE}
+some.words.logical.vect <- c(
+  "TRUE",  # do not accept single TRUE or FALSE, all matches should be in c().
+  "FALSE",
+  "c()",  # do not accept empty c()
+  "",
+  "c(TRUE)", # this should be accepted
+  "c(FALSE)",
+  "xc(FALSE)",  # not accepted: bad 'x' in the beginning
+  "c(FASLE)",  # typo
+  "c(TRUE,TRUE,FALSE)",
+  "c(TRUE,TRUE,TRUE,TRUE)",
+  "c(TRUE, TRUE)"  # do not accept spaces
+)
+
+matched <- grep(pattern.logical.vect, some.words.logical.vect, value = TRUE)
+
+matched # expected to be c("c(TRUE)", "c(FALSE)", "c(TRUE,TRUE,FALSE)", "c(TRUE,TRUE,TRUE,TRUE)")
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+some.words.logical.vect <- c(
+  "TRUE",  # do not accept single TRUE or FALSE, all matches should be in c().
+  "FALSE",
+  "c()",  # do not accept empty c()
+  "",
+  "c(TRUE)", # this should be accepted
+  "c(FALSE)",
+  "c(FALSE)x",
+  "c(TUER)",
+  "Ac(FALSE)",
+  "c(TRUE,TRUE,FALSE)",
+  "c(TRUE,TRUE,TRUE,TRUE)",
+  "c(TRUE, TRUE)"  # do not accept spaces
+)
+
+matched <- grep(pattern.logical.vect, some.words.logical.vect, value = TRUE)
+
+testthat::expect_equal(matched, c("c(TRUE)", "c(FALSE)", "c(TRUE,TRUE,FALSE)", "c(TRUE,TRUE,TRUE,TRUE)"))
+
+set.seed(1)
+nonwords.random <- replicate(10, paste(c("c(", sample(c(LETTERS, ",", ",", ","), rpois(1, 3) * 2 + 2, replace = TRUE), ")"), collapse = "", sep = ""))
+
+words.random <- replicate(10, paste(c("c(", head(c(t(cbind(sample(c("TRUE", "FALSE"), rpois(1, 2) + 1, replace = TRUE), ","))), -1), ")"), collapse = "", sep = ""))
+
+matched <- grep(pattern.logical.vect, c(words.random, nonwords.random))
+
+testthat::expect_equal(matched, 1:10)
+```
+
+# Exercise 6: Prime
+
+Define a variable `pattern.prime` that matches a string if it represents a prime number with up to three digits.
+
+Hint 1: the prime numbers between 1 and 1000 are:
+```{r}
+Filter(function(x) sum(!x%%(2:x))<2, 2:1000)
+```
+
+Hint 2: It is probably easiest to write code that constructs this regular expression.
+
+```{r}
+pattern.prime <- ".*"  # change this?
+```
+
+Expected behaviour:
+```{r, error = TRUE}
+grep(pattern.prime, c("1", "2", "3", "4", "x3", "4x", "997", "995"), value = TRUE)  # only "2", "3", and "997".
+
+# The following should give all prime numbers, i.e. as in `Filter(function(x) sum(!x%%(2:x))<2, 1:1000)`.
+# Think about it: why does this work?
+grep(pattern.prime, 1:10000)
+```
+
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+
+primes <- Filter(function(x) sum(!x%%(2:x))<2, 2:1000)
+
+testthat::expect_equal(grep(pattern.prime, c("1", "2", "3", "4", "x3", "4x", "997"), value = TRUE), c("2", "3", "997"))
+
+testthat::expect_equal(grep(pattern.prime, 1:10000), primes)
+```
+
+# Exercise 7: Author Shortening
+
+In some citation styles, author names are listed in the form `<last name>, <first initial>`, such as `Einstein, A.`.
+
+Define variables `author.pattern` and `author.replacement` that can be used inside `sub()` (as in the examples to follow), so that the author format is changed from
+"<first name> <last name>` to `<last name>, <first initial>`.
+You likely need to use references in your replacement variable.
+You can assume that first names always consist of only letters, while last names may contain spaces.
+There are no malformed strings (i.e. all given values conform to this pattern), and no middle names.
+
+
+```{r}
+author.pattern <- ".*"  # change this?
+author.replacement <- "x"  # change this?
+```
+
+```{r, error = TRUE}
+words.names <- c("Klaus Dieter", "Johannes von Aalen", "Ou Wu")
+sub(author.pattern, author.replacement, words.names)  # c("Dieter, K.", "von Aalen, J.", "Wu, O.")
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+words.names <- c("Klaus Dieter", "Johannes von Aalen", "Ou Wu")
+testthat::expect_equal(sub(author.pattern, author.replacement, words.names), c("Dieter, K.", "von Aalen, J.", "Wu, O."))
+
+set.seed(1)
+first.random <- paste0(sample(LETTERS, 10, replace = TRUE), replicate(10, paste(sample(c(letters), rpois(1, 5) + 1, replace = TRUE), collapse = "")))
+last.random <- replicate(10, gsub("  ", " ", paste(c(sample(LETTERS, 1), sample(c(letters, rep(" ", 5)), rpois(1, 5) + 1, replace = TRUE), sample(letters, 1)), collapse = "")))
+
+names.in <- sprintf("%s %s", first.random, last.random)
+names.expected <- sprintf("%s, %s.", last.random, substr(first.random, 1, 1))
+
+testthat::expect_equal(sub(author.pattern, author.replacement, names.in), names.expected)
+
+
+
+```
