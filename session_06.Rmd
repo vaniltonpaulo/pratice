@@ -306,7 +306,7 @@ There are no malformed strings (i.e. all given values conform to this pattern), 
 
 ```{r}
 author.pattern <- "^([A-Za-z]+)\\s+([A-Za-z\\s]+)$"  # change this?
-author.replacement <- "\\2, \\1\\U\\E."  # change this?
+author.replacement <- "\\2, \\1{1}."  # change this?
 ```
 
 ```{r, error = TRUE}
