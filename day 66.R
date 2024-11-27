@@ -1,4 +1,4 @@
-
+install.packages("checkmate")
 
 # The Game "Tic Tac Toe" is a two player game with players taking turns occupying spaces on a 3x3 grid.
 # A player wins by occupying either a full diagonal, a row, or a column of 3 spaces.
@@ -85,40 +85,14 @@ ex01Winner <- function(position) {
   # your code
   assertMatrix(position,ncols = 3,nrows = 3,mode = "character")
   assertSubset(position,c("X","O",NA))
-  result <- list()
-  
-  for (i in seq_len(nrow(position))) {
-    if(length(unique(position[,i])) == 1){
-      result[[length(result) + 1]] <- position[,i]
-    }
-    if(length(unique(position[i,])) == 1){
-      result[[length(result) + 1]] <- position[i,]
-    }
-    
-  }
-  
-  
-  if(length(unique(c(position[1,1],position[2,2], position[3,3]))) == 1){
-    result[[length(result) + 1]] <- position[1,1]
-  }
-  # Check diagonals
-  
-  
-  if (length(unique(c(position[1,3], position[2,2], position[3,1]))) == 1) {
-    result[[length(result) + 1]] <- position[1,3]
-  }
-  
-  result
-  
-  final <- unlist(lapply(result, function(k){
-    unique(k[1])
-  }))
-  
-  if(length(final[!is.na(final)]) > 1 ){
-    return("")
-  }
-  final[!is.na(final)]
+
 }
+
+mat <- matrix(c("NA","O","X"))
+assertMatrix(mat, mode = "character")
+assertSubset(mat,c("NA","O","X"))
+
+
 
 # Part 02: Write a function that takes a Gravity Tic Tac Toe position and a column that a player chooses to
 # play, and converts them to numeric c(row, col) matrix coordinates of where the player's token will come
