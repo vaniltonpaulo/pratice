@@ -115,4 +115,4 @@ for (char in str_split) {
 }
 match(str_split[[1]],lst)
 
-x <-"eif"
+x <-"dhufw"
