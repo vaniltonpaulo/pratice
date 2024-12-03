@@ -98,8 +98,64 @@ min_miss_pos <- function(x){
 # # After sorting, list becomes [-1, 0, 2, 3, 4, 4, 4, 5, 6, 7, 9, 9, 10, 10]
 # # So the smallest missing positive integer is 1
 
-x <- c(-2, 6, 4, 5, 7, -1, 1, 3, 6, -2, 9, 10, 2, 2)
-y<-sort(x)
-result <-min(y):max(y)
-final<-result[!result %in% unique(y)]
-final[final != 0]
+
+
+## very hard
+can_see_stage <- function(x){
+  apply(matrix1, 2,function(k) all(diff(k) >0 ))
+  
+}
+matrix1 <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow = 3, byrow = TRUE)
+
+# Example 2
+matrix2 <- matrix(c(0, 0, 0, 1, 1, 1, 2, 2, 2), nrow = 3, byrow = TRUE)
+
+# Example 3
+matrix3 <- matrix(c(2, 0, 0, 1, 1, 1, 2, 2, 2), nrow = 3, byrow = TRUE)
+
+# Example 4
+matrix4 <- matrix(c(1, 0, 0, 1, 1, 1, 2, 2, 2), nrow = 3, byrow = TRUE)
+
+
+
+id_mtrx <- function(n){
+  if(n < 0){
+    k <- n * -1
+    mat <- matrix(0,nrow = k,ncol = k)
+    for(i in seq_len(nrow(mat))){
+      for (j in seq_len(ncol(mat))) {
+        if( i ==j){
+          mat[i,i] <- 1
+        }
+        
+      }
+    } 
+    return(mat[rev(seq_len(nrow(mat))), ])
+    
+  }else{
+    mat <- matrix(0,nrow = n,ncol = n)
+    for(i in seq_len(nrow(mat))){
+      for (j in seq_len(ncol(mat))) {
+        if( i ==j){
+          mat[i,i] <- 1
+        }
+        
+      }
+    }
+    return(mat)
+  }
+}
+
+
+# id_mtrx(2) ➞ [
+#   [1, 0],
+#   [0, 1]
+# ]
+# 
+# id_mtrx(-2) ➞ [
+#   [0, 1],
+#   [1, 0]
+# ]
+# 
+# id_mtrx(0) ➞ []
+
