@@ -159,3 +159,56 @@ id_mtrx <- function(n){
 # 
 # id_mtrx(0) ➞ []
 
+
+
+staircase <- function(n){
+  if(n < 0) {
+    k <- n * -1
+    result <- character(0)
+    for (i in seq_len(k)) {
+      result[[length(result) + 1]] <- paste0(paste0(rep("_",(k - i)), collapse = ""),paste0(rep("#",i),collapse = ""))
+    }
+    result <- rev(result)
+    final <-paste0(result,collapse = "\n")
+    
+    return(cat(final,sep = "\n"))
+  }
+  result <- character(0)
+  for (i in seq_len(n)) {
+    result[[length(result) + 1]] <- paste0(paste0(rep("_",(n - i)), collapse = ""),paste0(rep("#",i),collapse = ""))
+  }
+  final <-paste0(result,collapse = "\n")
+  
+  return(cat(final,sep = "\n"))
+}
+
+
+# staircase(3) ➞ "__#\n_##\n###"
+# __#
+# _##
+# ###
+
+
+
+# staircase(7) ➞ "______#\n_____##\n____###\n___####\n__#####\n_######\n#######"
+# ______#
+# _____##
+# ____###
+# ___####
+# __#####
+# _######
+# #######
+# 
+# staircase(2) ➞ "_#\n##"
+# _#
+# ##
+# 
+# staircase(-8) ➞ "########\n_#######\n__######\n___#####\n____####\n_____###\n______##\n_______#"
+# ########
+# _#######
+# __######
+# ___#####
+# ____####
+# _____###
+# ______##
+# _______#
