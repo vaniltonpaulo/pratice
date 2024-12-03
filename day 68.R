@@ -39,3 +39,67 @@ find_fulcrum <- function(x){
 # find_fulcrum(c(8, 8, 8, 8)) ➞ -1
 
 
+makeTranspose <- function(x){
+  t(x)
+}
+matrix1 <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow = 3, byrow = TRUE)
+# Example 2
+matrix2 <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 3, byrow = TRUE)
+
+# Example 3
+matrix3 <- matrix(c("a", "b"), nrow = 1, byrow = TRUE)
+
+
+
+# makeTranspose([
+#   [1, 2, 3],
+#   [4, 5, 6],
+#   [7, 8, 9]
+# ]) ➞ [
+#   [1, 4, 7],
+#   [2, 5, 8],
+#   [3, 6, 9]
+# ]
+# 
+# makeTranspose([
+#   [1, 2],
+#   [3, 4],
+#   [5, 6]
+# ]) ➞ [
+#   [1, 3, 5],
+#   [2, 4, 6]
+# ]
+# 
+# makeTranspose([
+#   ["a", "b"]
+# ]) ➞ [
+#   ["a"],
+#   ["b"]
+# ]
+
+makeTranspose(matrix1)
+
+min_miss_pos <- function(x){
+  y<-sort(x)
+  result <-min(y):max(y)
+  final<-result[!result %in% unique(y)]
+  min(final[final > 0])  
+}
+
+# min_miss_pos(c(-2, 6, 4, 5, 7, -1, 1, 3, 6, -2, 9, 10, 2, 2)) ➞ 8
+# # After sorting, list becomes [-2, -2, -1, 1, 2, 2, 3, 4, 5, 6, 6, 7, 9, 10]
+# # So the smallest missing positive integer is 8
+# 
+# min_miss_pos(c(5, 9, -2, 0, 1, 3, 9, 3, 8, 9)) ➞ 2
+# # After sorting, list becomes [-2, 0, 1, 3, 3, 5, 8, 9, 9, 9]
+# # So the smallest missing positive integer is 2
+# 
+# min_miss_pos(c(0, 4, 4, -1, 9, 4, 5, 2, 10, 7, 6, 3, 10, 9)) ➞ 1
+# # After sorting, list becomes [-1, 0, 2, 3, 4, 4, 4, 5, 6, 7, 9, 9, 10, 10]
+# # So the smallest missing positive integer is 1
+
+x <- c(-2, 6, 4, 5, 7, -1, 1, 3, 6, -2, 9, 10, 2, 2)
+y<-sort(x)
+result <-min(y):max(y)
+final<-result[!result %in% unique(y)]
+final[final != 0]
