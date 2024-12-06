@@ -212,3 +212,5 @@ staircase <- function(n){
 # _____###
 # ______##
 # _______#
+
+x <-"nwcvnk"
