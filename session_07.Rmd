@@ -17,7 +17,7 @@ In this exercise you should write faster versions of the functions that are give
 Define a variable `zero` with value `0`.
 This is to try out the setup.
 ```{r}
-zero <- 0  # change this?
+zero <- 1  # change this?
 ```
 
 # Exercise 1: Sum
