@@ -1,0 +1,293 @@
+---
+title: 'Lecture 07: Performance'
+output: html_document
+---
+
+
+```{r setup, echo = FALSE}
+## setup
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", out.width = "50%", echo = TRUE)
+invisible(suppressPackageStartupMessages(testthat::expect_equal))
+```
+
+In this exercise you should write faster versions of the functions that are given.
+
+# Exercise 0: Test things
+
+Define a variable `zero` with value `0`.
+This is to try out the setup.
+```{r}
+zero <- 0  # change this?
+```
+
+# Exercise 1: Sum
+
+Write a functoin that sums the numbers from 1 to `n`, where `n` is a positive integer.
+
+```{r}
+nsum <- function(n) {
+  result <- 0
+  for (i in seq_len(n)) result <- result + i
+  result
+}
+```
+
+#### Tests
+
+```{r, error = TRUE, echo = FALSE}
+
+testthat::expect_equal(nsum(1), 1)
+
+testthat::expect_equal(nsum(10), 55)
+
+testthat::expect_equal(nsum(100), 5050)
+
+testthat::expect_equal(nsum(73), 2701)
+
+testthat::expect_equal(nsum(69), 2415)
+
+```
+
+## Exercise 2: Number of Missings
+
+Write a function that counts the number of missing values in each row of a `data.frame` `df`.
+The return value should be a integer-valued `numeric` vector with length equal to the number of rows of `df`.
+The `i`th entry of the return value should indicate the number of missing values in the `i`th row of `df`.
+You should also consider the case of having zero-row or zero-column `data.frame`s.
+
+```{r}
+countMissings <- function(df) {
+  # your code
+}
+```
+
+```{r}
+df1 <- read.csv(text = "  a,  b,  c
+ 10, NA, 10
+ NA,  9, NA
+  1,  2,  3
+  4,  5,  6
+", colClasses = "numeric")
+ 
+# Expected:
+#> [1] 1 2 0 0
+countMissings(df1)
+```
+```{r}
+# Expected:
+#> numeric(0)
+countMissings(data.frame())
+```
+```{r}
+# Expected:
+#> 1 2 3 4 5 6 
+#> 0 0 0 0 0 0 
+# or
+#> [1] 0 0 0 0 0 0
+countMissings(head(iris))
+```
+
+
+#### Tests
+```{r, echo = FALSE, error = TRUE}
+df1 <- read.csv(text = "  a,  b,  c
+ 10, NA, 10
+ NA,  9, NA
+  1,  2,  3
+  4,  5,  6
+", colClasses = "numeric")
+testthat::expect_equal(countMissings(df1), c(1, 2, 0, 0))
+
+testthat::expect_equal(unname(countMissings(head(iris))), rep(0, 6))
+
+testthat::expect_equal(countMissings(data.frame(x = NA, y = c(1:3, NA))), c(1, 1, 1, 2))
+
+testthat::expect_equal(countMissings(data.frame(a = 1)[0, , drop = FALSE]), numeric(0))
+
+testthat::expect_equal(countMissings(data.frame(a = 1)[, 0, drop = FALSE]), 0)
+
+testthat::expect_equal(countMissings(data.frame(x = NA, y = c(letters[1:3], NA))), c(1, 1, 1, 2))
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+
+
+# Exercise 3: Remove Missing Cols
+
+Write a faster version of this function which removes all columns from a data.frame that have missing values.
+```{r}
+dropMissingCols <- function(df) {
+  drop <- character(0)
+  for (col in colnames(df)) {
+    for (row in seq_len(nrow(df))) {
+      if (is.na(df[row, col])) drop <- union(drop, col)
+    }
+  }
+  df[, setdiff(colnames(df), drop), drop = FALSE]
+}
+```
+
+Expected Behaviour:
+```{r}
+testdf <- data.frame(x = c(1, 2, 3), y = c("A", "B", NA), z = c(1, NA, 2))
+print(dropMissingCols(testdf))  # data.frame with all coluns that do not contain missings: 'x', in this case
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+dropMissingColsFast <- function(df) {
+  df[colSums(is.na(df)) == 0]
+}
+
+# The following is necessary because the test server does not like loops.
+i <- 1
+  testdf <- iris
+  testdf[cbind(sample(nrow(iris), i, replace = TRUE), sample(ncol(iris), i, replace = TRUE))] <- NA
+  testthat::expect_equal(dropMissingCols(testdf), dropMissingColsFast(testdf))
+i <- 2
+  testdf <- iris
+  testdf[cbind(sample(nrow(iris), i, replace = TRUE), sample(ncol(iris), i, replace = TRUE))] <- NA
+  testthat::expect_equal(dropMissingCols(testdf), dropMissingColsFast(testdf))
+i <- 3
+  testdf <- iris
+  testdf[cbind(sample(nrow(iris), i, replace = TRUE), sample(ncol(iris), i, replace = TRUE))] <- NA
+  testthat::expect_equal(dropMissingCols(testdf), dropMissingColsFast(testdf))
+i <- 4
+  testdf <- iris
+  testdf[cbind(sample(nrow(iris), i, replace = TRUE), sample(ncol(iris), i, replace = TRUE))] <- NA
+  testthat::expect_equal(dropMissingCols(testdf), dropMissingColsFast(testdf))
+i <- 5
+  testdf <- iris
+  testdf[cbind(sample(nrow(iris), i, replace = TRUE), sample(ncol(iris), i, replace = TRUE))] <- NA
+  testthat::expect_equal(dropMissingCols(testdf), dropMissingColsFast(testdf))
+i <- 6
+  testdf <- iris
+  testdf[cbind(sample(nrow(iris), i, replace = TRUE), sample(ncol(iris), i, replace = TRUE))] <- NA
+  testthat::expect_equal(dropMissingCols(testdf), dropMissingColsFast(testdf))
+
+```
+
+# Exercise 4: Higher Order Fibonacci Sequence
+
+Remember, the Fibonacci Sequence is defined as `F(n) = F(n-1) + F(n-2)`.
+
+Here we define `x`th order fibonacci as `F(n, x) = F(n-1, x) + F(n-2, x) + ... + F(n - x, x)`.
+
+The fibonacci numbers are recovered for `x == 2`.
+
+Furthermore, `F(n, x)` is 1 for `n == 1`, and 0 for `n < 1`.
+
+Write a faster version of this function:
+
+```{r}
+hoFib <- function(n, x) {
+  if (n < 1) return(0)
+  if (n == 1) return(1)
+  result <- 0
+  for (subtract in seq_len(x)) {
+    result <- result + hoFib(n - subtract, x)
+  }
+  return(result)
+}
+```
+
+Expected Behaviour:
+```{r}
+vapply(seq_len(10), function(n) hoFib(n, 3), numeric(1))  # c(1, 1, 2, 4, 7, 13, 24, 44, 81, 149)
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+hoFibFaster <- function(n, x) {
+  if (n < 1) return(0)
+  numbers <- numeric(n)
+  numbers[[1]] <- 1
+  for (i in seq_len(n - 1)) {
+    sumstart <- i - x + 1
+    if (sumstart < 1) sumstart <- 1
+    numbers[[i + 1]] <- sum(numbers[seq.int(sumstart, i)])
+  }
+  return(numbers[[n]])
+}
+# The following is necessary because the test server does not like loops.
+
+evalFib <- function(fibfun, top, x) sapply(seq_len(top), function(n) fibfun(n, x))
+
+testthat::expect_equal(evalFib(hoFib, 15, 4), evalFib(hoFibFaster, 15, 4))
+testthat::expect_equal(evalFib(hoFib, 15, 5), evalFib(hoFibFaster, 15, 5))
+testthat::expect_equal(evalFib(hoFib, 15, 6), evalFib(hoFibFaster, 15, 6))
+testthat::expect_equal(evalFib(hoFib, 15, 7), evalFib(hoFibFaster, 15, 7))
+```
+
+# Exercise 5: Balanced Parentheses
+
+The following function checks if a given string of parentheses and square brackets is balanced.
+
+The parentheses / brackets are balanced if for every opening paren, there is a corresponding closing paren; likewise for brackets.
+
+```{r}
+isBalanced <- function(string) {
+  items <- strsplit(string, "")[[1]]
+  stack <- character(0)
+  is.balanced <- TRUE
+  for (char in items) {
+    if (char == "(") {
+      stack <- c(stack, char)
+    }
+    if (char == "[") {
+      stack <- c(stack, "[")
+    }
+    if (char == ")") {
+      if (length(stack) == 0) {
+        is.balanced <- FALSE
+      } else {
+        if (tail(stack, 1) != "(") is.balanced <- FALSE
+        stack <- stack[seq_len(length(stack) - 1)]
+      }
+    }
+    if (char == "]") {
+      if (length(stack) == 0) {
+        is.balanced <- FALSE
+      } else {
+        if (tail(stack, 1) != "[") is.balanced <- FALSE
+        stack <- stack[seq_len(length(stack) - 1)]
+      }
+    }
+  }
+  is.balanced
+}
+```
+
+Expected behaviour:
+```{r}
+isBalanced("")  # TRUE
+isBalanced("()")  # TRUE
+isBalanced("([])")  # TRUE
+isBalanced("([)]")  # FALSE
+isBalanced("()[)")  # FALSE
+isBalanced("]()[")  # FALSE
+```
+
+#### Tests
+
+```{r, echo = FALSE, error = TRUE}
+testthat::expect_true(isBalanced(""))
+testthat::expect_true(isBalanced("()"))
+testthat::expect_true(isBalanced("([])"))
+testthat::expect_true(!isBalanced("([)]"))
+testthat::expect_true(!isBalanced("()[)"))
+testthat::expect_true(!isBalanced("]()["))
+
+testthat::expect_true(!isBalanced("]()["))
+
+testthat::expect_false(isBalanced(")]]][[[[[]"))
+testthat::expect_false(isBalanced("))[((]]])]](])[[)(()[[]][[[()())(])](][)][[[][))([[]]))](]]]([[[[(][[)()[)[())]()([[[]]]()])(([][]()"))
+testthat::expect_true(isBalanced("[((()))][]([[]])(()[[]][[[()()]]])"))
+testthat::expect_true(isBalanced("[((()))][]([[]])(()[[]][[[()()]]])[((()))][]([[]])(()[[]][[[()()]]])[((()))][]([[]])(()[[]][[[()()]]])"))
+testthat::expect_true(isBalanced("([((()))][]([[]])(()[[]][[[()()]]])[((()))][]([[]])(()[[]][[[()()]]])[((()))][]([[]])(()[[]][[[()()]]]))"))
+testthat::expect_true(!isBalanced("([((()))][]([[]])(()[[]][[[()()]]])[((()))][]([[]])(()[[]][[[()()]]])[((()))][]([[]])(()[[]][[[()()]]])]"))
+
+```
