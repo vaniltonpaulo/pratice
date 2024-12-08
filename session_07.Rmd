@@ -17,18 +17,18 @@ In this exercise you should write faster versions of the functions that are give
 Define a variable `zero` with value `0`.
 This is to try out the setup.
 ```{r}
-zero <- 1  # change this?
+zero <- 0  # change this?
 ```
 
 # Exercise 1: Sum
 
-Write a functoin that sums the numbers from 1 to `n`, where `n` is a positive integer.
+Write a function that sums the numbers from 1 to `n`, where `n` is a positive integer.
 
 ```{r}
 nsum <- function(n) {
-  result <- 0
-  for (i in seq_len(n)) result <- result + i
-  result
+   result <- numeric(0)
+  for (i in seq_len(n)) result[[length(result) + 1]] <-  i
+  sum(result)
 }
 ```
 
@@ -58,6 +58,10 @@ You should also consider the case of having zero-row or zero-column `data.frame`
 ```{r}
 countMissings <- function(df) {
   # your code
+  if(nrow(df) > 0 && ncol(df) == 0) return(0)
+  if(ncol(df) == 0 | nrow(df) == 0) return(numeric(0))
+  x<-apply(df, 2, is.na)
+apply(x,1,sum)
 }
 ```
 
