@@ -1,6 +1,40 @@
 #coool stuff
 
 
+# check the speed pf both functions
+dropMissingCols <- function(df) {
+  drop <- character(0)
+  for (col in colnames(df)) {
+    for (row in seq_len(nrow(df))) {
+      if (is.na(df[row, col])) drop <- union(drop, col)
+    }
+  }
+  df[, setdiff(colnames(df), drop), drop = FALSE]
+}
+
+dropMissingCols.1 <- function(df) {
+  result<-vapply(colnames(df),function(k){
+    if(any(is.na(df[,k])) == FALSE){
+      return(k)
+    }else{
+      "pdf"
+    }
+  },character(1))
+  
+  final <-result[result !="pdf"]
+  df[,final,drop = FALSE]
+}
+
+library(microbenchmark)
+
+microbenchmark(
+  dropMissingCols(testdf),
+  dropMissingCols.1(testdf),
+  times = 100  # Number of iterations
+)
+
+
+
 
 # Function to check if a number is prime
 is_prime <- function(n) {

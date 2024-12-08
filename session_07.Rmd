@@ -122,13 +122,23 @@ cat("If there are no errors here then tests are ok.\n")
 Write a faster version of this function which removes all columns from a data.frame that have missing values.
 ```{r}
 dropMissingCols <- function(df) {
-  drop <- character(0)
-  for (col in colnames(df)) {
-    for (row in seq_len(nrow(df))) {
-      if (is.na(df[row, col])) drop <- union(drop, col)
-    }
+result<-vapply(colnames(df),function(k){
+  if(any(is.na(df[,k])) == FALSE){
+    return(k)
+  }else{
+    "pdf"
   }
-  df[, setdiff(colnames(df), drop), drop = FALSE]
+},character(1))
+
+final <-result[result !="pdf"]
+df[,final,drop = FALSE]
+  # drop <- character(0)
+  # for (col in colnames(df)) {
+  #   for (row in seq_len(nrow(df))) {
+  #     if (is.na(df[row, col])) drop <- union(drop, col)
+  #   }
+  # }
+  # df[, setdiff(colnames(df), drop), drop = FALSE]
 }
 ```
 
@@ -189,11 +199,20 @@ Write a faster version of this function:
 hoFib <- function(n, x) {
   if (n < 1) return(0)
   if (n == 1) return(1)
-  result <- 0
-  for (subtract in seq_len(x)) {
-    result <- result + hoFib(n - subtract, x)
+  #result <- 0
+  result <- numeric(x)   
+  result[[1]] <- 0
+  for (i in seq_len(x)) {
+    result[[length(result) + 1]] <- result[[i]] + hoFib(n - i, x)
   }
-  return(result)
+  return(  sum(result))
+  # if (n < 1) return(0)
+  # if (n == 1) return(1)
+  # result <- 0
+  # for (subtract in seq_len(x)) {
+  #   result <- result + hoFib(n - subtract, x)
+  # }
+  # return(result)
 }
 ```
 
