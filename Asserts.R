@@ -1,3 +1,33 @@
+#AssertSubset vs AssertChoice
+
+#AssertSubset:
+  
+#   This function is used to check if all elements of one vector (x) are contained in another vector (choices).
+# It is appropriate for ensuring that a set of values is within a defined allowable set.
+#Use this when validating multiple values or ensuring that subsets adhere to the permissible set.
+
+# Example:
+
+
+assertSubset(c("apple", "banana"), c("apple", "banana", "cherry"))
+# Passes since both "apple" and "banana" are in the set of choices
+
+#AssertChoice:
+  
+#   This function is used to check if a single value is part of a predefined set of allowed values (choices).
+# It is more specific than assertSubset, designed for scalar values.
+# Example:
+assertChoice("apple", c("apple", "banana", "cherry"))
+# Passes since "apple" is in the set of choices
+
+#When to Use Each:
+
+## - Use assertSubset when the input could have multiple elements, and you want to ensure all of them are valid options.
+
+## - Use assertChoice when validating a single input value.
+
+
+
 # Logical Assertions
 # 
 # assert_flag(x): Asserts that x is a logical scalar (TRUE or FALSE).
@@ -28,7 +58,7 @@
 # assert_true(x): Asserts that x is TRUE.
 # assert_false(x): Asserts that x is FALSE.
 
-# ESSENTIALLY AS INPUT, WE ARE ONLY GOING TO ACCEPT
+# ESSENTIALLY AS INPUT, WE ARE ONLY GOING TO ACCEPT(use this for for words, not in matrix rather)
 # assert_choice(x, choices): Asserts that x is a scalar and one of the provided choices.
 
 # assert_scalar_na(x): Asserts that x is a scalar NA.
