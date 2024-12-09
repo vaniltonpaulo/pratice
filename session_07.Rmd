@@ -196,6 +196,7 @@ Furthermore, `F(n, x)` is 1 for `n == 1`, and 0 for `n < 1`.
 Write a faster version of this function:
 
 ```{r}
+#I have to work on this
 hoFib <- function(n, x) {
   if (n < 1) return(0)
   if (n == 1) return(1)
@@ -252,6 +253,7 @@ The following function checks if a given string of parentheses and square bracke
 The parentheses / brackets are balanced if for every opening paren, there is a corresponding closing paren; likewise for brackets.
 
 ```{r}
+#I have to work on this
 isBalanced <- function(string) {
   items <- strsplit(string, "")[[1]]
   stack <- character(0)

@@ -60,7 +60,15 @@ testdf <- data.frame(x = c(1, 2, 3), y = c("A", "B", NA), z = c(1, NA, 2))
 dropMissingCols(testdf)  # data.frame with all coluns that do not contain missings: 'x', in this case
 
 
-
+hoFib <- function(n, x) {
+  if (n < 1) return(0)
+  if (n == 1) return(1)
+  result <- 0
+  for (subtract in seq_len(x)) {
+    result <- result + hoFib(n - subtract, x)
+  }
+  return(result)
+}
 
 hoFib.1 <- function(n, x) {
   if (n < 1) return(0)
@@ -78,11 +86,94 @@ vapply(seq_len(10), function(n) hoFib(n, 3), numeric(1))  # c(1, 1, 2, 4, 7, 13,
 
 
 
+
 microbenchmark(
   hoFib(10,3),
   hoFib.1(10,3),
   times = 100  # Number of iterations
 )
-system.time({
-  hoFib.1(10,3)
-})
+
+
+
+isBalanced.1 <- function(string) {
+  items <- strsplit(string, "")[[1]]
+  stack <- character(0)
+  is.balanced <- TRUE
+  for (char in items) {
+    if (char == "(") {
+      stack[[length(stack) + 1]] <- char
+    }
+    if (char == "[") {
+      stack[[length(stack) + 1]] <- "["
+    }
+    if (char == ")") {
+      if (length(stack) == 0) {
+        is.balanced <- FALSE
+      } else {
+        if (tail(stack, 1) != "(") is.balanced <- FALSE
+        stack <- stack[seq_len(length(stack) - 1)]
+      }
+    }
+    if (char == "]") {
+      if (length(stack) == 0) {
+        is.balanced <- FALSE
+      } else {
+        if (tail(stack, 1) != "[") is.balanced <- FALSE
+        stack <- stack[seq_len(length(stack) - 1)]
+      }
+    }
+  }
+  is.balanced
+}
+
+
+
+
+
+
+isBalanced <- function(string) {
+  items <- strsplit(string, "")[[1]]
+  stack <- character(0)
+  is.balanced <- TRUE
+  for (char in items) {
+    if (char == "(") {
+      stack <- c(stack, char)
+    }
+    if (char == "[") {
+      stack <- c(stack, "[")
+    }
+    if (char == ")") {
+      if (length(stack) == 0) {
+        is.balanced <- FALSE
+      } else {
+        if (tail(stack, 1) != "(") is.balanced <- FALSE
+        stack <- stack[seq_len(length(stack) - 1)]
+      }
+    }
+    if (char == "]") {
+      if (length(stack) == 0) {
+        is.balanced <- FALSE
+      } else {
+        if (tail(stack, 1) != "[") is.balanced <- FALSE
+        stack <- stack[seq_len(length(stack) - 1)]
+      }
+    }
+  }
+  is.balanced
+}
+isBalanced("")
+
+
+
+
+
+profvis::profvis(replicate(100000,isBalanced("")  ))
+
+
+
+
+microbenchmark(
+  isBalanced(""),
+  isBalanced.1(""),
+  times = 100  # Number of iterations
+)
