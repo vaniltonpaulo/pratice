@@ -1,5 +1,13 @@
 #coool stuff
 
+#The readline() function in R is used for interactive input from the user via the command line. Here's how it works:
+# How It Works
+# Displays a Prompt: If you specify a prompt, it is shown to the user.
+# Waits for Input: The function pauses execution and waits for the user to enter a response.
+# Captures Input: When the user presses Enter/Return, the input is returned as a character string.
+
+name <- readline("Enter your name: ")
+cat("Hello,", name, "!\n")
 
 # check the speed pf both functions
 dropMissingCols <- function(df) {

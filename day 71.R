@@ -1,3 +1,42 @@
+ex01Winner <- function(position) {
+  # your code
+  assertMatrix(position, mode= "character")
+  assertSubset(position, choices = c("X","O",NA))
+  
+  getwinner <- function(sequence){
+    winner <-unique(sequence)
+    if(length(winner) == 1) return(winner)
+    NA_character_
+    
+  }
+  
+  allWinners <- c(
+    apply(position, 1, getwinner),
+    apply(position, 2, getwinner),
+    getwinner(diag(position)),
+    getwinner(diag(position[ , 3:1]))
+  )
+  
+  result <- unique(allWinners[!is.na(allWinners)])
+  
+  if (length(result) == 1) {
+    return(result)
+  }
+  
+  if (length(result) == 0) {
+    if (any(is.na(position))) {
+      return(NA)
+    }else{
+      return("")
+    }
+    
+  }
+  stop("more than one winner")
+}
+
+
+
+
 # Part 02: Write a function that takes a Gravity Tic Tac Toe position and a column that a player chooses to
 # play, and converts them to numeric c(row, col) matrix coordinates of where the player's token will come
 # to rest, checking if the column is a valid move in the process.
@@ -46,3 +85,123 @@ ex02MoveStringToCoordinate <- function(column,position) {
 }
 
 ex02MoveStringToCoordinate("A",example.position)
+
+
+
+
+# Part 03: Write a function that interacts with a human player. Your function should take the arguments
+# `position` and `player`.
+# - `position` should be a 3x3 position matrix, checked in the same way as in ex02MoveStringToCoordinate.
+# - `player` should be checked to be either the string "X" or the string "O".
+#
+# The function is called whenever the current position is `position`, and player `player` is asked to
+# make a move. If the game is already over (a player has won, or there is a draw, as per ex01Winner),
+# then an error should be thrown, as the player can no longer make a move.
+# Otherwise, the function should prompt the player to make his choice, e.g. by printing the position,
+# announcing that player `player` is to play, and getting an input by using the `readline()` function.
+# (It is essential that `readline()` is called to prompt for input; this function will be replaced
+# in the submission check).
+# The user input should be sanitized (removing spaces e.g. using `gsub` or `trimws`, converting input
+# to uppercase using `toupper`, so that an input of "  a " still counts as valid) and checked:
+#  - if the input is "Q", an error should be thrown because the player has ended the game.
+#  - if the input is not a valid coordinate as by `ex02MoveStringToCoordinate`, e.g. because the chosen
+#    space is occupied or the input is not valid, then an information message should be printed
+#    and the user should be prompted *again* for a new input. It is recommended to use the
+#    ex02MoveStringToCoordinate function here, in combination with tryCatch, to check user input.
+#
+# The function should return the numeric coordinate c(row, col) where the token of the player will be
+# placed; this is the result of ex02MoveStringToCoordinate of the user's input if the input was valid.
+#
+# Example interaction with the program:
+# > ex03HumanPlayer(matrix(c("X", "O", "X", NA, "O", "O", NA, NA, NA), nrow = 3), "X")
+## Position:
+##   A   B   C
+## 1 "X" NA  NA
+## 2 "O" "O" NA
+## 3 "X" "O" NA
+## Player X to move. What is your move?
+## ("A", "B", "C"; or "Q" to quit): <INPUT> d
+## Invalid move: D.
+## Player X to move. What is your move?
+## ("A", "B", "C"; or "Q" to quit): <INPUT> a
+## Column A already full.
+## Player X to move. What is your move?
+## ("A", "B", "C"; or "Q" to quit): <INPUT> b
+# <RETURN VALUE:> c(1, 2)
+#
+# > ex03HumanPlayer(matrix(c("X", "O", "X", NA, "O", "O", NA, NA, NA), nrow = 3), "X")
+## Position:
+##   A   B   C
+## 1 "X" NA  NA
+## 2 "O" "O" NA
+## 3 "X" "O" NA
+## Player X to move. What is your move?
+## ("A", "B", "C"; or "Q" to quit): <INPUT> Q
+## Error in ex03HumanPlayer(matrix(c("X", "O", "X", NA, "O", "O", NA, NA, NA),  :
+##   Player X Quit
+#
+# The output of your answer does not need to be exactly like this, and
+# the tests do not check if the function prints anything, but it is recommended to give some output
+# to make everything nicer.
+ex03HumanPlayer <- function(position, player) {
+  # your code
+  assertMatrix(position, mode = "character", nrows = 3, ncols = 3)
+  assertSubset(position,choices = c("X", "O", NA))
+  assertChoice(player, choices = c("X", "O"))
+  
+  if(!is.na(ex01Winner(position))) stop("Its over son")
+  colnames(position) <-LETTERS[1:3]
+  rownames(position) <- 1:3
+  repeat{
+    response <- readline(sprintf("Player %s to move. What is your move?
+ (\"A\", \"B\", \"C\"; or \"Q\" to quit):",player))
+    response <- trimws(toupper(response))
+  }
+}
+
+
+position <- matrix(c("X", "O", "X", NA, "O", "O", NA, NA, NA), nrow = 3)
+player <- "X"
+
+name <- readline("Enter your name: ")
+cat("Hello,", name, "!\n")
+
+
+final <- function(n,m ,i) {
+  mt <- matrix(0,nrow = n,ncol = m)
+  
+  for (x in seq_along(i)) {
+    result<-strsplit(i[[x]], "")[[1]]
+    if(result[[2]] == "r"){
+      mt[as.numeric(result[1]), ] <-mt[as.numeric(result[1]), ] + 1
+    }else{
+      mt[,as.numeric(result[1]) ] <-mt[, as.numeric(result[1])] + 1
+    }
+  }
+  mt
+  
+}
+
+
+
+# final(2, 2, c("1r", "1r", "1r", "2c")) ➞ [
+#   [3, 4],
+#   [0, 1]
+# ]
+# 
+# final(2, 2, c("1c")) ➞ [
+#   [1, 0],
+#   [1, 0]
+# ]
+# 
+# final(3, 3, c('1c', '2c', '2c', '3c', '3c', '3c')) ➞ [
+#   [1, 2, 3],
+#   [1, 2, 3],
+#   [1, 2, 3]
+# ]
+# 
+# final(3, 3, c()) ➞ [
+#   [0, 0, 0],
+#   [0, 0, 0],
+#   [0, 0, 0]
+# ]

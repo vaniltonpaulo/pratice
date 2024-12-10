@@ -96,6 +96,8 @@ assertChoice("apple", c("apple", "banana", "cherry"))
 # assert_int(x): Ensure that all values in an integer matrix are integers.
 # assert_subset(colnames(x), choices = c("col1", "col2")): Asserts specific column names are present in the matrix if it’s labeled.
 
+# assert_subset(a,give.matrix, choices = c("X", "O",NA)) Asserts that the matrix only contain this values(choices)
+
 
 
 ##############################################################################
