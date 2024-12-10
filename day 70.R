@@ -116,3 +116,6 @@ ex01Winner <- function(position) {
   stop("more than one winner")
   
 }
+
+
+max(NA,0)
