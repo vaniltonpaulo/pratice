@@ -34,3 +34,22 @@ first_vowel <- function(x){
 # first_vowel("STRAWBERRY") ➞ 3
 # 
 # first_vowel("pInEaPPLe") ➞ 1
+
+
+
+
+
+
+
+clear_fog <- function(x){
+  x <- tolower(x)
+  result <- regmatches(x,gregexpr("[^fog]",x,perl = TRUE))[[1]]
+  paste0(result,collapse = "")
+}
+
+# clear_fog("sky") ➞ "It's a clear day!"
+# 
+# clear_fog("fogfogFFfoooofftogffreogffesGgfOogfog") ➞ "trees"
+# 
+# clear_fog("fogFogFogffoObirdsanffodthebffoeffoesGGGfOgFog") ➞ "birdsandthebees"
+
