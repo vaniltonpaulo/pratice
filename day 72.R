@@ -1,4 +1,6 @@
 #speed run very easy REGEX
+
+##### Very EASY
 is_valid <- function(x){
   if(nchar(x)>5) return(FALSE)
   if(isTRUE(grepl("\\s+",x,perl = TRUE))) return(FALSE)
@@ -52,4 +54,53 @@ clear_fog <- function(x){
 # clear_fog("fogfogFFfoooofftogffreogffesGgfOogfog") ➞ "trees"
 # 
 # clear_fog("fogFogFogffoObirdsanffodthebffoeffoesGGGfOgFog") ➞ "birdsandthebees"
+
+
+count_all <- function(x){
+  
+  re.x<-regmatches(x,gregexpr("[A-z]",x,perl = TRUE))[[1]]
+  re.y<-regmatches(x,gregexpr("[0-9]",x,perl = TRUE))[[1]]
+  
+  c("LETTERS" = length(re.x), "DIGITS" = length(re.y))
+}
+
+
+# count_all("Hello World") ➞ { "LETTERS":  10, "DIGITS": 0 }
+# 
+# count_all("H3ll0 Wor1d") ➞ { "LETTERS":  7, "DIGITS": 3 }
+# 
+# count_all("149990") ➞ { "LETTERS": 0, "DIGITS": 6 }
+
+
+
+####EASY
+
+alphanumeric_restriction <- function(x){
+  funny <- regmatches(x,gregexpr("[[:punct:]]",x,perl = TRUE))[[1]]
+  if(length(funny) >0) return(FALSE)
+  result <-regmatches(x,gregexpr("[A-z0-9]",x,perl = TRUE))[[1]]
+  
+  if(any(letters %in% result) == TRUE && any(0:9 %in% result) == TRUE) return(FALSE)
+  if( any(LETTERS %in% result) == TRUE && any(0:9 %in% result) == TRUE) return(FALSE)
+  TRUE
+}
+# alphanumeric_restriction("Bold") ➞ True
+# 
+# alphanumeric_restriction("123454321") ➞ True
+# 
+# alphanumeric_restriction("H3LL0") ➞ False
+# 
+# alphanumeric_restriction("ed@bit") ➞ False
+alphanumeric_restriction("1a2b3c")
+
+
+
+replace_vowel <- function(x){
+  chartr("aeiou","12345",x) 
+}
+# replace_vowel("karachi") ➞ "k1r1ch3"
+# 
+# replace_vowel("chembur") ➞ "ch2mb5r"
+# 
+# replace_vowel("khandbari") ➞ "kh1ndb1ri"
 
