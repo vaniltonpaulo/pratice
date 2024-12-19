@@ -104,3 +104,22 @@ replace_vowel <- function(x){
 # 
 # replace_vowel("khandbari") ➞ "kh1ndb1ri"
 
+
+double_letters <- function(x){
+  result <- strsplit(x,"")[[1]]
+  for (i  in 1:(length(result) -1)) {
+    if(result[[i]] == result[[i + 1]]) {
+      return(TRUE)
+    }
+  }
+  FALSE
+}
+
+# double_letters("loop") ➞ True
+# 
+# double_letters("yummy") ➞ True
+# 
+# double_letters("orange") ➞ False
+# 
+# double_letters("munchkin") ➞ False
+
