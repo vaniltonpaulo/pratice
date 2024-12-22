@@ -86,3 +86,14 @@ grab_city <- function(x) {
 # grab_city("[50% Off!][Group Tours Included] 5-Day Trip to Onsen [Kyoto]") ➞ "Kyoto"
 
 grab_city("[Duration: 7 hours] Tour of the Maritimes [Charlottetown]")
+
+
+remove_abc <- function(x){
+  paste0(regmatches(x,gregexpr("[^abc]",x,perl = TRUE))[[1]],collapse = "")
+}
+
+# remove_abc("This might be a bit hard") ➞ "This might e  it hrd"
+# 
+# remove_abc("hello world!") ➞ None
+# 
+# remove_abc("") ➞ None
