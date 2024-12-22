@@ -97,3 +97,20 @@ remove_abc <- function(x){
 # remove_abc("hello world!") ➞ None
 # 
 # remove_abc("") ➞ None
+
+make_title <- function(x) {
+  regmatches(x,gregexpr("^[A-z]",x,perl = TRUE))[[1]] <- toupper(regmatches(x,gregexpr("^[A-z]",x,perl = TRUE))[[1]])
+  regmatches(x,gregexpr(" [A-z]",x,perl = TRUE))[[1]] <- toupper(regmatches(x,gregexpr(" [A-z]",x,perl = TRUE))[[1]])
+  
+  x
+}
+
+# make_title("This is a title") ➞ "This Is A Title"
+# 
+# make_title("capitalize every word") ➞ "Capitalize Every Word"
+# 
+# make_title("I Like Pizza") ➞ "I Like Pizza"
+# 
+# make_title("PIZZA PIZZA PIZZA") ➞ "PIZZA PIZZA PIZZA"
+make_title("1f you c4n r34d 7h15, you r34lly n33d 2 g37 l41d")
+
