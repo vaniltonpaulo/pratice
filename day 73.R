@@ -62,6 +62,27 @@ retrieve <- function(x){
 # retrieve("")
 # ➞ []
 
-x <- "A simple life is a happy life for me."
-x <- tolower(x)
-regmatches(x,gregexpr("(?<![bcdfghjklmnpqrstvwxyz])[aeiou][a-z]*",x,perl = TRUE))[[1]]
+
+remove_special_characters <- function(x) {
+  result <- regmatches(x,gregexpr("[^\\.\\!@#\\$%\\^\\&\\*\\(\\)]",x,perl = TRUE))[[1]]
+  paste0(result,collapse = "")
+}
+# remove_special_characters("The quick brown fox!") ➞ "The quick brown fox"
+# 
+# remove_special_characters("%fd76$fd(-)6GvKlO.") ➞ "fd76fd-6GvKlO"
+# 
+# remove_special_characters("D0n$c sed 0di0 du1") ➞ "D0nc sed 0di0 du1"
+
+
+grab_city <- function(x) {
+  result <-regmatches(x,gregexpr("(?<=\\s)\\[[A-z]+\\]",x,perl = TRUE))[[1]]
+  regmatches(result,gregexpr("(?<=\\[)[A-z]+(?=\\])",result,perl = TRUE))[[1]] 
+}
+
+# grab_city("[Last Day!] Beer Festival [Munich]") ➞ "Munich"
+# 
+# grab_city("Cheese Factory Tour [Portland]") ➞ "Portland"
+# 
+# grab_city("[50% Off!][Group Tours Included] 5-Day Trip to Onsen [Kyoto]") ➞ "Kyoto"
+
+grab_city("[Duration: 7 hours] Tour of the Maritimes [Charlottetown]")

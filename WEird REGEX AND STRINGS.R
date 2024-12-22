@@ -39,3 +39,16 @@ correct_signs <- function(expression) {
   
   return(result)
 }
+
+
+
+
+remove_special_characters <- function(x) {
+  result <- regmatches(x,gregexpr("[^\\.\\!@#\\$%\\^\\&\\*\\(\\)]",x,perl = TRUE))[[1]]
+  paste0(result,collapse = "")
+}
+# remove_special_characters("The quick brown fox!") ➞ "The quick brown fox"
+# 
+# remove_special_characters("%fd76$fd(-)6GvKlO.") ➞ "fd76fd-6GvKlO"
+# 
+# remove_special_characters("D0n$c sed 0di0 du1") ➞ "D0nc sed 0di0 du1"
