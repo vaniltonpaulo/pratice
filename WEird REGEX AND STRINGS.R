@@ -52,3 +52,20 @@ remove_special_characters <- function(x) {
 # remove_special_characters("%fd76$fd(-)6GvKlO.") ➞ "fd76fd-6GvKlO"
 # 
 # remove_special_characters("D0n$c sed 0di0 du1") ➞ "D0nc sed 0di0 du1"
+
+
+
+
+
+num_in_str <- function(x) {
+  result <- grep("[0-9]+",x,value = TRUE,perl = TRUE)
+  grep("[A-z]+",result,value = TRUE,perl = TRUE)  
+}
+
+# num_in_str(c("1a", "a", "2b", "b")) ➞ ["1a", "2b"]
+# 
+# num_in_str(c("abc", "abc10")) ➞ ["abc10"]
+# 
+# num_in_str(c("abc", "ab10c", "a10bc", "bcd")) ➞ ["ab10c", "a10bc"]
+# 
+# num_in_str(c("this is a test", "test1")) ➞ ["test1"]
