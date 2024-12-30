@@ -69,3 +69,17 @@ num_in_str <- function(x) {
 # num_in_str(c("abc", "ab10c", "a10bc", "bcd")) ➞ ["ab10c", "a10bc"]
 # 
 # num_in_str(c("this is a test", "test1")) ➞ ["test1"]
+
+
+
+absolute <- function(x) {
+  #here if you dont assign it back to x, it converts back to the original x
+  x<- gsub("^A(?=\\s)","An absolute",x,perl = TRUE)
+  gsub("(?<=\\s)(a)(?=\\s)","an absolute",x,perl = TRUE)
+}
+
+# absolute("I am a champion!!!") ➞ "I am an absolute champion!!!"
+# 
+# absolute("Such an amazing bowler.") ➞ "Such an amazing bowler."
+# 
+# absolute("A man with no haters.") ➞ "An absolute man with no haters."
