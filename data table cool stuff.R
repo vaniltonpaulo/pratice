@@ -1,6 +1,6 @@
 ## tHIS IS THE REDO OF THE FIRST HW WITH THE SOLUTUIONS
 
-
+#THis with = FALSE is super important
 data[row,  sensorcols, with = FALSE]
 # Setting with = FALSE tells data.table to treat sensorcols as an object containing 
 # column names or indices, not column data.
@@ -220,4 +220,42 @@ ex01ListTable <- function(data) {
          data[row,  sensorcols, with = FALSE])))
  })
   data[, .(machine, quality, sensor)]
+}
+
+
+
+
+
+
+
+# You want to analyse the effect of measured sensor data on the quality of widgets, for each machine
+# separately. However, you are worried that too much missing data will bring on misleading results.
+# Therefore, you plan to remove columns with too much missing data.
+#
+# Write a function that removes all `sensorXX` columns which have
+# 50% or more missing data for at least one machine. Your function should accept one `data.table` argument
+# `data` and return the modified `data.table`. For the example `widget.corp.data` dataset,
+# that would be `sensor01` (50% missing for "Machine03") and `sensor04` (75% missing for
+# both "Machine01" and "Machine03"). The resulting dataset would therefore be
+widget.corp.data.fsel <- rbindlist(list(
+  list(machine = NULL, quality = NULL, sensor02 = NULL, sensor03 = NULL),
+  list("Machine01",    78,             28.6,            -23),
+  list("Machine02",    28,             77.8,            NA),
+  list("Machine03",    32,             91.6,            -29),
+  list("Machine03",    80,             32.3,            NA),
+  list("Machine03",    58,             77.8,            3),
+  list("Machine02",    74,             24.5,            -18),
+  list("Machine01",    46,             NA,              NA),
+  list("Machine01",    24,             13.3,            -22),
+  list("Machine02",    7,              96.0,            0),
+  list("Machine01",    22,             23.5,            7),
+  list("Machine03",    98,             NA,              11)
+))
+ex02CleanTable <- function(data) {
+  assertDataTable(data)
+ 
+  drop <- data[ ,as.list(colMeans(is.na(.SD))) ,by = "machine",.SDcols = patterns("^sensor[0-9]+")][,
+      maschine :=NULL][, colnames(.SD)[vapply(.SD,max,numeric(1)) >= 0.5]]
+  
+  data[ , (drop):= NULL][]
 }
