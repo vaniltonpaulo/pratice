@@ -259,3 +259,75 @@ ex02CleanTable <- function(data) {
   
   data[ , (drop):= NULL][]
 }
+
+
+
+
+
+
+
+
+
+
+
+#####Aufgabe 4
+
+
+
+
+
+# This exercise concerns itself with data in the same format as 02_exercise_sort.R
+# Remember, the example datasets could look like the following:
+widget.corp.data <- rbindlist(list(
+  list(machine = NULL, quality = NULL, sensor01 = NULL, sensor02 = NULL, sensor03 = NULL, sensor04 = NULL),
+  list("Machine01",    78,             23,              28.6,            -23,             NA),
+  list("Machine02",    28,             41,              77.8,            NA,              27),
+  list("Machine03",    32,             57,              91.6,            -29,             10),
+  list("Machine03",    80,             NA,              32.3,            NA,              NA),
+  list("Machine03",    58,             10,              77.8,            3,               NA),
+  list("Machine02",    74,             NA,              24.5,            -18,             3),
+  list("Machine01",    46,             81,              NA,              NA,              NA),
+  list("Machine01",    24,             43,              13.3,            -22,             NA),
+  list("Machine02",    7,              96,              96.0,            0,               NA),
+  list("Machine01",    22,             107,             23.5,            7,               8),
+  list("Machine03",    98,             NA,              NA,              11,              NA)
+))
+# In the following tasks you should write functions that handle data just like this. However, you may get
+# a dataset with more or fewer machines, and with more or fewer sensors.
+
+# All your functions should `assertDataTable` the input value, but do not need to make any further assertions
+# regarding the format of `data.table` arguments here.
+
+# Even after removing columns with 50% or more missing data for any machine, you are still left with
+# a dataset with missing values. You don't want to remove all columns with missing data (which would,
+# in most cases, leave you with no data at all), so instead you choose to "impute" missing values.
+# You know that values are missing because they are below the detection threshold of a sensor.
+# You don't know the detection thesholds, but you know that for each sensor they are the same on
+# different machines. Therefore, you *estimate* the threshold as the *minimum non-missing value* for each sensor.
+#
+# Write a function that imputes all missing values for sensor columns as the minimum of that column.
+# The function takes one `data.table` argument `data` and should return the modified `data.table`.
+# You can rely on at least one non-missing value being present in each sensor-column. The result
+# for the `widget.corp.data` example data would be
+widget.corp.data.imputed <- rbindlist(list(
+  list(machine = NULL, quality = NULL, sensor01 = NULL, sensor02 = NULL, sensor03 = NULL, sensor04 = NULL),
+  list("Machine01",    78,             23,              28.6,            -23,             3),
+  list("Machine02",    28,             41,              77.8,            -29,             27),
+  list("Machine03",    32,             57,              91.6,            -29,             10),
+  list("Machine03",    80,             10,              32.3,            -29,             3),
+  list("Machine03",    58,             10,              77.8,            3,               3),
+  list("Machine02",    74,             10,              24.5,            -18,             3),
+  list("Machine01",    46,             81,              13.3,            -29,             3),
+  list("Machine01",    24,             43,              13.3,            -22,             3),
+  list("Machine02",    7,              96,              96.0,            0,               3),
+  list("Machine01",    22,             107,             23.5,            7,               8),
+  list("Machine03",    98,             10,              13.3,            11,              3)
+))
+ex01ImputeTable <- function(data) {
+  assertDataTable(data)
+  # your code
+  sensorcols <- grep("^sensor[0-9]+", colnames(data), value = TRUE)
+  data[,(sensorcols) := lapply(.SD, function(k) {
+    nafill(k, fill = min(k,na.rm = TRUE))
+  }), .SDcols = sensorcols][]
+}
