@@ -101,3 +101,132 @@ ex01KeepOutliers <- function(x, n.keep) {
 
 
 #profvis::profvis(replicate(1000, ex01KeepOutliersReference(seq_len(100),2) ))
+
+
+
+
+
+
+
+
+
+
+
+########Aufgabe 2
+
+
+# Simple Ecology
+#
+# The objective here is again to rewrite the following functions to be faster
+# than the provided reference versions.
+#
+# Consider a very simple ecological model that predicts how many individuals
+# of a given species are alive in time `t`. The system starts out with
+# `x(1)` individuals at time 1. In every discrete time step, the population
+# changes because of two effects:
+# - Reproduction with reproduction rate `qr`: Add `(qr - 1) * x(t)` individuals
+#   after every time step `t`.
+# - Starvation with carrying capacity `G`: Remove a proportion of `x(t) / G` of
+#   individuals after time step `t`, i.e., an absolute number of
+#   `x(t) * x(t) / G` die in every step.
+
+# With the two effects, the quantity of living individuals at time step `t + 1`
+# is given by
+#   x(t + 1) = (1 / G) * x(t) * (qr * G - x(t)).
+# Notice that `x` is a quantity that changes over time `t`, whereas `G` and
+# `qr` are model parameters.
+#
+#   Derivation, in case you are interested (if not, skip to the task):
+#      x(t + 1) = x(t) + (qr - 1) * x(t)   - x(t) * x(t) / G
+#               = qr * x(t)                - x(t) * x(t) / G
+#               = (1 / G) * x(t) * qr * G  - (1 / G) * x(t) * x(t)
+#               = (1 / G) * x(t) * (qr * G - x(t))
+#      This is the "logistic map" and plays a role in chaos theory:
+#      <https://en.wikipedia.org/wiki/Logistic_map>. To get from our formula
+#      to the one in Wikipedia, set `qr` to `r` and `G` to `1 / r`.)
+
+# Task: Calculate the sequence of living individuals.
+#
+# Write a function that calculates the sequence of quantities `x(t)` for `t`
+# between 1 and `t.max` (inclusive).
+#
+# Input arguments:
+# - `x1`: `numeric(1)` indicating `x(1)`, at least 0
+# - `qr`: `numeric(1)` the reproduction rate, at least 1.
+# - `g`: `numeric(1)` the carrying capacity, at least 0.
+# - `t.max`: positive integer `numeric(1)` indicating the length of the result.
+# Return value: `numeric` vector giving the `x(t)` for `t` in 1 ... `t.max`
+# (inclusive).
+# Performance goal: Your function should have a median runtime 1/2 as much as
+# `ex01SimpleEcologyReference` for values of `t.max` of 1000, `qr` between 1
+# and 4, `g` between 0 and 100, and x1 between 0 and `qr * g`.
+# Remarks:
+# - You can use `microbenchmark` to assess runtime of individual components of
+#   the function.
+# - You can use `profvis` to see which part of a function take the most time
+#   and therefore profit most from optimization. For this, you will need to
+#   call your function in a loop, since otherwise the function returns too
+#   quickly for `profvis` to measure anything:
+#   #> profvis::profvis({for (i in 1:1000) ex01SimpleEcologyReference(10, 2, 50, 1000)})
+#   !! you need to "source" this .R-file so that `profvis` can see it: Use the
+#   'Source' button in RStudio. Ctrl/Cmd-Enter will not work !!
+# - Work with continuous quantities (no rounding).
+# - You might want to ensure that recurring quantities are only computed once.
+# - Your function can achieve the necessary speedup while still containing a
+#   `for` loop. Not everything in life can be vectorized!
+
+ex01SimpleEcologyReference <- function(x1, qr, g, t.max) {
+  assertNumber(x1, lower = 0)
+  assertNumber(qr, lower = 1)
+  assertNumber(g, lower = 0)
+  assertInt(t.max, lower = 1, tol = 1e-100)
+  result <- x1
+  xt <- x1
+  for (t in seq_len(t.max - 1)) {
+    xt.next <- 1 / g * xt * (qr * g - xt)
+    result <- append(result, xt.next)
+    xt <- xt.next
+  }
+  result
+}
+
+ex01SimpleEcology <- function(x1, qr, g, t.max) {
+  assertNumber(x1, lower = 0)
+  assertNumber(qr, lower = 1)
+  assertNumber(g, lower = 0)
+  assertInt(t.max, lower = 1, tol = 1e-100)
+  #Option 1(7.73 faster)
+  result <- x1
+  
+  xt <- x1
+  for (t in seq_len(t.max - 1)) {
+    #you could also pre compute 1/g and create a variable outside of the loop for a +4 improvement
+    
+    xt.next <- 1 / g * xt * (qr * g - xt)
+    #The append was the problem
+    result[[length(result) + 1]] <-  xt.next
+    xt <- xt.next
+  }
+  result
+  
+  
+  
+  #Option 2(faster 25.36)
+  result <- numeric(t.max)
+  result[[1]] <- x1
+  
+  xt <- x1
+  for (t in seq_len(t.max - 1)) {
+    #you could also pre compute 1/g and create a variable outside of the loop for a +4 improvement
+    xt.next <- 1 / g * xt * (qr * g - xt)
+    #The append was the problem
+    result[[t+ 1]] <-  xt.next
+    xt <- xt.next
+  }
+  result
+  
+}
+
+#to analyze what makes it slow
+#this is much better
+profvis::profvis(for (i in 1:1000) ex01SimpleEcology(10, 2, 50, 1000))
