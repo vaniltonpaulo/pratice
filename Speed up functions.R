@@ -83,7 +83,20 @@ ex01KeepOutliers <- function(x, n.keep) {
   assertNumeric(x, any.missing = FALSE)
   # your code
 
+  #option 1 (4.45 faster)
+  x.rank <- rank(x)
+  # this is looking at the position ZB: lowest 25 or highest 25
+  x[x.rank <= n.keep| x.rank > length(x) - n.keep]
   
+  
+  #option 2(7.75 faster)
+  if(n.keep == 0) return(numeric(0))
+  if (2 * n.keep >= length(x)) return(x)
+  
+  x.sorted <- sort(x)
+  cutoff.lower <- x[[n.keep]]
+  cutoff.upper <- x[[length(x) - n.keep]]
+  x[x <= cutoff.lower| x > cutoff.upper]
 }
 
 
