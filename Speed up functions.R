@@ -344,3 +344,6 @@ ex01ComplexEcology <- function(x1, qr, qi, t.max) {
   }
   result
 }
+
+
+
