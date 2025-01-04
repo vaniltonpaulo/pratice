@@ -331,3 +331,50 @@ ex01ImputeTable <- function(data) {
     nafill(k, fill = min(k,na.rm = TRUE))
   }), .SDcols = sensorcols][]
 }
+
+
+###########How to use dcats
+
+# Key Arguments:
+#   data: A data.table or data.frame containing the molten data (long format).
+# formula: A formula specifying how to cast the data. Typically, row_variable ~ column_variable.
+# value.var: The name of the variable to use as values in the wide format.
+# fun.aggregate: (Optional) A function to apply if multiple values exist for a combination of row_variable and column_variable.
+
+
+library(data.table)
+
+# Example dataset in long format
+dt <- data.table(ID = c(1, 1, 2, 2), 
+                 variable = c("A", "B", "A", "B"), 
+                 value = c(10, 20, 30, 40))
+
+# Convert to wide format
+wide_dt <- dcast(dt, ID ~ variable, value.var = "value")
+print(wide_dt)
+
+
+# Example 2: Aggregation
+# If multiple values exist for a combination of row and column variables, you can specify an aggregation function.
+
+
+# Dataset with duplicate combinations
+dt <- data.table(ID = c(1, 1, 2, 2), 
+                 variable = c("A", "A", "B", "B"), 
+                 value = c(10, 15, 20, 25))
+
+# Aggregating duplicate values
+wide_dt <- dcast(dt, ID ~ variable, value.var = "value", fun.aggregate = mean)
+print(wide_dt)
+
+
+# Example 3: Multiple Value Variables
+# If the dataset has multiple value variables, you can specify them in value.var.
+dt <- data.table(ID = c(1, 1, 2, 2), 
+                 variable = c("A", "B", "A", "B"), 
+                 value1 = c(10, 20, 30, 40),
+                 value2 = c(100, 200, 300, 400))
+
+# Convert to wide format for multiple values
+wide_dt <- dcast(dt, ID ~ variable, value.var = c("value1", "value2"))
+print(wide_dt)
