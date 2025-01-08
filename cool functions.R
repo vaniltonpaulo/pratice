@@ -261,3 +261,37 @@ print(long_words)  # Output: "apple" "banana" "grape"
 # Filter is most commonly used with logical tests (TRUE/FALSE functions).
 # If you need the opposite condition (filter out certain values), use Negate() to reverse the logical result.
 # The Filter function is efficient for lists and vectors and keeps the code clean and concise when you need to filter items by condition.
+
+
+
+
+
+
+
+
+histogram <- function(x,y) {
+  result <- character(0)
+  for (i in seq_len(length(x))) {
+    result[[length(result) + 1]] <- paste0(rep(y,x[[i]]),collapse = "")
+  }
+  result
+  
+  cat(result, sep = "\n")
+}
+# histogram(c(1, 3, 4), "#") ➞ "#\n###\n####"
+# 
+# #
+# ###
+# ####
+# 
+# histogram(c(6, 2, 15, 3), "=") ➞ "======\n==\n===============\n==="
+# 
+# ======
+#   ==
+#   ===============
+#   ===
+#   
+#   histogram(c(1, 10), "+") ➞ "+\n++++++++++"
+# 
+# +
+#   ++++++++++

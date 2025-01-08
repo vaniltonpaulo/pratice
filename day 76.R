@@ -105,3 +105,25 @@ histogram <- function(x,y) {
 # +
 #   ++++++++++
 
+
+
+move <- function(x) {
+  result <- strsplit(x,"")[[1]]
+  for (i in seq_len(length(result))) {
+    place <-which(result[[i]] == letters)
+    result[[i]] <-letters[[place + 1]]
+  }
+  
+  paste0(result,collapse = "")
+  
+}
+
+
+
+# move("hello") ➞ "ifmmp"
+# 
+# move("bye") ➞ "czf"
+# 
+# move("welcome") ➞ "xfmdpnf"
+
+
