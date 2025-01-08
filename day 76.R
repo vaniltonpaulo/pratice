@@ -63,3 +63,45 @@ reverse_words <- function(x) {
 # 
 # reverse_words("a good   example") ➞ "example good a"
 
+shared_letters <- function(x) {
+  y <- strsplit(x[[1]],"")[[1]]
+  z <- strsplit(x[[2]],"")[[1]]
+  length(unique(intersect(y,z)))
+}
+# shared_letters(c("apple", "meaty")) ➞ 2
+# # Since "ea" is shared between "apple" and "meaty".
+# 
+# shared_letters(c("fan", "forsook")) ➞ 1
+# 
+# shared_letters(c("spout", "shout")) ➞ 4
+
+
+
+
+histogram <- function(x,y) {
+  result <- character(0)
+  for (i in seq_len(length(x))) {
+    result[[length(result) + 1]] <- paste0(rep(y,x[[i]]),collapse = "")
+  }
+  result
+  
+  cat(result, sep = "\n")
+}
+# histogram(c(1, 3, 4), "#") ➞ "#\n###\n####"
+# 
+# #
+# ###
+# ####
+# 
+# histogram(c(6, 2, 15, 3), "=") ➞ "======\n==\n===============\n==="
+# 
+# ======
+#   ==
+#   ===============
+#   ===
+#   
+#   histogram(c(1, 10), "+") ➞ "+\n++++++++++"
+# 
+# +
+#   ++++++++++
+
