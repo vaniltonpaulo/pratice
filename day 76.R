@@ -38,3 +38,28 @@ normalize <- function(x) {
 # 
 # normalize("Let us stay calm, no need to panic.") ➞ "Let us stay calm, no need to panic."
 
+
+
+stupid_addition <- function(x) {
+  if(all(unlist(lapply(x,is.numeric)))) return(paste0(x,collapse = ""))
+  if(all(unlist(lapply(x,is.character)))) return(sum(as.numeric(x)))
+  return("NONE")
+}
+
+# stupid_addition(c(1, 2)) ➞ "12"
+# 
+# stupid_addition(c("1", "2")) ➞ 3
+# 
+# stupid_addition(c("1", 2)) ➞ None
+
+
+reverse_words <- function(x) {
+  result <- strsplit(x,"\\s+")[[1]]
+  paste(rev(result),collapse = " ")
+}
+# reverse_words("the sky is blue") ➞ "blue is sky the"
+# 
+# reverse_words("  hello world!  ") ➞ "world! hello"
+# 
+# reverse_words("a good   example") ➞ "example good a"
+
