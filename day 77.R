@@ -66,9 +66,33 @@ countdown <- function(x, y) {
 # 
 # countdown(5, "FIRE") ➞ "5. 4. 3. 2. 1. FIRE!"
 
+wave <- function(x) {
+  result <- strsplit(x,"")[[1]]
+  n <- 1
+  final <- character(0)
+  
+  repeat{
+    
+    if(n <= nchar(x)) {
+      result[[n]] <- toupper(result[[n]])
+      final[[length(final) + 1]] <- paste0(result,collapse = "")
+      result <- tolower(result)
+      n <- n + 1
+      
+    }else {
+      break
+    }
+    
+    
+  }
+  
+  final
+  
+}
 
-x <- 10
-x<-x:1
-paste(paste0(x,".",collapse = " "),y,sep = " ")
-y <- "Blast Off"
-y <- paste0(y,"!",collapse = "")
+# wave("edabit") ➞ ["Edabit", "eDabit", "edAbit", "edaBit", "edabIt", "edabiT"]
+# 
+# wave("just do it") ➞ ["Just do it", "jUst do it", "juSt do it", "jusT do it", "just Do it", "just dO it", "just do It", "just do iT"]
+# 
+# wave(" ") ➞ []
+

@@ -295,3 +295,39 @@ histogram <- function(x,y) {
 # 
 # +
 #   ++++++++++
+
+
+
+
+
+
+
+wave <- function(x) {
+  result <- strsplit(x,"")[[1]]
+  n <- 1
+  final <- character(0)
+  
+  repeat{
+    
+    if(n <= nchar(x)) {
+      result[[n]] <- toupper(result[[n]])
+      final[[length(final) + 1]] <- paste0(result,collapse = "")
+      result <- tolower(result)
+      n <- n + 1
+      
+    }else {
+      break
+    }
+    
+    
+  }
+  
+  final
+  
+}
+
+# wave("edabit") ➞ ["Edabit", "eDabit", "edAbit", "edaBit", "edabIt", "edabiT"]
+# 
+# wave("just do it") ➞ ["Just do it", "jUst do it", "juSt do it", "jusT do it", "just Do it", "just dO it", "just do It", "just do iT"]
+# 
+# wave(" ") ➞ []
