@@ -35,3 +35,40 @@ censor <- function(x) {
 # 
 # censor("aaaa aaaaa 1234 12345") ➞ "aaaa ***** 1234 *****"
 
+digit_occurrences <- function(x,y,z) {
+  item <- paste0("[",z,"]",collapse = "")
+  result <- seq(x, y,1)
+  final<-paste0(result,collapse = "")[[1]]
+  length(regmatches(final,gregexpr(item,final,perl = TRUE))[[1]])
+  
+}
+
+# digit_occurrences(51, 55, 5) ➞ 6
+# # [51, 52, 53, 54, 55] : 5 occurs 6 times
+# 
+# digit_occurrences(1, 8, 9) ➞ 0
+# 
+# digit_occurrences(-8, -1, 8) ➞ 1
+# 
+# digit_occurrences(71, 77, 2) ➞ 1
+
+
+countdown <- function(x, y) {
+  x<-x:1
+  y <- paste0(y,"!",collapse = "")
+  paste(paste0(x,".",collapse = " "),y,sep = " ")
+  
+}
+
+# countdown(10, "Blast Off") ➞ "10. 9. 8. 7. 6. 5. 4. 3. 2. 1. BLAST OFF!"
+# 
+# countdown(3, "go") ➞ "3. 2. 1. GO!"
+# 
+# countdown(5, "FIRE") ➞ "5. 4. 3. 2. 1. FIRE!"
+
+
+x <- 10
+x<-x:1
+paste(paste0(x,".",collapse = " "),y,sep = " ")
+y <- "Blast Off"
+y <- paste0(y,"!",collapse = "")
