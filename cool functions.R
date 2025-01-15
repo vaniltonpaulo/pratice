@@ -331,3 +331,28 @@ wave <- function(x) {
 # wave("just do it") ➞ ["Just do it", "jUst do it", "juSt do it", "jusT do it", "just Do it", "just dO it", "just do It", "just do iT"]
 # 
 # wave(" ") ➞ []
+
+
+
+num_of_leapyears <- function(x) {
+  result <- strsplit(x,"\\-")[[1]]
+  result <-seq(result[[1]],result[[2]])
+  isleap <- lapply(result, function(k){
+    if( k %% 4 ==0 & (k %% 100 !=0  || k %% 400 == 0)) {
+      return(TRUE)
+    } else {
+      return(FALSE)
+    }
+  })
+  length(result[unlist(isleap)])
+}
+
+
+# num_of_leapyears("1980-1984") ➞ 2
+# # 1980 and 1984 are leapyears.
+# 
+# num_of_leapyears("2000-2020") ➞ 6
+# 
+# num_of_leapyears("1600-2000") ➞ 98
+
+
