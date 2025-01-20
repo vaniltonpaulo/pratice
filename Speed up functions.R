@@ -230,7 +230,7 @@ ex01SimpleEcology <- function(x1, qr, g, t.max) {
   
 }
 
-#to analyze what makes it slow
+#to analyze what makes it slowrf
 #this is much better
 profvis::profvis(for (i in 1:1000) ex01SimpleEcology(10, 2, 50, 1000))
 
