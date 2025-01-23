@@ -17,8 +17,39 @@ flip <-  function(x) {
 # flip(0) ➞ 1
 
 
+
+say_hello_bye <-  function(x,y){
+  ifelse(y == 1,paste("Hello",x), paste("Bye",x))
+}
+
 # say_hello_bye("alon", 1) ➞ "Hello Alon"
 # 
 # say_hello_bye("Tomi", 0) ➞ "Bye Tomi"
 # 
 # say_hello_bye("jose", 0) ➞ "Bye Jose"
+
+
+test_jackpot <-  function(x) {
+  ifelse(length(unique(x)) == 1, TRUE,FALSE)
+}
+# test_jackpot(c("@", "@", "@", "@")) ➞ True
+# 
+# test_jackpot(["abc", "abc", "abc", "abc"]) ➞ True
+# 
+# test_jackpot(["SS", "SS", "SS", "SS"]) ➞ True
+# 
+# test_jackpot(c("&&", "&", "&&&", "&&&&")) ➞ False
+# 
+# test_jackpot(["SS", "SS", "SS", "Ss"]) ➞ False
+
+
+hurdle_jump <-  function(x,y) {
+  all(y>=x)
+}
+# hurdle_jump(c(1, 2, 3, 4, 5), 5) ➞ True
+# 
+# hurdle_jump(c(5, 5, 3, 4, 5), 3) ➞ False
+# 
+# hurdle_jump([5, 4, 5, 6], 10) ➞ True
+# 
+# hurdle_jump([1, 2, 1], 1) ➞ False
