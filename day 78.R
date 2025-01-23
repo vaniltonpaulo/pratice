@@ -53,3 +53,22 @@ hurdle_jump <-  function(x,y) {
 # hurdle_jump([5, 4, 5, 6], 10) ➞ True
 # 
 # hurdle_jump([1, 2, 1], 1) ➞ False
+
+
+transform <-  function(x) {
+  for (i in seq_len(length(x))) {
+    if(x[[i]] %% 2 == 0){
+      x[[i]] <-  x[[i]] - 1
+    }else{
+      x[[i]] <-  x[[i]] + 1
+    }
+    
+  }
+  x
+}
+# transform(c(1, 2, 3, 4, 5)) ➞ [2, 1, 4, 3, 6]
+# 
+# transform([3, 3, 4, 3]) ➞ [4, 4, 3, 4]
+# 
+# transform(c(2, 2, 0, 8, 10)) ➞ [1, 1, -1, 7, 9]
+
