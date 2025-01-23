@@ -98,7 +98,7 @@ assertChoice("apple", c("apple", "banana", "cherry"))
 
 # assert_subset(a,give.matrix, choices = c("X", "O",NA)) Asserts that the matrix only contain this values(choices)
 
-# assertNames(colnames(data), permutation.of = c("speed","dist")) Assert that matrix has this specif colnames
+# assertNames(colnames(data), permutation.of = c("speed","dist")) Assert that matrix has this specif colnames and not others
 # assertNumeric(data$peed, any.missing = FALSE) Assert that this column has only numeric numbers
 # assertNumeric(data$peed, any.missing = FALSE)
 
