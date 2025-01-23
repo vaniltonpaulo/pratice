@@ -58,9 +58,9 @@ hurdle_jump <-  function(x,y) {
 transform <-  function(x) {
   for (i in seq_len(length(x))) {
     if(x[[i]] %% 2 == 0){
-      x[[i]] <-  x[[i]] - 1
+      x[[i]] <-  x[[i]] - 2
     }else{
-      x[[i]] <-  x[[i]] + 1
+      x[[i]] <-  x[[i]] + 2
     }
     
   }
@@ -133,3 +133,23 @@ century <-  function(x) {
 # century(1001) ➞ "11th century"
 # 
 # century(2005) ➞ "21st century"
+
+even_odd_transform <-  function(x,y) {
+  n <-  1
+  repeat{
+    if(n <= y){
+      x <- transform(x)
+    }else {
+      break;
+    }
+    n <- n + 1
+  }
+  x
+    
+}
+# even_odd_transform(c(3, 4, 9), 3) ➞ [9, -2, 15]
+# # Since [3, 4, 9] => [5, 2, 11] => [7, 0, 13] => [9, -2, 15]
+# 
+# even_odd_transform(c(0, 0, 0), 10) ➞ [-20, -20, -20]
+# 
+# even_odd_transform([1, 2, 3], 1) ➞ [3, 0, 5]
