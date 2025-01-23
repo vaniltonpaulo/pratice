@@ -72,3 +72,40 @@ transform <-  function(x) {
 # 
 # transform(c(2, 2, 0, 8, 10)) ➞ [1, 1, -1, 7, 9]
 
+
+chatroom_status <-  function(x) {
+  if(length(x)< 1) return("no one online")
+  if(length(x)== 1) return(paste(x,"online"))
+  if(length(x) == 2) return(paste(paste0(x,collapse =  " and "),"online"))
+  if(length(x) > 2) return(paste(paste(x[[1]],x[[2]],sep =  ", "),"and",length(x) - 2,"more online"))
+  
+  
+}
+# chatroom_status(c()) ➞ "no one online"
+# 
+# chatroom_status(c("paRIE_to")) ➞ "paRIE_to ç
+# 
+# chatroom_status(c("s234f", "mailbox2")) ➞ "s234f and mailbox2 online"
+# 
+# chatroom_status(c("pap_ier44", "townieBOY", "panda321", "motor_bike5", "sandwichmaker833", "violinist91"))
+# ➞ "pap_ier44, townieBOY and 4 more online"
+
+
+count_palindromes <-  function(x,y) {
+  result <- seq(x,y)
+  final <-  logical(0)
+  for (i in seq_len(length(result))) {
+    if(isTRUE(paste0(rev(strsplit(as.character(result[[i]]),"")[[1]]),collapse = "") == result[[i]])) {
+      final[[length(final) + 1]] <- TRUE
+    }
+    
+  }
+  
+  length(final)
+}
+# count_palindromes(1, 10) ➞ 9
+# 
+# count_palindromes(555, 556) ➞ 1
+# 
+# count_palindromes(878, 898) ➞ 3
+
