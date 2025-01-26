@@ -1,8 +1,10 @@
 ---
 title: 'Lecture: R6'
 output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
-
 
 ```{r setup, echo = FALSE}
 ## setup
@@ -39,6 +41,17 @@ CatHerd <- R6::R6Class("CatHerd",
   ),
   private = list(
     # implement deep_clone
+           deep_clone = function(name, value) {
+             #name must be equal to just like in the public fields
+                           if (name == "cats") {
+                             # Clone each cat object in the list
+                             # pay attention that we used lowered case cat
+                             lapply(value, function(cat) cat$clone(deep = TRUE))
+                           } else {
+                             # For other fields, return the value as is
+                             value
+                           }
+                         }
   )
 )
 ```
@@ -64,6 +77,7 @@ herd.clone$cats[[1]]$age
 ## Should be:
 #> [1] 2
 ```
+
 Running the above code should show that **only** the age in the original herd is changed to 4, while the cloned herd’s first cat remains age 2.
 
 ### Tests
@@ -92,7 +106,6 @@ testthat::expect_false(identical(herd$cats[[1]], herd.clone$cats[[1]]))
 cat("If there are no errors here then tests are ok.\n")
 ```
 
-
 ## Exercise 02: Rectangle with Active Binding
 
 Create a class `Rectangle` with two public fields `width` and `height`.
@@ -107,10 +120,25 @@ Rectangle <- R6::R6Class("Rectangle",
     height = NULL,
     initialize = function(width, height) {
       # your code
+        self$width <- width
+      self$height <- height
     }
   ),
   active = list(
     # your code
+    # This is in the case that you want to dynamically uptade some variable
+    area = function(value) {
+      if (missing(value)) {
+        # Getter: calculate and return the area dynamically
+        return(self$width * self$height)
+      } else {
+        # Setter: adjust width to match the new area, keeping height constant
+        #essentialy 'value' is the new area 
+        #And you want to find the width that can be multiplied with height to get
+        #that area
+        self$width <- value / self$height
+      }
+    }
   )
 )
 ```
@@ -145,7 +173,8 @@ rect$width
 #> [1] 9
 ```
 
-Running this code should confirm that the `area` updates whenever either `width` or `height` is changed. Attempting to do `rect$area <- 100` should result in an error.
+Running this code should confirm that the `area` updates whenever either `width` or `height` is changed.
+Attempting to do `rect$area <- 100` should result in an error.
 
 ### Tests
 
@@ -177,15 +206,38 @@ cat("If there are no errors here then tests are ok.\n")
 ```
 
 **Task**: Implement the `area` active binding in `Rectangle` so that it always returns `width * heigth` and throws an error if the user tries to assign to `area`.
-
+```{r}
+Rectangle <- R6::R6Class("Rectangle",
+  public = list(
+    width = NULL,
+    height = NULL,
+    initialize = function(width, height) {
+      # your code
+        self$width <- width
+      self$height <- height
+    }
+  ),
+  active = list(
+    # your code
+    # This is in the case that you want to dynamically uptade some variable
+    area = function(value) {
+      if (missing(value)) {
+        # Getter: calculate and return the area dynamically
+        return(self$width * self$height)
+      } else {
+       stop("cannot assign new area")
+      }
+    }
+  )
+)
+```
 ## Exercise 03: Bank Account (`private`)
 
 Write a class `BankAccount` that has two functions, `$deposit()` and `$withdraw()`, both with single numeric argument `amount`.
 For both, the argument should be checked to be a positive scalar numeric.
 
 The class should have a *private* field `.balance` (note the dot), and the balance should be adjusted by `$deposit()` and `$withdraw()`.
-Negative balances should be prohibited:
-Reducing the balance to a negative amount should throw an error before the class is changed.
+Negative balances should be prohibited: Reducing the balance to a negative amount should throw an error before the class is changed.
 Both `deposit()` and `$withdraw()` should return `invisible(self)`.
 
 The constructor should have an argument `initial.amount`, which should be the starting value of `.balance`.
@@ -197,9 +249,11 @@ library("checkmate")
 BankAccount <- R6::R6Class("BankAccount",
   public = list(
     # your code...
-
+amount = NULL,
     withdraw = function(amount) {
       # your code
+      assertNumber(amount,lower = 1)
+      invisible(self)
     }
   ),
   active = list(
@@ -207,12 +261,14 @@ BankAccount <- R6::R6Class("BankAccount",
   ),
   private = list(
     # your code
+    .balance = NULL
   )
 )
 
 ```
 
 Expected behavior:
+
 ```{r, error = TRUE}
 account.georg <- BankAccount$new(10)
 
@@ -231,7 +287,6 @@ try(account.kunigunde$balance <- 1000)  # should give an error
 
 try(account.kunigunde$withdraw(1000))  # should give an error
 ```
-
 
 ### Tests
 

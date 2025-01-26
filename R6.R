@@ -238,6 +238,74 @@ print(john$introduce())  # "Hi, my name is Jonathan and I am 35 years old."
 
 
 
+#### deep_clone()
+
+#Using deep_clone() with Two Classes
+
+library(R6)
+
+Cat <- R6::R6Class("Cat",
+                   public = list(
+                     name = NULL,
+                     age = NULL,
+                     initialize = function(name, age) {
+                       self$name <- name
+                       self$age <- age
+                     }
+                   )
+)
+
+CatHerd <- R6::R6Class("CatHerd",
+                       public = list(
+                         cats = NULL,
+                         initialize = function(cats = list()) {
+                           self$cats <- cats
+                         }
+                       ),
+                       private = list(
+                         # implement deep_clone
+                         deep_clone = function(name, value) {
+                           #name must be equal to just like in the public fields
+                           if (name == "cats") {
+                             # Clone each cat object in the list
+                             # pay attention that we used lowered case cat
+                             lapply(value, function(cat) cat$clone(deep = TRUE))
+                           } else {
+                             # For other fields, return the value as is
+                             value
+                           }
+                         }
+                       )
+)
+
+cat1 <- Cat$new("Fluffy", 2)
+cat2 <- Cat$new("Whiskers", 3)
+herd <- CatHerd$new(list(cat1, cat2))
+
+# Deep clone
+herd.clone <- herd$clone(deep = TRUE)
+
+# Modify an element in the original herd
+herd$cats[[1]]$age <- 4
+
+# Check that herd changed, but herd.clone is not affected
+herd$cats[[1]]$age
+## Should be:
+#> [1] 4
+herd.clone$cats[[1]]$age
+## Should be:
+#> [1] 2
+# deep_clone() in the Person Class:
+#   
+#   The deep_clone() method is defined in the Person class.
+# Inside deep_clone(), we check if the field being cloned is address.
+# If it is address, we call $clone(deep = TRUE) on the Address object to ensure it is deeply cloned.
+# Result:
+#   
+#   When you deeply clone a Person object, the nested Address object is also cloned, ensuring independence between the original and the clone.
+#Modifying the address of the original Person does not affect the cloned Person
+
+
 
 ########################## FULL EXAMPLE
 
