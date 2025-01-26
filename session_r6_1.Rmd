@@ -247,22 +247,45 @@ There should be an active binding `$balance`, which should return the current ba
 ```{r}
 library("checkmate")
 BankAccount <- R6::R6Class("BankAccount",
-  public = list(
-    # your code...
-amount = NULL,
-    withdraw = function(amount) {
-      # your code
-      assertNumber(amount,lower = 1)
-      invisible(self)
-    }
-  ),
-  active = list(
-    # your code
-  ),
-  private = list(
-    # your code
-    .balance = NULL
-  )
+                           public = list(
+                             # your code...
+                             initial.amount = NULL,
+                             amount = NULL,
+                             initialize = function(initial.amount) {
+                               private$.balance <- initial.amount
+                               invisible(self)
+                             },
+                             withdraw = function(amount) {
+                               # your code
+                               if(private$.balance < amount) {
+                                 stop("Insufficient funds.")
+                               }
+                               assertNumber(amount,lower = 1)
+                               private$.balance <-  private$.balance - amount
+                               invisible(self)
+                             },
+                             deposit = function(amount) {
+                               # your code
+                               assertNumber(amount,lower = 1)
+                               private$.balance <-  private$.balance + amount
+                               invisible(self)
+                             }
+                           ),
+                           active = list(
+                             # your code
+                             balance = function(value) {
+                               if (missing(value)) {
+                                 private$.balance
+                               } else {
+                                 stop("You cant set your own balance")
+                               }
+                               
+                             }
+                           ),
+                           private = list(
+                             # your code
+                             .balance = NULL
+                           )
 )
 
 ```
