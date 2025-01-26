@@ -1,0 +1,254 @@
+---
+title: 'Lecture: R6'
+output: html_document
+---
+
+
+```{r setup, echo = FALSE}
+## setup
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", out.width = "50%", echo = TRUE)
+```
+
+# R6
+
+Solve the following tasks by creating or completing R6 classes.
+
+## Exercise 01: Cat Herd (Cloning Behavior)
+
+Create two classes, `Cat` and `CatHerd`, that illustrate deep cloning in R6.
+The `CatHerd` class should contain a list of `Cat` objects and implement the `deep_clone()` method such that modifications to the original herd do not affect the cloned herd.
+
+```{r}
+Cat <- R6::R6Class("Cat",
+  public = list(
+    name = NULL,
+    age = NULL,
+    initialize = function(name, age) {
+      self$name <- name
+      self$age <- age
+    }
+  )
+)
+
+CatHerd <- R6::R6Class("CatHerd",
+  public = list(
+    cats = NULL,
+    initialize = function(cats = list()) {
+      self$cats <- cats
+    }
+  ),
+  private = list(
+    # implement deep_clone
+  )
+)
+```
+
+### Example Behviour:
+
+```{r}
+cat1 <- Cat$new("Fluffy", 2)
+cat2 <- Cat$new("Whiskers", 3)
+herd <- CatHerd$new(list(cat1, cat2))
+
+# Deep clone
+herd.clone <- herd$clone(deep = TRUE)
+
+# Modify an element in the original herd
+herd$cats[[1]]$age <- 4
+
+# Check that herd changed, but herd.clone is not affected
+herd$cats[[1]]$age
+## Should be:
+#> [1] 4
+herd.clone$cats[[1]]$age
+## Should be:
+#> [1] 2
+```
+Running the above code should show that **only** the age in the original herd is changed to 4, while the cloned herd’s first cat remains age 2.
+
+### Tests
+
+```{r, echo = FALSE, error = TRUE}
+cat1 <- Cat$new("Fluffy", 2)
+cat2 <- Cat$new("Whiskers", 3)
+herd <- CatHerd$new(list(cat1, cat2))
+herd.clone <- herd$clone(deep = TRUE)
+checkmate::expect_r6(herd, "CatHerd")
+checkmate::expect_r6(herd.clone, "CatHerd")
+
+testthat::expect_equal(herd, herd.clone)
+herd$cats[[1]]$age <- 4
+testthat::expect_equal(herd$cats[[1]]$age, 4)
+testthat::expect_equal(herd.clone$cats[[1]]$age, 2)
+testthat::expect_equal(herd$cats[[2]]$age, 3)
+testthat::expect_equal(herd.clone$cats[[2]]$age, 3)
+herd$cats[[2]]$age <- 4
+testthat::expect_equal(herd$cats[[2]]$age, 4)
+testthat::expect_equal(herd.clone$cats[[2]]$age, 3)
+
+# Check that the cat objects inside each herd are separate
+testthat::expect_false(identical(herd$cats[[1]], herd.clone$cats[[1]]))
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+
+## Exercise 02: Rectangle with Active Binding
+
+Create a class `Rectangle` with two public fields `width` and `height`.
+It should be possible to set these on construction.
+Implement an active binding `area` that computes the rectangle’s area dynamically (i.e., updates automatically when `width` or `height` change).
+It should be able to assign a value to `area`, in which case the `width` should be adjusted accordingly.
+
+```{r}
+Rectangle <- R6::R6Class("Rectangle",
+  public = list(
+    width = NULL,
+    height = NULL,
+    initialize = function(width, height) {
+      # your code
+    }
+  ),
+  active = list(
+    # your code
+  )
+)
+```
+
+### Example Behaviour
+
+```{r , error= TRUE}
+rect <- Rectangle$new(width = 5, height = 10)
+rect$area
+## Should be:
+#> [1] 50
+
+rect$width <- 6
+rect$area
+## Should be:
+#> [1] 60
+
+rect$height <- 3
+rect$area
+## Should be:
+#> [1] 18
+
+rect$area <- 27
+rect$area
+## Should be
+#> [1] 27
+rect$height
+## Should be
+#> [1] 3
+rect$width
+## Should be
+#> [1] 9
+```
+
+Running this code should confirm that the `area` updates whenever either `width` or `height` is changed. Attempting to do `rect$area <- 100` should result in an error.
+
+### Tests
+
+```{r, echo = FALSE, error = TRUE}
+# Test setup
+rect.test <- Rectangle$new(width = 5, height = 10)
+
+# Check class
+checkmate::expect_r6(rect.test, "Rectangle")
+
+# Check initial area
+testthat::expect_equal(rect.test$area, 50)
+
+# Update width
+rect.test$width <- 6
+testthat::expect_equal(rect.test$area, 60)
+
+# Update height
+rect.test$height <- 3
+testthat::expect_equal(rect.test$area, 18)
+
+rect.test$area <- 27
+
+testthat::expect_equal(rect.test$area, 27)
+testthat::expect_equal(rect.test$width, 9)
+testthat::expect_equal(rect.test$height, 3)
+
+cat("If there are no errors here then tests are ok.\n")
+```
+
+**Task**: Implement the `area` active binding in `Rectangle` so that it always returns `width * heigth` and throws an error if the user tries to assign to `area`.
+
+## Exercise 03: Bank Account (`private`)
+
+Write a class `BankAccount` that has two functions, `$deposit()` and `$withdraw()`, both with single numeric argument `amount`.
+For both, the argument should be checked to be a positive scalar numeric.
+
+The class should have a *private* field `.balance` (note the dot), and the balance should be adjusted by `$deposit()` and `$withdraw()`.
+Negative balances should be prohibited:
+Reducing the balance to a negative amount should throw an error before the class is changed.
+Both `deposit()` and `$withdraw()` should return `invisible(self)`.
+
+The constructor should have an argument `initial.amount`, which should be the starting value of `.balance`.
+
+There should be an active binding `$balance`, which should return the current balance.
+
+```{r}
+library("checkmate")
+BankAccount <- R6::R6Class("BankAccount",
+  public = list(
+    # your code...
+
+    withdraw = function(amount) {
+      # your code
+    }
+  ),
+  active = list(
+    # your code
+  ),
+  private = list(
+    # your code
+  )
+)
+
+```
+
+Expected behavior:
+```{r, error = TRUE}
+account.georg <- BankAccount$new(10)
+
+account.georg$balance
+# Expected:
+#> [1] 10
+
+account.kunigunde <- BankAccount$new(20)
+account.kunigunde$deposit(10)$withdraw(5)
+
+account.kunigunde$balance
+# Expected:
+#> [1] 25
+
+try(account.kunigunde$balance <- 1000)  # should give an error
+
+try(account.kunigunde$withdraw(1000))  # should give an error
+```
+
+
+### Tests
+
+```{r, echo = FALSE, error = TRUE}
+account.georg <- BankAccount$new(10)
+
+testthat::expect_equal(account.georg$balance, 10)
+
+account.kunigunde <- BankAccount$new(20)
+testthat::expect_identical(account.kunigunde$deposit(10)$withdraw(5), account.kunigunde)
+
+testthat::expect_equal(account.kunigunde$balance, 25)
+testthat::expect_error(account.kunigunde$balance <- 1000)  # should give an error
+
+testthat::expect_error(account.kunigunde$withdraw(1000))  # should give an error
+
+testthat::expect_equal(names(account.kunigunde$.__enclos_env__$private), ".balance")
+
+cat("If there are no errors here then tests are ok.\n")
+```
