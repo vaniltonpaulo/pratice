@@ -145,17 +145,68 @@ data[, (sensor_cols_sorted) := .SD, .SDcols = sensor_cols_sorted[order(unname(mi
 
 data <- copy(widget.corp.data[, new_col := 10])
 
-# Calculate the number of missing values for sensor columns
 missing <- data[, colSums(is.na(.SD)), .SDcols = patterns("^sensor")]
 
-# Get the sensor columns sorted by the number of missing values
 sensor_cols_sorted <- names(missing)[order(missing)]
 
-# Extract the data for the sensor columns in the sorted order
-sensor_data_sorted <- data[, ..sensor_cols_sorted]
+cols.i.want.to.keep <- grep("^sensor\\.", colnames(data), invert = TRUE, value = TRUE)
+data[, c(cols.i.want.to.keep, sensor_cols_sorted), with = FALSE]
 
-# Reassign the sorted sensor columns back to their positions in the dataset
-data[, (sensor_cols_sorted) := sensor_data_sorted][]
 
-# Output the updated data
-data
+
+
+
+
+data <- copy(widget.corp.data)
+data[, new_col := 10]
+
+# Calculate the count of missing values for columns matching the pattern "^sensor"
+missing <- data[, lapply(.SD, function(x) sum(is.na(x))), .SDcols = patterns("^sensor")]
+
+# Get sensor columns sorted by the count of missing values
+sensor_cols_sorted <- names(missing)[order(unlist(missing))]
+
+# Select columns you want to keep
+cols_i_want_to_keep <- grep("^sensor\\.", colnames(data), invert = TRUE, value = TRUE)
+
+# Subset the data with selected columns and sorted sensor columns
+result <- data[, c(cols_i_want_to_keep, sensor_cols_sorted), with = FALSE]
+
+# View the resulting dataset
+result
+
+
+
+# Create a copy of the dataset
+data <- copy(widget.corp.data)
+
+# Add a new column (example of additional non-sensor column manipulation)
+data[, new_col := 10]
+
+sensor_cols <- grep("^sensor", colnames(data), value = TRUE)
+
+# Identify all non-sensor columns dynamically
+non_sensor_cols <- setdiff(colnames(data), sensor_cols)
+
+# Get the positions of the non-sensor columns in the original dataset
+non_sensor_positions <- match(non_sensor_cols, colnames(data))
+# Identify the first two columns and the last column by position
+non_sensor_positions <- non_sensor_positions
+non_sensor_cols <- colnames(data)[non_sensor_positions]
+
+# Calculate the count of missing values for columns matching the pattern "^sensor"
+missing <- data[, lapply(.SD, function(x) sum(is.na(x))), .SDcols = patterns("^sensor")]
+
+# Get sensor columns sorted by the count of missing values
+sensor_cols_sorted <- names(missing)[order(unlist(missing))]
+
+# Create the final ordered column list
+final_columns <- colnames(data)  # Start with the original column order
+final_columns[non_sensor_positions] <- non_sensor_cols  # Plug back the first 2 and last columns at their original positions
+final_columns[-non_sensor_positions] <- sensor_cols_sorted  # Fill the remaining positions with sorted sensor columns
+
+# Subset the data using the final column order
+result <- data[, ..final_columns]
+
+# View the resulting dataset
+result
