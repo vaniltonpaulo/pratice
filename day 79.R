@@ -65,3 +65,32 @@ first_before_second <-  function(string, first, second) {
 # 
 # first_before_second("precarious kangaroos", "k", "a") ➞ False
 
+
+
+can_build <-  function(x,y) {
+  x <- gsub(" ","",x)
+  y <- gsub(" ","",y)
+  
+  x.result <- strsplit(x,"")[[1]]
+  so <- table(x.result)
+  
+  y.result <- strsplit(y,"")[[1]]
+  ko <- table(y.result)
+  
+  for (i in names(so)) {
+    if(so[i] > ko[i]) {
+      return(FALSE)
+    }
+    
+  }
+  return(TRUE)
+}
+
+
+# can_build("got 2 go", "gogogo 2 today") ➞ True
+# 
+# can_build("sit on top", "its a moo point") ➞ True
+# 
+# can_build("long high add or", "highway road go long") ➞ False
+# 
+# can_build("fill tuck mid", "truck falls dim") ➞ False
