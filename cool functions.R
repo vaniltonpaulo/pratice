@@ -356,3 +356,17 @@ num_of_leapyears <- function(x) {
 # num_of_leapyears("1600-2000") ➞ 98
 
 
+
+first_before_second <-  function(string, first, second) {
+  # Get the positions of the letters in the string
+  first_positions <- gregexpr(first, string)[[1]]
+  second_positions <- gregexpr(second, string)[[1]]
+  
+  # If either letter is not found, return TRUE since the condition is trivially satisfied
+  if (first_positions[1] == -1 || second_positions[1] == -1) {
+    return(TRUE)
+  }
+  
+  # Check if the maximum position of 'first' is less than the minimum position of 'second'
+  max(first_positions) < min(second_positions)
+}
