@@ -79,3 +79,65 @@ test_dir("tests/testthat")
 # test_dir(): Runs all tests in a specified directory.
 # test_file(): Runs a specific test file.
 # test_check(): Runs tests during package development (for CRAN checks).
+
+
+#######################################################. COMPLETE EXAMPLE #####################################
+
+
+#Example Function File (math_utils.R)
+
+
+
+add_numbers <- function(a, b) {
+  a + b
+}
+
+divide_numbers <- function(a, b) {
+  if (b == 0) stop("Division by zero is not allowed")
+  a / b
+}
+
+print_message <- function(msg) {
+  message("Message: ", msg)
+}
+
+generate_warning <- function() {
+  warning("This is a warning!")
+}
+
+square <- function(x) {
+  x * x
+}
+
+
+
+
+# tests/testthat/test-math_utils.R
+test_that("math_utils functions behave as expected", {
+  
+  # 1. expect_equal() - Check numerical equality
+  expect_equal(add_numbers(2, 3), 5)             # 2 + 3 = 5
+  expect_equal(square(-3), 9)                    # (-3)^2 = 9
+  
+  # 2. expect_identical() - Check strict identity (including data type)
+  expect_identical(add_numbers(1, 1), 2L)        # Identical as integer
+  expect_identical(TRUE, !FALSE)                 # Identical TRUE values
+  
+  # 3. expect_true() - Check if a condition is TRUE
+  expect_true(add_numbers(10, 5) == 15)          # 10 + 5 = 15
+  
+  # 4. expect_false() - Check if a condition is FALSE
+  expect_false(add_numbers(2, 2) == 5)           # 2 + 2 is NOT equal to 5
+  
+  # 5. expect_error() - Expect an error when dividing by zero
+  expect_error(divide_numbers(10, 0), "Division by zero is not allowed")
+  
+  # 6. expect_warning() - Expect a warning to be thrown
+  expect_warning(generate_warning(), "This is a warning!")
+  
+  # 7. expect_message() - Expect a message to be printed
+  expect_message(print_message("Hello"), "Message: Hello")
+  
+  # 8. expect_output() - Check printed output
+  expect_output(print(letters[1:5]), "[1] \"a\" \"b\" \"c\" \"d\" \"e\"")
+})
