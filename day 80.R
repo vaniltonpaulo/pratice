@@ -68,3 +68,54 @@ print(makeTranspose(matrix(c("a", "b"), nrow = 1, byrow = TRUE)))
 #      [,1]
 # [1,] "a" 
 # [2,] "b"
+
+
+idMtrx <- function(n) {
+  if(n > 0) {
+    result <- matrix(0, ncol = n, nrow = n)
+    
+    for (i in seq_len(nrow(result))) {
+      for (j in seq_len(ncol(result))) {
+        if(i == j) {
+          result[i,j] <-  1
+        } else {
+          result[i,j] <-  0
+        }
+        
+      }
+      
+    }
+    
+    return(result)
+  } else {
+    n <-  n * -1
+    result <- matrix(0, ncol = n, nrow = n)
+    
+    for (i in seq_len(nrow(result))) {
+      for (j in seq_len(ncol(result))) {
+        if(i != j) {
+          result[i,j] <-  1
+        } else {
+          result[i,j] <-  0
+        }
+        
+      }
+      
+    }
+    
+    return(result)
+    
+  }
+}
+
+# idMtrx(2) ➞ [
+#   [1, 0],
+#   [0, 1]
+# ]
+# 
+# idMtrx(-2) ➞ [
+#   [0, 1],
+#   [1, 0]
+# ]
+# 
+# idMtrx(0) ➞ []
