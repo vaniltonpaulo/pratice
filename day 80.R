@@ -234,3 +234,43 @@ print(spiralMatrix(4))
 # [4,]   10    9    8    7
 
 
+
+padMatrix <-  function(df,x, y) {
+  if(nrow(df) == x && ncol(df) == y) return(df)
+  result <- matrix(0, ncol = x, nrow = y)
+  
+  for (i in seq_len(nrow(df))) {
+    for (j in seq_len(ncol(df))) {
+      result[i,j] <-  df[i,j]
+      
+    }
+    
+  }
+  
+  result
+  
+}
+
+# 1. Adding a column of zeros
+print(padMatrix(matrix(c(1, 2, 3, 4, 5, 6), nrow = 3, byrow = TRUE), 3, 3))
+# Output:
+#      [,1] [,2] [,3]
+# [1,]    1    2    0
+# [2,]    3    4    0
+# [3,]    5    6    0
+
+# 2. No change when the matrix fits exactly
+print(padMatrix(matrix(c(1, 2, 3, 4, 5, 6, 7, 8), nrow = 2, byrow = TRUE), 2, 4))
+# Output:
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    2    3    4
+# [2,]    5    6    7    8
+
+# 3. Padding extra rows and columns with zeros
+print(padMatrix(matrix(c(1, 2, 3, 4, 5, 6, 7, 8), nrow = 2, byrow = TRUE), 4, 4))
+# Output:
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    2    3    4
+# [2,]    5    6    7    8
+# [3,]    0    0    0    0
+# [4,]    0    0    0    0
