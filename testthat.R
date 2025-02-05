@@ -141,3 +141,40 @@ test_that("math_utils functions behave as expected", {
   # 8. expect_output() - Check printed output
   expect_output(print(letters[1:5]), "[1] \"a\" \"b\" \"c\" \"d\" \"e\"")
 })
+
+
+
+
+##### good one
+
+
+is.negative <- function(x) {
+  assertNumber(x)
+  x < 0
+}
+
+
+
+
+## You can just put everything together tbh
+
+test_that("is.negative gives correct result", {
+  
+  expect_true(is.negative(-1))
+  expect_true(is.negative(-10))
+  
+  expect_false(is.negative(1))
+  expect_false(is.negative(10))
+  
+  for (p in positive.numbers) expect_false(is.negative(p))
+  for (n in negative.numbers) expect_true(is.negative(n))
+  
+})
+
+test_that("is.negative raises error on bad input", {
+  
+  expect_error(is.negative("a"))
+  expect_error(is.negative(NULL))
+  
+})
+

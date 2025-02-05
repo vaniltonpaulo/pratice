@@ -23,6 +23,7 @@ ex01List2DT <- function(lst) {
   assertList(lst)
   lapply(lst, function(k) {
     assertList(k, names = "unique")
+    # You have to assert that the elements inside are numbers
     lapply(k, assertNumber)
   })
   
