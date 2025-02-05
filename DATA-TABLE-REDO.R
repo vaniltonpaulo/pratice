@@ -234,13 +234,11 @@ widget.corp.data.fsel <- rbindlist(list(
   list("Machine03",    98,             NA,              11)
 ))
 ex02CleanTable <- function(data) {
-  
-}
-data <- copy(widget.corp.data)
-assertDataTable(data)
-#sensorcol <-  grep("^sensor[0-9]+",colnames(data), value = TRUE)
+  data <- copy(widget.corp.data)
+  assertDataTable(data)
+  #sensorcol <-  grep("^sensor[0-9]+",colnames(data), value = TRUE)
+  drop <- data[, as.list(colMeans(is.na(.SD))),.SDcols = patterns("^sensor[0-9]+")
+               ,by = "machine"][,machine := NULL][,colnames(.SD)[vapply(.SD, max,numeric(1)) >= 0.5]]
+  data[, (drop) := NULL][]
 
-drop <- data[, as.list(colMeans(is.na(.SD))),.SDcols = patterns("^sensor[0-9]+")
-     ,by = "machine"][,machine := NULL][,colnames(.SD)[vapply(.SD, max,numeric(1)) >= 0.5]]
-data[, (drop) := NULL][]
-data
+}
