@@ -1,3 +1,9 @@
+# WEEK 1
+
+############# EXERCISE 1
+
+
+
 # If you have looked at some of the data.table material then this function should
 # be a breeze for you.
 
@@ -32,6 +38,7 @@ ex01List2DT <- function(lst) {
 }
 
 
+############# EXERCISE 2
 
 # This exercise, and the following exercises, concern themselves with data in a certain format.
 #
@@ -105,38 +112,13 @@ ex01SortTable <- function(data) {
   assertDataTable(data)
   #rowSums(is.na(.SD)): Computes the number of missing values for each row across the selected columns.
  missings <-  data[,rowSums(is.na(.SD)), .SDcols = patterns("^sensor")]
+ #order() expects row-level data.
  data[order(missings,quality,decreasing = TRUE)][]
 }
 ex01SortTable(copy(widget.corp.data))
 
 
-
-
-
-
-
-
-
-widget.corp.data.sorted <- rbindlist(list(
-  list(machine = NULL, quality = NULL, sensor01 = NULL, sensor02 = NULL, sensor03 = NULL, sensor04 = NULL),
-  list("Machine03",    98,             NA,              NA,              11,              NA),
-  list("Machine03",    80,             NA,              32.3,            NA,              NA),
-  list("Machine01",    46,             81,              NA,              NA,              NA),
-  list("Machine01",    78,             23,              28.6,            -23,             NA),
-  list("Machine02",    74,             NA,              24.5,            -18,             3),
-  list("Machine03",    58,             10,              77.8,            3,               NA),
-  list("Machine02",    28,             41,              77.8,            NA,              27),
-  list("Machine01",    24,             43,              13.3,            -22,             NA),
-  list("Machine02",    7,              96,              96.0,            0,               NA),
-  list("Machine03",    32,             57,              91.6,            -29,             10),
-  list("Machine01",    22,             107,             23.5,            7,               8)
-))
-ex01SortTable <- function(data) {
-assertDataTable(data)
-  missings <- data[,rowSums(is.na(.SD)), .SDcols = patterns("^sensor")]
-  data[order(missings,quality,decreasing = TRUE)]
-}
-ex01SortTable(copy(widget.corp.data))
+# FOR COLUMNS
 data <-  copy(widget.corp.data[, new_col := 10])
 missing <- data[,colSums(is.na(.SD)), .SDcols = patterns("^sensor")]
 sensor_cols_sorted <- names(missing)[order(missing)]
@@ -144,76 +126,11 @@ sensor_cols_sorted <- names(missing)[order(missing)]
 data[, (sensor_cols_sorted) := .SD, .SDcols = sensor_cols_sorted[order(unname(missing))]]
 
 
-data <- copy(widget.corp.data[, new_col := 10])
 
-missing <- data[, colSums(is.na(.SD)), .SDcols = patterns("^sensor")]
+############# EXERCISE 3
 
-sensor_cols_sorted <- names(missing)[order(missing)]
-
-cols.i.want.to.keep <- grep("^sensor\\.", colnames(data), invert = TRUE, value = TRUE)
-data[, c(cols.i.want.to.keep, sensor_cols_sorted), with = FALSE]
-
-
-
-
-
-
-data <- copy(widget.corp.data)
-data[, new_col := 10]
-
-# Calculate the count of missing values for columns matching the pattern "^sensor"
-missing <- data[, lapply(.SD, function(x) sum(is.na(x))), .SDcols = patterns("^sensor")]
-
-# Get sensor columns sorted by the count of missing values
-sensor_cols_sorted <- names(missing)[order(unlist(missing))]
-
-# Select columns you want to keep
-cols_i_want_to_keep <- grep("^sensor\\.", colnames(data), invert = TRUE, value = TRUE)
-
-# Subset the data with selected columns and sorted sensor columns
-result <- data[, c(cols_i_want_to_keep, sensor_cols_sorted), with = FALSE]
-
-# View the resulting dataset
-result
-
-
-
-# Create a copy of the dataset
-data <- copy(widget.corp.data)
-
-# Add a new column (example of additional non-sensor column manipulation)
-data[, new_col := 10]
-
-sensor_cols <- grep("^sensor", colnames(data), value = TRUE)
-
-# Identify all non-sensor columns dynamically
-non_sensor_cols <- setdiff(colnames(data), sensor_cols)
-
-# Get the positions of the non-sensor columns in the original dataset
-non_sensor_positions <- match(non_sensor_cols, colnames(data))
-# Identify the first two columns and the last column by position
-non_sensor_positions <- non_sensor_positions
-non_sensor_cols <- colnames(data)[non_sensor_positions]
-
-# Calculate the count of missing values for columns matching the pattern "^sensor"
-missing <- data[, lapply(.SD, function(x) sum(is.na(x))), .SDcols = patterns("^sensor")]
-
-# Get sensor columns sorted by the count of missing values
-sensor_cols_sorted <- names(missing)[order(unlist(missing))]
-
-# Create the final ordered column list
-final_columns <- colnames(data)  # Start with the original column order
-final_columns[non_sensor_positions] <- non_sensor_cols  # Plug back the first 2 and last columns at their original positions
-final_columns[-non_sensor_positions] <- sensor_cols_sorted  # Fill the remaining positions with sorted sensor columns
-
-# Subset the data using the final column order
-result <- data[, ..final_columns]
-
-# View the resulting dataset
-result
-
-
-
+# This exercise concerns itself with data in the same format as 02_exercise_sort.R
+# Remember, the example datasets could look like the following:
 widget.corp.data <- rbindlist(list(
   list(machine = NULL, quality = NULL, sensor01 = NULL, sensor02 = NULL, sensor03 = NULL, sensor04 = NULL),
   list("Machine01",    78,             23,              28.6,            -23,             NA),
@@ -253,19 +170,43 @@ widget.corp.data.list <- rbindlist(list(
   list("Machine01",    22,             list(c(sensor01 = 107, sensor02 = 23.5, sensor03 = 7, sensor04 = 8))),
   list("Machine03",    98,             list(c(sensor03 = 11)))
 ))
-
-
+# (Just to make clear what a `list` column is -- another way to write this would be the following:)
+widget.corp.data.list <- data.table(
+  machine = c("Machine01", "Machine02", "Machine03", "Machine03", "Machine03", "Machine02", "Machine01",
+              "Machine01", "Machine02", "Machine01", "Machine03"),
+  quality = c(78, 28, 32, 80, 58, 74, 46, 24, 7, 22, 98),
+  sensor = list(
+    c(sensor01 = 23, sensor02 = 28.6, sensor03 = -23),
+    c(sensor01 = 41, sensor02 = 77.8, sensor04 = 27),
+    c(sensor01 = 57, sensor02 = 91.6, sensor03 = -29, sensor04 = 10),
+    c(sensor02 = 32.3),
+    c(sensor01 = 10, sensor02 = 77.8, sensor03 = 3),
+    c(sensor02 = 24.5, sensor03 = -18, sensor04 = 3),
+    c(sensor01 = 81),
+    c(sensor01 = 43, sensor02 = 13.3, sensor03 = -22),
+    c(sensor01 = 96, sensor02 = 96, sensor03 = 0),
+    c(sensor01 = 107, sensor02 = 23.5, sensor03 = 7, sensor04 = 8),
+    c(sensor03 = 11)
+  )
+)
+# Be aware that some rows may not have any non-missing sensor data, in which case the `sensor` value for the
+# corresponding result row should be an empty `numeric`.
 ex01ListTable <- function(data) {
-  
+  assertDataTable(data)
+  # your code
+  clnames <- grep("^sensor", colnames(data), value = TRUE)
+  data[, sensor := apply(.SD, 1, list), .SDcols = clnames, by = .(machine, quality)][]
+  data[, sensor := as.list(sensor)]
+  data$sensor <- lapply(data$sensor, function(k) k[!is.na(k)])
+  #data[, sensor := as.list(sensor)]
+  data[, .(machine, quality, sensor)]
 }
 
-data <- copy(widget.corp.data)
 
-sensorcols <- grep("^sensor[0-9]+",colnames(data), value = TRUE)
-sensor <-  lapply(seq_len(nrow(data)), function(row) {
-  c(na.omit(unlist(data[row,sensorcols,with = FALSE])))
-})
-data[,.(machine,quality,sensor)]
+
+
+
+
 
 
 
