@@ -357,15 +357,7 @@ ex02ModelTable <- function(data) {
 
 
 
-# A friend asked you to help him with his small corner store for various
-# items. Because his shop is both a physical store where customers can
-# take items, as well as an online shop that ships items, he has separate
-# prices for items with and without delivery to reflect the different
-# realities of the two markets.
-# Your friend changes his inventory and prices monthly, and keeps a record of all
-# sales made in that month. He wants to have a few functions that summarize
-# the sales and revenue made in a month.
-# His price-list could, for example, look like the following:
+
 itemshop.prices <- rbindlist(list(
   list(item = NULL,             price.onsite = NULL, price.online = NULL),
   list("Healing Potion",        9.99,                12.99),
