@@ -358,6 +358,9 @@ ex02ModelTable <- function(data) {
 
 
 
+############# EXERCISE 1
+
+
 itemshop.prices <- rbindlist(list(
   list(item = NULL,             price.onsite = NULL, price.online = NULL),
   list("Healing Potion",        9.99,                12.99),
@@ -407,9 +410,7 @@ ex01CountSales <- function(prices, sales) {
   # your code
   assertDataTable(prices)
   assertDataTable(sales)
-  
-  result <- sales[, .(count = .N), by = "item"][prices$item, on = "item"]
-  setnafill(result, fill = 0, cols = "count")[]
+  sales[, .(count = .N), keyby = "item"][prices$item, .(item, count = nafill(count, fill = 0))]
 }
 
 # Write a function that counts the number of items sold for each type, and
@@ -435,19 +436,10 @@ ex02CountSalesChannels <- function(prices, sales) {
   # your code
   assertDataTable(prices)
   assertDataTable(sales)
-  if (nrow(sales) == 0) {
-    return(sales[prices$item, on = "item"][, .(item, count.onsite = 0, count.online = 0)][])
-  }
-  
-  sales <- sales[, .(item, channel = paste0("count.", channel))]
-  
-  sales <- dcast(sales, item ~ channel, value.var = "channel", fun.aggregate = length)
-  sales <- rbind(sales, data.table(item = character(), count.onsite = numeric(),
-                                   #because some times there is two columns instead of three fill = TRUE is a must
-                                   count.online = numeric()), fill = TRUE)[, .(item, count.onsite, count.online)]
-  result <- sales[prices$item, on = "item"]
-  
-  setnafill(result, fill = 0, cols = c("count.onsite", "count.online"))[]
+  sales[, channel := paste0("count.", channel)]
+  res <- if (!nrow(sales)) prices[, "item"] else dcast(sales, item ~ channel, fun.aggregate = length)[prices$item]
+  res <- rbind(data.table(item = character(0), count.onsite = numeric(0), count.online = numeric(0)), res, fill = TRUE)
+  setnafill(res, fill = 0, cols = 2:3)
 }
 
 # Write a function that calculates the total revenue received by the shop.
@@ -461,5 +453,88 @@ ex03Revenue <- function(prices, sales) {
   # your code
   assertDataTable(prices)
   assertDataTable(sales)
-  sum(prices[sales, on = "item"][, ifelse(channel == "online", price.online, price.onsite)])
+  sum(prices[sales, ifelse(channel == "online", price.online, price.onsite), on = "item"])
 }
+
+
+
+############# EXERCISE 2
+
+# Write a function that calculates the median and maximal arrival delay of the
+# 3 most frequent carriers.
+#
+# Input:
+# - `flights`: `data.table` in the format of the example `flights.data` given
+# Output:
+# `data.table` with columns `carrier`, `delay.median`, `delay.max`, indicating
+# the minimum and maximum arrival delay experienced by flights of the three
+# most represented carriers in the dataset. The median delay should be of the
+# flights that were delayed at all, i.e. flights that were not delayed should
+# not be counted. (If there were no delays in any flights of a carrier, this
+# value should be zero). Only the lines for the three carriers with the most
+# flights should be given (in any order). You can rely on there being at least
+# three different carriers in the dataset.
+# The result with the example dataset could be (up to row order):
+flights.delays <- rbindlist(list(
+  list(carrier = NULL, delay.median = NULL, delay.max = NULL),
+  list("AA",           19,                  1524),
+  list("DL",           15,                  1107),
+  list("UA",           18,                  668)
+))
+# (There may be a datatype error when you use `median()` inside a `[ ]`
+# aggregation; in that case, use `as.numeric(median())`.)
+ex01DelayStats <- function(flights) {
+  # your code
+  assertDataTable(flights)
+  
+  topcarrier <- flights[, .N, by = "carrier"][order(N, decreasing = TRUE), head(carrier, 3)]
+  
+  flights[topcarrier, on = "carrier"][, .(
+    delay.median = as.numeric(median(arr_delay[arr_delay != 0])),
+    delay.max = max(arr_delay)
+  ), by = "carrier"]
+}
+
+# Write a function that returns the median delay of flights for each month and
+# for each route.
+#
+# Input:
+# - `flights`: `data.table` in the format of the example `flights.data` given
+# - `year`: the year for which to aggregate. (Remember that `flights` could
+#   contain data from multiple years.)
+# Output:
+# `data.table` with columns `month`, `delay`, `origin`, `dest`.
+# `delay` should indicate the median arrival delay of flights from `origin` to
+# `dest` in that month. The median delay should be of the flights that were
+# delayed at all, i.e. flights that were not delayed should not be counted. (If
+# there were no delays in any flight of given route, the `delay` should be 0.)
+# All months of the given `year` should be considered, and the routes from
+# and to all airports that are in either `origin` or `dest` of the `flights`
+# argument. I.e. if there is only a flight from `"DEN"` to `"ATL"`, but no
+# flight from `"ATL"` to `"DEN"`, then the `"ATL"` to `"DEN"` route should
+# be *included* in the returned table and listed with a delay of 0.
+# This is even true if the airports are listed in different years than
+# the `year` given as argument. I.e. `ex02MonthlyDelays(flights.data, 2000)`
+# should give a table with many entries that all have `delay` 0.
+# A possible return value of this function when called with `flights.data` and
+# 2014 is saved in `"ex02MonthlyDelaysResult.csv"`:
+flights.monthlydelays <- fread("tables/ex02MonthlyDelaysResult.csv")
+# It is a good idea to use the `CJ()` function to generate the table of all
+# possible combinations of months, and origin and destination airports. In that
+# case you have to take care to remove flights with same origin and destination
+# airport, however.
+ex02MonthlyDelays <- function(flights, year) {
+  # your code
+  assertDataTable(flights)
+  assertInt(year)
+  allairports <- union(flights$origin, flights$dest)
+  index <- CJ(year = year, month = 1:12, origin = allairports, dest = allairports)
+  index <- index[origin != dest]
+  yr <- year
+  delaytbl <- flights[yr == year & arr_delay > 0,
+                      .(delay = median(arr_delay)), by = c("month", "origin", "dest")]
+  
+  ret <- delaytbl[index, on = c("month", "origin", "dest")]
+  setnafill(ret, fill = 0, cols = "delay")[, .(month, delay, origin, dest)]
+}
+
