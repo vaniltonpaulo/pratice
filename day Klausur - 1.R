@@ -2,7 +2,7 @@ isMaxReallyLarge <-  function(x) {
   assertNumeric(x,any.missing = FALSE, min.len = 2)
   result <- max(x)
   final <- 2 * x[x != result]
-  any( result > final) 
+   all(result > final)
 }
 
 
@@ -271,3 +271,86 @@ textToMorse("Morse code!")
 #> Error in textToMorse("Morse code!") : could not convert the text
 #> 
 #> 
+
+
+
+applyAction <- function(element, matrix) {
+  assertMatrix(matrix)
+  UseMethod("applyAction")
+}
+
+# Constructor
+Flip <- function() {
+  structure(list(),
+    class = c("Flip","GroupElement")
+  )
+}
+
+
+applyAction.Flip <- function(element, matrix) {
+  matrix[, ncol(matrix):1, drop = FALSE]
+}
+
+applyAction(Flip(), mat)
+
+
+# Constructor
+Rotate <- function(mat) {
+  t(apply(mat,2,rev))
+  mat
+  structure(
+    list(mat = mat),
+    class = c("Rotate","GroupElement")
+  )
+}
+Rotate(mat)
+
+
+# Constructor
+Chain <- function(first, second) {
+  assertClass(first,"GroupElement")
+  assertClass(second,"GroupElement")
+  
+  
+  structure(
+    list(first = first, second = second),
+    class = c("Chain","GroupElement")
+  )
+}
+
+ch1 <- Chain(Flip(), Rotate())
+class(ch1)
+
+
+
+
+
+mat <- matrix(1:9, nrow = 3)
+mat[, ncol(mat):1]
+
+
+
+
+
+
+
+
+
+
+
+
+flp <- Flip()
+class(flp)
+#> [1] "Flip" "GroupElement"
+applyAction(flp, mat)
+#> [,1] [,2] [,3]
+#> [1,] 7 4 1
+#> [2,] 8 5 2
+#> [3,] 9 6 3
+applyAction(flp, matrix(1:3))
+#> [,1]
+#> [1,] 1
+#> [2,] 2
+#> [3,] 3
+applyAction(flp, matrix(numeric(0), nrow = 0, ncol = 0))
+#> <0 x 0 matrix>
